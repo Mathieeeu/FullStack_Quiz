@@ -1,1 +1,26 @@
-/* You can add global styles to this file, and also import other style files */
+* {
+    --grn:#04fc43;
+    --ylw:#fee800;
+    --red:#ff2972;
+    --clr: var(--grn);
+
+    --txt:#4caf50;
+    --box:#2f363e;
+    --bg :#d2d2d2;
+}
+
+html, body {
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--box);
+    background-color: var(--bg);
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}

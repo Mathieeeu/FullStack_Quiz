@@ -1,0 +1,35 @@
+header {
+    text-align: center;
+    font-size: 30px;
+    font-weight: bold;
+    color: var(--bg);
+    background-color: var(--box);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position:fixed;
+    top:0;
+    left:0;
+    right:0;
+    padding: 10px;
+    max-height:40px;
+    padding-bottom: 15px;
+}
+.button {
+    padding: 10px 20px;
+    background-color: var(--txt);
+    color: var(--box);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s, transform 0.3s;
+}
+.button:hover {
+    background-color: var(--txt);
+    transform: scale(1.02);
+}
+.button:active {
+    background-color: var(--txt);
+    transform: scale(0.95);
+}

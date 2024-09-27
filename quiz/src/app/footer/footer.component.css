@@ -7,4 +7,6 @@ footer {
     border-top: 1px solid var(--box);
     color: var(--box);
     text-align: center;
+    z-index: 1000;
+    background-color: var(--bg);
   }

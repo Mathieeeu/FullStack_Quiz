@@ -1,0 +1,137 @@
+body 
+{
+  display: flex;
+  position: relative;
+  justify-content: center;
+  align-items: center;
+  background: var(--bg);
+}
+
+.connexion{
+    display: flex;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    height: 60vh;
+    width : 30vw;
+    background: var(--box);
+    z-index: 1000;
+    border-radius: 20px;
+    box-shadow: 0 15px 35px rgba(0,0,0,9);
+}
+
+.content{
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+}
+
+h2{
+    color: var(--txt);
+    font-size: 4vw;
+}
+
+input[type=text],input[type=password]{
+    background-color: var(--box);
+    border: none;
+    border-bottom: 2px solid #000000b6;
+    padding: 15px 10px;
+    margin-bottom: 18px;
+    height:3vh;
+    width:20vw;
+    font-size:2vw;
+    transition: 0.5s;
+}
+
+input[type=submit]{
+    padding: 2vh 6vw;
+    background-color: var(--txt);
+    color: var(--box);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s, transform 0.3s;
+}
+input[type=submit]:hover {
+    background-color: var(--txt);
+    transform: scale(1.02);
+}
+input[type=submit]:active {
+    background-color: var(--txt);
+    transform: scale(0.95);
+}
+
+input:focus{
+    transform: translateY(-7.5px);
+    font-size: 1.5vw;
+    outline:none;
+    border-radius: 20px;
+    background-color: rgba(111, 111, 111, 0.152);
+}
+
+a{
+    margin-top: 1vh;
+    text-decoration: none;  
+    color :#757171
+}
+
+section 
+{
+width: 100%;
+height: 100%;
+top:0;
+left:0;
+display: flex;
+position:absolute;
+justify-content: space-between;
+align-content: flex-start;
+align-items: center;
+flex-wrap: wrap;
+overflow: hidden;
+}
+
+section::before 
+{
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(var(--bg),var(--grn),var(--bg));
+  animation: animate 5s linear infinite;
+  z-index:0 ;
+}
+
+@keyframes animate 
+{
+  0%
+  {
+    transform: translateY(-100%);
+  }
+  100%
+  {
+    transform: translateY(100%);
+  }
+}
+
+section span 
+{
+  position: relative;
+  display: block;
+  width: 100px;
+  height: 100px;
+  background:var(--bg);
+  z-index: 1;
+  transition: 1.5s;
+  margin-bottom: 0.2vh;
+}
+
+section span:hover 
+{
+  background: var(--grn);
+  transition: 0s;
+}

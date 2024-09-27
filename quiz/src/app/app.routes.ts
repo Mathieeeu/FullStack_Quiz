@@ -11,9 +11,9 @@ import { SalleAttenteComponent } from './salle-attente/salle-attente.component';
 export const routes: Routes = [
   { path: '', component: AccueilComponent },
   { path: 'jeu', component: JeuComponent },
-  {path: 'admin', component: AdminComponent},
-  {path: 'connexion', component: ConnexionComponent},
-  {path: 'salle-attente', component: SalleAttenteComponent},
+  { path: 'admin', component: AdminComponent },
+  { path: 'connexion', component: ConnexionComponent },
+  { path: 'salle-attente', component: SalleAttenteComponent },
   { path: '**', component: NotFoundComponent }
 ];
 

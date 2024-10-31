@@ -1,2 +1,4 @@
 .env
 *.test.bat
+node_modules/
+.vscode/

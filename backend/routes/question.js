@@ -82,5 +82,16 @@ module.exports = (collection) => {
         }
     });
 
+    // Route pour ajouter une question
+    router.post('/add', async (req, res) => {
+        try {
+            const newQuestion = req.body;
+            const result = await collection.insertOne(newQuestion);
+            res.status(201).send(result);
+        } catch (error) {
+            res.status(500).send(error);
+        }
+    });
+
     return router;
 };

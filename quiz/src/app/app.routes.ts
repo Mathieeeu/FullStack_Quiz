@@ -7,15 +7,18 @@ import { NotFoundComponent } from './not-found/not-found.component';
 import { AdminComponent } from './admin/admin.component';
 import { ConnexionComponent } from './connexion/connexion.component';
 import { SalleAttenteComponent } from './salle-attente/salle-attente.component';
+import { QuestionFormComponent } from './question-form/question-form.component';
 
 export const routes: Routes = [
   { path: '', component: AccueilComponent },
   { path: 'jeu', component: JeuComponent },
-  {path: 'admin', component: AdminComponent},
-  {path: 'connexion', component: ConnexionComponent},
-  {path: 'salle-attente', component: SalleAttenteComponent},
+  { path: 'admin', component: AdminComponent },
+  { path: 'connexion', component: ConnexionComponent },
+  { path: 'salle-attente', component: SalleAttenteComponent },
+  { path: 'form', component: QuestionFormComponent },
   { path: '**', component: NotFoundComponent }
 ];
+
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

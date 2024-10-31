@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
 
+import { QuestionComponent } from '../jeu/question/question.component';
+
 @Component({
   selector: 'app-jeu',
   standalone: true,
-  imports: [],
+  imports: [QuestionComponent],
   templateUrl: './jeu.component.html',
   styleUrl: './jeu.component.css'
 })

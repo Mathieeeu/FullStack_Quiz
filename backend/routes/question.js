@@ -84,10 +84,77 @@ module.exports = (collection) => {
 
     // Route pour ajouter une question
     router.post('/add', async (req, res) => {
+        // req.body contient {questionText, answerText, themeText, difficulty}
+        const question = {
+            questionId: "",
+            questionText: req.body.questionText,
+            answerText: req.body.answerText,
+            themeText: req.body.themeText,
+            difficulty: req.body.difficulty
+        };
+
+        // Récupération du nombre de questions pour générer un nouvel id
+        const nbQuestions = await collection.countDocuments();
+        question.questionId = (nbQuestions + 1).toString();
+
+        // Ajout de la question
         try {
-            const newQuestion = req.body;
-            const result = await collection.insertOne(newQuestion);
-            res.status(201).send(result);
+            const result = await collection.insertOne(question);
+            res.send(result);
+
+            // Réorganisation des ids (car on a des soucis car les ids sont attribués trop lentement) ######## TODO : Trouver une solution pour éviter ça
+            const questions = await collection.find().sort({ questionId: 1 }).toArray();
+            for (let i = 0; i < questions.length; i++) {
+                questions[i].questionId = i.toString();
+                await collection.updateOne({ _id: questions[i]._id }, { $set: { questionId: questions[i].questionId } });
+            }
+            console.log(`Question ${question.questionId} added and IDs updated: `, question);
+        } catch (error) {
+            res.status(500).send(error);
+        }
+    });
+
+    // Route pour modifier une question
+    router.post('/edit/:id', async (req, res) => {
+        const questionId = req.params.id;
+        const question = {
+            questionText: req.body.questionText,
+            answerText: req.body.answerText,
+            themeText: req.body.themeText,
+            difficulty: req.body.difficulty
+        };
+
+        try {
+            const result = await collection.updateOne({ questionId }, { $set: question });
+            console.log(`Question ${questionId} edited: `, question);
+            res.send(result);
+        } catch (error) {
+            res.status(500).send(error);
+        }
+    });
+
+    // Route pour supprimer une question
+    router.post('/delete/:id', async (req, res) => {
+        const questionId = req.params.id;
+    
+        try {
+            // Suppression de la question
+            const deleteResult = await collection.deleteOne({ questionId });
+            if (deleteResult.deletedCount === 0) {
+                return res.status(404).send({ message: "Question not found" });
+            }
+    
+            // Récupération de toutes les questions restantes
+            const questions = await collection.find().sort({ questionId: 1 }).toArray();
+    
+            // Réattribution des ids
+            for (let i = 0; i < questions.length; i++) {
+                questions[i].questionId = i.toString();
+                await collection.updateOne({ _id: questions[i]._id }, { $set: { questionId: questions[i].questionId } });
+            }
+    
+            console.log(`Question ${questionId} deleted and IDs updated`);
+            res.send({ message: "Question deleted and IDs updated" });
         } catch (error) {
             res.status(500).send(error);
         }

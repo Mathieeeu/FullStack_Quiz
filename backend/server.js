@@ -15,6 +15,10 @@ app.use(cors());
 
 
 // Connect to MongoDB
+if (!process.env.MONGO_USER || !process.env.MONGO_PASSWORD || !process.env.MONGO_ADDRESS || !process.env.MONGO_DB) {
+    console.error('Les variables d\'environnement MONGO_USER, MONGO_PASSWORD, MONGO_ADDRESS et MONGO_DB doivent être définies !');
+    process.exit(1);
+}
 const user = process.env.MONGO_USER;
 const password = process.env.MONGO_PASSWORD;
 const address = process.env.MONGO_ADDRESS;
@@ -24,7 +28,7 @@ client = new MongoClient(url, { useUnifiedTopology: true });
 client.connect()
     .then(() => {
         console.log('Connected to MongoDB');
-        const database = process.env.MONGO_DB;
+        const database = client.db(process.env.MONGO_DB);
         const collection = database.collection("question");
 
         // Routes (la collection est passée en paramètre pour qu'elles puissent l'utiliser)

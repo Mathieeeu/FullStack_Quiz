@@ -1,0 +1,9 @@
+<!-- CETTE PAGE EST TEMPORAIRE, ELLE NE SERT QU'A AFFICHER LES QUESTIONS POUR TESTER -->
+<div class="question-container" *ngFor="let question of questions">
+    <div class="question-box">
+      <h3>{{ question.questionText }}</h3>
+      <p><strong>Answer:</strong> {{ question.answerText }}</p>
+      <p><strong>Theme:</strong> {{ question.themeText }}</p>
+      <p><strong>Difficulty:</strong> {{ question.difficulty }}</p>
+    </div>
+  </div>

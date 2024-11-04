@@ -1,0 +1,13 @@
+<label for="question">
+    Question :
+    <input id="question" type="text" [(ngModel)]="questionText"/>
+</label>
+<label for="theme">
+    Theme :
+    <input id="theme" type="text" [(ngModel)]="themeText"/>
+</label>
+<label for="answer">
+    Answer :
+    <input id="answer" type="text" [(ngModel)]="answerText"/>
+</label>
+<button (click)="addQuestion()">Add question</button>

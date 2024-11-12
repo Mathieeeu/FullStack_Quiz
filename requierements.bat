@@ -11,5 +11,8 @@ npm install body-parser
 npm install cors
 npm install dotenv
 
+cd ../quiz
+
+
 echo All npm packages have been installed, this window will close in 5 seconds.
 timeout /t 5

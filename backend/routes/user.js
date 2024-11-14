@@ -23,7 +23,9 @@ module.exports = (collection) => {
 
 
     // Route pour permettre à un utilisateur de se connecter
-
+    router.post('/login', async (req, res) => {
+        console.log(req.body);
+    });
 
     return router;
 };

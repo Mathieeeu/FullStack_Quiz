@@ -1,4 +1,4 @@
-// server.js
+// db-server.js
 require('dotenv').config();
 const express = require('express');
 const { MongoClient } = require('mongodb');
@@ -14,7 +14,6 @@ const port = 3000;
 // Middleware
 app.use(bodyParser.json());
 app.use(cors());
-
 
 // Connect to MongoDB
 if (!process.env.MONGO_USER || !process.env.MONGO_PASSWORD || !process.env.MONGO_ADDRESS || !process.env.MONGO_DB) {

@@ -1,3 +1,3 @@
 cd backend
-start node server.js
+start node db-server.js
 start "" "http://localhost:3000"

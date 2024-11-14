@@ -8,6 +8,7 @@ import { AdminComponent } from './admin/admin.component';
 import { ConnexionComponent } from './connexion/connexion.component';
 import { SalleAttenteComponent } from './salle-attente/salle-attente.component';
 import { QuestionFormComponent } from './question-form/question-form.component';
+import { QuestionListComponent } from './question-list/question-list.component';
 
 export const routes: Routes = [
   { path: '', component: AccueilComponent },
@@ -16,6 +17,7 @@ export const routes: Routes = [
   { path: 'connexion', component: ConnexionComponent },
   { path: 'salle-attente', component: SalleAttenteComponent },
   { path: 'form', component: QuestionFormComponent },
+  { path: 'list', component: QuestionListComponent },
   { path: '**', component: NotFoundComponent }
 ];
 

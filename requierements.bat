@@ -6,7 +6,6 @@ echo Installing npm packages...
 
 cd backend/
 npm install express
-npm install mongoose
 npm install body-parser
 npm install cors
 npm install dotenv

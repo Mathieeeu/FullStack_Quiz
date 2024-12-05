@@ -1,18 +1,13 @@
-<<<<<<< Updated upstream
-// server.js
+// backend/db-server.js
+
 require('dotenv').config();
 const express = require('express');
 const { MongoClient } = require('mongodb');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const questionRoutes = require('./routes/question');
-=======
-// backend/server.js
-
-const { exec } = require('child_process');
-const util = require('util');
-const execAsync = util.promisify(exec);
->>>>>>> Stashed changes
+const userRoutes = require('./routes/user');
+const gameRoutes = require('./routes/game');
 
 const app = express();
 const port = 3000;
@@ -20,7 +15,6 @@ const port = 3000;
 // Middleware
 app.use(bodyParser.json());
 app.use(cors());
-
 
 // Connect to MongoDB
 if (!process.env.MONGO_USER || !process.env.MONGO_PASSWORD || !process.env.MONGO_ADDRESS || !process.env.MONGO_DB) {
@@ -37,10 +31,14 @@ client.connect()
     .then(() => {
         console.log('Connected to MongoDB');
         const database = client.db(process.env.MONGO_DB);
-        const collection = database.collection("question");
+        const questionCollection = database.collection("question");
+        const userCollection = database.collection("user");
+        const gameCollection = database.collection("game");
 
         // Routes (la collection est passée en paramètre pour qu'elles puissent l'utiliser)
-        app.use('/api/question', questionRoutes(collection));
+        app.use('/api/question', questionRoutes(questionCollection));
+        app.use('/api/user', userRoutes(userCollection));
+        app.use('/api/game', gameRoutes(gameCollection));
     })
     .catch(err => {
         console.error('Failed to connect to MongoDB', err);
@@ -72,8 +70,11 @@ app.get('/', (req, res) => {
                 .cmd {
                     color: #569cd6;
                 }
-                .path{
+                .path {
                     color: #4ec9b0;
+                }
+                hr {
+                    border: 1px solid #d4d4d4;
                 }
             </style>
         </head>
@@ -91,24 +92,35 @@ app.get('/', (req, res) => {
                         <li><span class="cmd">difficulty=&ltint&gt</span> : Difficulté(s) à rechercher</li>
                         <li><span class="cmd">n=&ltint&gt</span> : Nombre de questions à récupérer</li>
                     </ul>
-                <li><span class="cmd">POST</span> <span class="path">/api/question/add</span> : Soumettre un formulaire pour ajouter une question</li>
-                <li><span class="cmd">POST</span> <span class="path">/api/question/edit/</span> : Modifier une question</li>
-                <li><span class="cmd">POST</span> <span class="path">/api/question/delete/</span> : Supprimer une question</li>
+                <li><span class="cmd">POST</span> <span class="path">/api/question/add/</span> : Soumettre un formulaire pour ajouter une question</li>
+                <li><span class="cmd">POST</span> <span class="path">/api/question/edit/&ltid&gt</span> : Modifier une question</li>
+                <li><span class="cmd">POST</span> <span class="path">/api/question/delete/&ltid&gt</span> : Supprimer une question</li>
+            </ul>
+
+            <hr>
+            <br>
+            <p>API de la base de données d'utilisateurs</p>
+            <p>Voici les différentes opérations possibles :</p>
+            <ul>
+                <li><span class="cmd">GET</span> <span class="path">/api/user/names</span> : Récupérer la liste des noms d'utilisateurs (provisoire)</li>
+                <li><span class="cmd">POST</span> <span class="path">/api/user/add</span> : Ajouter un utilisateur</li>
+                <li><span class="cmd">POST</span> <span class="path">/api/user/edit/&ltname&gt</span> : Modifier un utilisateur</li>
+                <li><span class="cmd">POST</span> <span class="path">/api/user/delete/&ltid&gt</span> : Supprimer un utilisateur</li>
+                <li><span class="cmd">POST</span> <span class="path">/api/user/login/&ltidentifiants&gt</span> : Se connecter</li>
+            </ul>
+
+            <br>
+            <hr>
+            <p>API de la base de données de parties</p>
+            <p>Voici les différentes opérations possibles :</p>
+            <ul>
+                <li>...WIP...</li>
             </ul>
         </body>
         </html>
     `);
 });
 
-<<<<<<< Updated upstream
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
 });
-=======
-lookForGames();
-
-// wait for input
-process.stdin.resume();
-console.log('Press any key to exit...');
-process.stdin.on('data', process.exit.bind(process, 0));
->>>>>>> Stashed changes

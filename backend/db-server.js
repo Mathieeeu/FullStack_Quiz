@@ -1,4 +1,5 @@
-// db-server.js
+// backend/db-server.js
+
 require('dotenv').config();
 const express = require('express');
 const { MongoClient } = require('mongodb');

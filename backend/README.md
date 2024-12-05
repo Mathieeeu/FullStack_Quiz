@@ -30,12 +30,9 @@
 - `host: String`
 - `currentQuestion: String?` _(on sait pas trop si c'est une bonne idée)_
 - `questionNumber: String?` _(on sait pas trop si c'est une bonne idée)_
-- `players: {`
-  - `id : {` 
-    - `username: String`
-    - `score: Number`
-      `}`
-    `}`
+- `players: [`
+    - `{username: String, score: Number}`
+  `]`
 
 
   

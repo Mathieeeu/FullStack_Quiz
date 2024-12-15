@@ -1,20 +1,42 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthService } from '../service/auth.service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-connexion',
   standalone: true,
-  imports: [],
+  imports: [FormsModule],
   templateUrl: './connexion.component.html',
   styleUrl: './connexion.component.css'
 })
 export class ConnexionComponent {
-  constructor(private router: Router) {}
+  login: string = '';
+  password: string = '';
+
+  constructor(private authService: AuthService, private router: Router) {}
 
   // Méthode appelée au clic du bouton
   goToAdmin(): void {
-    this.router.navigate(['/admin']);
-
-  }
+      if (this.login && this.password) {
+      this.authService.login(this.login, this.password).subscribe({
+        next: (isAuthenticated) => {
+          if (isAuthenticated) {
+            this.router.navigate(['/admin']);
+          } else {
+            alert('Identifiants incorrects');
+          }
+        },
+        error: (error) => {
+          console.error('Erreur lors de la tentative de connexion', error);
+        },
+        complete: () => {
+          console.log('Requête terminée');
+        }
+      });
+      } else {
+        alert('Veuillez remplir tous les champs');
+      }
+    }
 
 }

@@ -1,4 +1,5 @@
 const express = require('express');
+const bcrypt = require('bcrypt');
 
 module.exports = (collection) => {
     const router = express.Router();
@@ -28,7 +29,11 @@ module.exports = (collection) => {
                 res.status(409).send({ message: "User name already used" });
             }
             else{
-                const result1 = await collection.insertOne(user);
+                // Hachage du mot de passe
+                const saltRounds = 10; // Plus le nombre est élevé, plus le hachage est sécurisé mais lent
+                user.userPW = await bcrypt.hash(user.userPW, saltRounds);
+
+                await collection.insertOne(user);
                 res.send("User added");
                 console.log(`User ${user.userLogin} added`);
             }
@@ -53,6 +58,7 @@ module.exports = (collection) => {
                  res.status(404).send({ message: "User not found" });
              }
              else{
+                user.userPW = await bcrypt.hash(user.userPW, 10);
                 const result = await collection.updateOne({ username: user.userLogin }, { $set: { password: user.userPW, Superuser: user.Superuser } });
                 console.log(`User ${user.userLogin} edited: `);
                 res.send("User edited");
@@ -93,6 +99,11 @@ module.exports = (collection) => {
                 res.send(false)
             }
             else{
+                 // Comparez le mot de passe saisi avec le mot de passe haché
+                const isMatch = await bcrypt.compare(password, result.password);
+                if (!isMatch) {
+                    res.status(401).send({ success: false, message: "Invalid credentials" });
+                }
                 res.send(true)
             }
         } catch (error) {

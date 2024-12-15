@@ -2,3 +2,4 @@
 *.test.bat
 node_modules/
 .vscode/
+*/test/*

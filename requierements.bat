@@ -10,6 +10,7 @@ npm install mongoose
 npm install body-parser
 npm install cors
 npm install dotenv
+npm install axios
 
 cd ../quiz
 

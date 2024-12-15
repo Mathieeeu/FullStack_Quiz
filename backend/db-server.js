@@ -1,5 +1,3 @@
-// backend/db-server.js
-
 require('dotenv').config();
 const express = require('express');
 const { MongoClient } = require('mongodb');
@@ -38,7 +36,7 @@ client.connect()
         // Routes (la collection est passée en paramètre pour qu'elles puissent l'utiliser)
         app.use('/api/question', questionRoutes(questionCollection));
         app.use('/api/user', userRoutes(userCollection));
-        app.use('/api/game', gameRoutes(gameCollection));
+        app.use('/api/game', gameRoutes(gameCollection, questionCollection));
     })
     .catch(err => {
         console.error('Failed to connect to MongoDB', err);
@@ -86,9 +84,9 @@ app.get('/', (req, res) => {
                 <li><span class="cmd">GET</span> <span class="path">/api/question/&ltconditions&gt</span> : Récupérer des questions aléatoires selon des conditions</li>
                 <li><span class="cmd">GET</span> <span class="path">/api/question/nb/*</span> : Renvoie le nombre total de questions</li>
                 <li><span class="cmd">GET</span> <span class="path">/api/question/nb/&ltconditions&gt</span> : Renvoie le nombre de questions respectant des conditions</li>
-                    <span>Conditions possibles (séparées de '&', si une condition a plusieurs valeurs, elles sont séparées par ',') :</span>
+                    <span>Options possibles (séparées de '&', si une condition a plusieurs valeurs, elles sont séparées par ',' et avec un ! devant pour exclure) :</span>
                     <ul>
-                        <li><span class="cmd">theme=&ltstring&gt</span> : Thème(s) à rechercher</li>
+                        <li><span class="cmd">theme=&ltstring&gt</span> : Thème(s) à rechercher (sans accents !)</li>
                         <li><span class="cmd">difficulty=&ltint&gt</span> : Difficulté(s) à rechercher</li>
                         <li><span class="cmd">n=&ltint&gt</span> : Nombre de questions à récupérer</li>
                     </ul>

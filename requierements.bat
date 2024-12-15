@@ -10,6 +10,7 @@ npm install body-parser
 npm install cors
 npm install dotenv
 npm install axios
+npm install bcrypt
 
 cd ../quiz
 

@@ -1,0 +1,1 @@
+curl -X POST -H "Content-Type: application/json" -d "{\"login\":\"joueur3\", \"password\":\"joueur3\", \"superuser\":\"false\"}" http://localhost:3000/api/user/add

@@ -9,6 +9,7 @@ npm install express
 npm install body-parser
 npm install cors
 npm install dotenv
+npm install bcrypt
 
 cd ../quiz
 

@@ -1,4 +1,4 @@
-// server.js
+// backend/server.js
 const { exec } = require('child_process');
 const util = require('util');
 const execAsync = util.promisify(exec);
@@ -23,7 +23,11 @@ function lookForGames() {
 startDBServer();
 console.log('Database server started');
 
+lookForGames();
+
 // wait for input
 process.stdin.resume();
 console.log('Press any key to exit...');
 process.stdin.on('data', process.exit.bind(process, 0));
+
+

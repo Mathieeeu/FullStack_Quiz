@@ -160,10 +160,11 @@ module.exports = (collection, questionCollection) => {
             const questions = response.data;
 
             game.isStarted = true;
-            game.questions = questions;
+            // game.questions = questions; // Retiré pour ne pas "stocker" les questions sur l'api
             game.currentQuestion = questions[0];
-            await collection.updateOne({ code }, { $set: { isStarted: game.isStarted, questions: game.questions, currentQuestion: game.currentQuestion } });
-
+            // await collection.updateOne({ code }, { $set: { isStarted: game.isStarted, questions: game.questions, currentQuestion: game.currentQuestion } }); // Retiré pour ne pas "stocker" les questions sur l'api
+            await collection.updateOne({ code }, { $set: { isStarted: game.isStarted, currentQuestion: game.currentQuestion } }); // Ajouté pour ne pas "stocker" les questions sur l'api
+ 
             // Changer les questions toutes les x secondes
             const questionTime = game.options.questionTime * 1000;
             let currentQuestionIndex = -1;
@@ -192,12 +193,14 @@ module.exports = (collection, questionCollection) => {
 
             async function sendQuestion() {
                 currentQuestionIndex++;
-                if (currentQuestionIndex >= game.questions.length) {
+                // if (currentQuestionIndex >= game.questions.length) { // Retiré pour ne pas "stocker" les questions sur l'api
+                if (currentQuestionIndex >= questions.length) { // Ajouté pour ne pas "stocker" les questions sur l'api
                     game.isOver = true;
                     await collection.updateOne({ code }, { $set: { isOver: game.isOver } });
                     console.log("La partie est terminée !");
                 } else {
-                    game.currentQuestion = game.questions[currentQuestionIndex];
+                    // game.currentQuestion = game.questions[currentQuestionIndex]; // Retiré pour ne pas "stocker" les questions sur l'api
+                    game.currentQuestion = questions[currentQuestionIndex]; // Ajouté pour ne pas "stocker" les questions sur l'api
                     console.log(`Question ${currentQuestionIndex + 1}: ${game.currentQuestion.questionText}`);
                     await collection.updateOne({ code }, { $set: { currentQuestionIndex, currentQuestion: game.currentQuestion } });
 

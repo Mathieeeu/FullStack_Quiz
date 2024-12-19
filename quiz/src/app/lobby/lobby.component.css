@@ -1,0 +1,9 @@
+.page_container {
+    display: flex;
+    justify-content: space-between; 
+    padding: 8vh; 
+}
+
+h2{
+    
+}

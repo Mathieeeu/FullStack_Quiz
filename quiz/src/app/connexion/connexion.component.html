@@ -51,7 +51,7 @@
       <div class="content">
         <h2>Connexion</h2>
         <form (submit)="goToAdmin(); $event.preventDefault();">
-          <input type="text" placeholder="Identifiant"  [(ngModel)]="login" required autocomplete="off"name = "login"/>
+          <input type="text" placeholder="Identifiant"  [(ngModel)]="login" required autocomplete="off" name = "login"/>
           <input type="password" placeholder="Mot de passe" [(ngModel)]="password"  required name = "password"/>
           <input type="submit" id="submit" value="Valider" />
         </form>

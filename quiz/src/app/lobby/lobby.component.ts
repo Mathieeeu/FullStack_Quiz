@@ -1,14 +1,24 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { GameService } from '../service/game.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { interval, Subscription } from 'rxjs';
+
+import { GameService } from '../service/game.service';
+import { SessionService } from '../service/session.service';
+
+import { InformationsComponent } from '../lobby/informations/informations.component';
+import { PlayerListComponent } from '../lobby/player-list/player-list.component';
 
 @Component({
   selector: 'app-lobby',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [
+    CommonModule, 
+    FormsModule,
+    InformationsComponent,
+    PlayerListComponent
+  ],
   templateUrl: './lobby.component.html',
   styleUrls: ['./lobby.component.css']
 })
@@ -20,6 +30,7 @@ export class LobbyComponent implements OnInit, OnDestroy {
 
   constructor(
     private gameService: GameService,
+    private sessionService: SessionService,
     private route: ActivatedRoute,
     private router: Router
   ) {
@@ -27,9 +38,13 @@ export class LobbyComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    if (typeof window !== 'undefined' && window.localStorage) { 
-      this.username = localStorage.getItem('username') || '';
+    this.username = this.sessionService.getUsername();
+    
+    console.log(this.username);
+    if (!this.username) {
+      this.router.navigate(['/']);
     }
+    
     this.loadGameDetails();
     this.subscription = interval(1000).subscribe(() => this.loadGameDetails());
   }

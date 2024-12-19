@@ -22,7 +22,7 @@ export class QuestionService {
   submitQuestion(QuestionData: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/question/add`, QuestionData);
   }
-
+  
   getQuestions(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/question/*`);
   }

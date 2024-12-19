@@ -1,0 +1,9 @@
+<div>
+  <h2>Lobby - Game Code: {{ gameDetails.code }}</h2>
+  <p>Host: {{ gameDetails.host }}</p>
+  <ul>
+    <li *ngFor="let player of gameDetails.players">{{player.username}}</li>
+  </ul>
+  <button (click)="startGame()" [disabled]="gameDetails.isStarted">Start Game</button>
+  <button (click)="leaveGame()">Leave Game</button>
+</div>

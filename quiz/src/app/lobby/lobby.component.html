@@ -1,8 +1,14 @@
 <div class="page_container">
-
-  <app-informations></app-informations>
-  <app-player-list></app-player-list>
-  <br>
-  <button (click)="startGame()" [disabled]="gameDetails.isStarted">Start Game</button>
-  <button (click)="leaveGame()">Leave Game</button>
+  <div class="informations">
+    <app-informations></app-informations>
+    <br>
+    <div class="boutons"> 
+      <button (click)="startGame()">Démarrer la partie</button>
+      <button (click)="leaveGame()">Quittez</button>
+    </div> 
+  </div>
+  <div class ="liste_joueur">
+    <app-player-list></app-player-list>
+  </div>
+ 
 </div>

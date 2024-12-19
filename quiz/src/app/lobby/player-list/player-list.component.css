@@ -1,0 +1,15 @@
+.liste_joueur {
+    font-size : 20px;
+    overflow: hidden auto;
+    width: 80%;
+    max-height: 80vh;
+    border-radius: 50px;
+    background: var(--bg);
+    box-shadow: 20px 20px 60px #bebebe,
+                  -20px -20px 60px #ffffff;
+    padding: 10px; 
+    box-sizing: border-box; 
+    scrollbar-width: none;
+}
+
+/* Rajouter barre de scroll avec un style jolie */

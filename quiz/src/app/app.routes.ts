@@ -7,10 +7,8 @@ import { NotFoundComponent } from './not-found/not-found.component';
 import { AdminComponent } from './admin/admin.component';
 import { ConnexionComponent } from './connexion/connexion.component';
 import { QuestionFormComponent } from './question-form/question-form.component';
-import { QuestionListComponent } from './question-list/question-list.component';
 import { LobbyComponent } from './lobby/lobby.component';
 import { CreateGameComponent } from './create-game/create-game.component';
-import { QuestionComponent } from './question/question.component'
 
 export const routes: Routes = [
   { path: '', component: AccueilComponent },
@@ -18,9 +16,7 @@ export const routes: Routes = [
   { path: 'admin', component: AdminComponent },
   { path: 'connexion', component: ConnexionComponent },
   { path: 'form', component: QuestionFormComponent },
-  { path: 'list', component: QuestionListComponent },
   { path: 'lobby/:code', component: LobbyComponent},
-  { path: 'question/:code', component: QuestionComponent},
   { path: 'create', component: CreateGameComponent },
   { path: '**', component: NotFoundComponent }
 ];

@@ -37,12 +37,14 @@ export class InformationsComponent {
     }
 
     this.loadGameDetails();
+
   }
 
   loadGameDetails(): void {
     this.gameService.getGameDetails(this.gameCode).subscribe(
       data => {
         this.gameDetails = data;
+        console.log(this.gameDetails);
       },
       error => {
         console.error(error);

@@ -5,6 +5,8 @@
 echo Installing npm packages...
 
 cd backend/
+npm install @angular/cli
+ng build
 npm install express
 npm install body-parser
 npm install cors

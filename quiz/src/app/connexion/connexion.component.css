@@ -106,6 +106,7 @@ input[type=text],input[type=password]{
   width:20vw;
   font-size:2vw;
   transition: 0.5s;
+  color : var(--txt);
 }
 
 input[type=submit]{
@@ -133,6 +134,7 @@ input:focus{
   outline:none;
   border-radius: 20px;
   background-color: var(--bg-button);
+  border-bottom: 2px solid var(--txt);
 }
 
 a{
@@ -140,3 +142,4 @@ a{
   text-decoration: none;  
   color :#757171
 }
+

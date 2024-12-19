@@ -34,3 +34,7 @@ header {
     background-color: var(--txt);
     transform: scale(0.95);
 }
+
+h1 {
+    cursor: pointer; 
+  }

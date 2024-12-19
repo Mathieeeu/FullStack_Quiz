@@ -11,9 +11,14 @@ import { Router } from '@angular/router';
 export class HeaderComponent {
   constructor(private router: Router) {}
 
-  // Méthode appelée au clic du bouton
+  // Méthodes appelées au clic du bouton
   goToConnexion(): void {
     this.router.navigate(['/connexion']);
+
+  }
+
+  goToAccueil(): void {
+    this.router.navigate(['']);
 
   }
 }

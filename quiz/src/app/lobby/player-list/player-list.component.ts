@@ -19,6 +19,7 @@ export class PlayerListComponent {
   gameCode: string = '';
   username: string = '';
   gameDetails: any;
+  private subscription: Subscription = new Subscription();
 
   constructor(
     private gameService: GameService,
@@ -26,7 +27,7 @@ export class PlayerListComponent {
     private route: ActivatedRoute,
     private router: Router
   ) {
-    
+
     this.username = sessionService.getUsername();
     this.gameCode = sessionService.getGameCode();
 
@@ -35,6 +36,20 @@ export class PlayerListComponent {
     }
   
     this.loadGameDetails();                                      
+  }
+
+  ngOnInit(): void {
+    this.username = this.sessionService.getUsername();
+
+    console.log(this.username);
+    console.log(this.gameCode);
+
+    if (!this.username) {
+      this.router.navigate(['/']);
+    }
+    
+    this.loadGameDetails();
+    this.subscription = interval(1000).subscribe(() => this.loadGameDetails());
   }
 
   loadGameDetails(): void {

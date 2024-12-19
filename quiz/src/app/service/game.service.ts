@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 
+import { SessionService } from './session.service';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -9,7 +11,8 @@ export class GameService {
   private apiUrl = 'http://localhost:3000/api/game';
 
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+    private sessionService: SessionService
   ) { }
 
   createGame(options: any): Observable<any> {
@@ -17,7 +20,7 @@ export class GameService {
   }
 
   joinGame(code: string, username: string): Observable<any> {
-    localStorage.setItem('username', username);
+    this.sessionService.setUsername(username);
     return this.http.post(`${this.apiUrl}/join/${code}`, { username });
   }
 

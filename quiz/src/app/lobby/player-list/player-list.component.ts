@@ -27,7 +27,7 @@ export class PlayerListComponent {
     private route: ActivatedRoute,
     private router: Router
   ) {
-    
+
     this.username = sessionService.getUsername();
     this.gameCode = sessionService.getGameCode();
 

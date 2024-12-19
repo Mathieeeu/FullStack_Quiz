@@ -9,6 +9,7 @@ import { ConnexionComponent } from './connexion/connexion.component';
 import { QuestionFormComponent } from './question-form/question-form.component';
 import { LobbyComponent } from './lobby/lobby.component';
 import { CreateGameComponent } from './create-game/create-game.component';
+import { GameComponent } from './game/game.component';
 
 export const routes: Routes = [
   { path: '', component: AccueilComponent },
@@ -18,6 +19,7 @@ export const routes: Routes = [
   { path: 'form', component: QuestionFormComponent },
   { path: 'lobby/:code', component: LobbyComponent},
   { path: 'create', component: CreateGameComponent },
+  { path: 'game/:code', component: GameComponent },
   { path: '**', component: NotFoundComponent }
 ];
 

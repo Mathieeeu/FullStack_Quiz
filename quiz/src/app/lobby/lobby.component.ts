@@ -1,8 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { interval, Subscription } from 'rxjs';
+import { ActivatedRoute, Router, NavigationStart } from '@angular/router';
+import { interval, Subscription, filter } from 'rxjs';
 
 import { GameService } from '../service/game.service';
 import { SessionService } from '../service/session.service';
@@ -35,24 +35,37 @@ export class LobbyComponent implements OnInit, OnDestroy {
     private router: Router
   ) {
     this.gameCode = this.route.snapshot.paramMap.get('code') || '';
+  
+    // On écoute les événements de navigation pour quitter la partie si l'utilisateur change de page
+    this.router.events
+      .pipe(filter(event => event instanceof NavigationStart))
+      .subscribe(() => {
+        this.leaveGame();
+      });
   }
 
   ngOnInit(): void {
     this.username = this.sessionService.getUsername();
-    
+
     console.log(this.username);
+    console.log(this.gameCode);
+
     if (!this.username) {
       this.router.navigate(['/']);
     }
     
     this.loadGameDetails();
     this.subscription = interval(1000).subscribe(() => this.loadGameDetails());
+  
+    window.addEventListener('beforeunload', () => this.leaveGame());
   }
 
   ngOnDestroy(): void {
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
+    this.leaveGame();
+    window.removeEventListener('beforeunload', () => this.leaveGame());
   }
 
   loadGameDetails(): void {
@@ -64,6 +77,13 @@ export class LobbyComponent implements OnInit, OnDestroy {
         console.error(error);
       }
     );
+    console.log(this.gameDetails);
+
+    if (this.gameDetails && this.gameDetails.isStarted) {
+      this.subscription.unsubscribe();
+
+      this.router.navigate(['/game', this.gameCode]);
+    }
   }
 
   startGame(): void {

@@ -27,6 +27,7 @@ export class LobbyComponent implements OnInit, OnDestroy {
   username: string = '';
   gameDetails: any;
   private subscription: Subscription = new Subscription();
+  private isNavigatingToGame: boolean = false;
 
   constructor(
     private gameService: GameService,
@@ -39,8 +40,11 @@ export class LobbyComponent implements OnInit, OnDestroy {
     // On écoute les événements de navigation pour quitter la partie si l'utilisateur change de page
     this.router.events
       .pipe(filter(event => event instanceof NavigationStart))
-      .subscribe(() => {
-        this.leaveGame();
+      .subscribe((event: NavigationStart) => {
+        if (event.url.startsWith('/game')) {
+          this.isNavigatingToGame = true;
+        }
+        this.handleBeforeUnload();
       });
   }
 
@@ -57,39 +61,41 @@ export class LobbyComponent implements OnInit, OnDestroy {
     this.loadGameDetails();
     this.subscription = interval(1000).subscribe(() => this.loadGameDetails());
   
-    window.addEventListener('beforeunload', () => this.leaveGame());
+    window.addEventListener('beforeunload', () => this.handleBeforeUnload());
   }
 
   ngOnDestroy(): void {
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
-    this.leaveGame();
-    window.removeEventListener('beforeunload', () => this.leaveGame());
+    window.removeEventListener('beforeunload', () => this.handleBeforeUnload());
+    this.handleBeforeUnload();
   }
 
   loadGameDetails(): void {
-    this.gameService.getGameDetails(this.gameCode).subscribe(
-      data => {
-        this.gameDetails = data;
-      },
-      error => {
-        console.error(error);
-      }
-    );
-    console.log(this.gameDetails);
-
     if (this.gameDetails && this.gameDetails.isStarted) {
       this.subscription.unsubscribe();
 
       this.router.navigate(['/game', this.gameCode]);
+    }
+    else {
+      this.gameService.getGameDetails(this.gameCode).subscribe(
+        data => {
+          this.gameDetails = data;
+        },
+        error => {
+          console.error(error);
+        }
+      );
+      console.log(this.gameDetails);
     }
   }
 
   startGame(): void {
     this.gameService.startGame(this.gameCode).subscribe(
       res => {
-        this.gameDetails = res;
+        console.log(`Game ${this.gameCode} started`);
+        this.router.navigate([`/game/${this.gameCode}`]);
       },
       err => console.error(err)
     );
@@ -99,9 +105,16 @@ export class LobbyComponent implements OnInit, OnDestroy {
     // Supposons que nous avons une route pour supprimer un joueur de la partie
     this.gameService.leaveGame(this.gameCode, this.username).subscribe(
       res => {
+        this.sessionService.clearSession();
         this.router.navigate(['/']);
       },
       err => console.error(err)
     );
+  }
+
+  handleBeforeUnload = () => {
+    if (!this.isNavigatingToGame) {
+      this.leaveGame();
+    }
   }
 }

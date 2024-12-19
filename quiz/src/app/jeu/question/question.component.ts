@@ -93,11 +93,11 @@ export class QuestionComponent {
       clearInterval(timer);
       count = max;
       if (no_question <= nb_question) {
-          start()
+        start()
       }
       else {
-          return;
+        return;
       }
-  }
+    }
   }
 }

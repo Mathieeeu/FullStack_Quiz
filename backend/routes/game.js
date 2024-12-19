@@ -88,6 +88,10 @@ module.exports = (collection, questionCollection) => {
                 return res.status(404).send({ message: "Game not found" });
             }
 
+            if (game.isOver) {
+                return res.status(400).send({ message: "Game is over" });
+            }
+
             // Vérifier si le pseudo existe déjà
             const existingPlayer = game.players.find(p => p.username === player.username);
             if (existingPlayer) {

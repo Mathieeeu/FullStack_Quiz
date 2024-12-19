@@ -132,7 +132,7 @@ input:focus{
   font-size: 1.5vw;
   outline:none;
   border-radius: 20px;
-  background-color: rgba(111, 111, 111, 0.152);
+  background-color: var(--bg-button);
 }
 
 a{

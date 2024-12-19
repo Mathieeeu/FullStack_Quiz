@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-accueil',
@@ -7,6 +8,12 @@ import { Component } from '@angular/core';
   templateUrl: './accueil.component.html',
   styleUrl: './accueil.component.css'
 })
-export class AccueilComponent {
 
+export class AccueilComponent {
+  constructor(private router: Router) {}
+
+  goToLobby(): void {
+    this.router.navigate(['/lobby']);
+       
+  }
 }

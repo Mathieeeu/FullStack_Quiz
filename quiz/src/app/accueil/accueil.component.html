@@ -1,1 +1,16 @@
-<p>accueil works!</p>
+<div class = "page_container">
+    <div class = "div_gauche">
+        <h2>Bienvenue sur *******, le site ultime de quiz multijoueur en ligne !</h2>
+            <p>Testez vos connaissances, défiez vos amis et grimpez au sommet des classements.
+            Rejoignez notre communauté de joueurs du monde entier et découvrez qui est le véritable maître du quiz.
+            <br>Prêt à relever le défi ?</p>
+        <form (submit) = goToLobby()>
+            <input type="text" placeholder="Pseudo" required maxlength="20" autocomplete="off" name = "pseudo"/>
+            <input type="submit" id="submit" value="Rejoindre" />
+          </form>
+    </div>
+    <div class = "div_droite">
+        <img src = "img accueil (1).png"/>
+    </div>
+</div>
+

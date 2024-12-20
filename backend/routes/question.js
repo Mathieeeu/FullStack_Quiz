@@ -23,7 +23,9 @@ module.exports = (collection) => {
             }
         });
 
+        // Génération de la requête avec les conditions
         let query = {};
+        // Conditions sur le thème
         if (themes.length > 0) {
             const includeThemes = themes.filter(theme => !theme.startsWith('!'));
             const excludeThemes = themes.filter(theme => theme.startsWith('!')).map(theme => theme.substring(1));
@@ -35,6 +37,7 @@ module.exports = (collection) => {
                 query.themeText.$nin = excludeThemes;
             }
         }
+        // Conditions sur la difficulté
         if (difficulties.length > 0) {
             const includeDifficulties = difficulties.filter(difficulty => !difficulty.startsWith('!'));
             const excludeDifficulties = difficulties.filter(difficulty => difficulty.startsWith('!')).map(difficulty => difficulty.substring(1));

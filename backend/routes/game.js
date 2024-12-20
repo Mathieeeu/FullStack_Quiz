@@ -37,6 +37,8 @@ module.exports = (collection, questionCollection) => {
         if (!code) {
             code = await generateGameCode();
         }
+
+        // Modèle d'une partie dans la base de données
         const game = {
             code: code,
             creationDate: new Date().toISOString().replace(/T/, '_').replace(/\..+/, ''),
@@ -163,11 +165,11 @@ module.exports = (collection, questionCollection) => {
             const response = await axios.get(requeteAPI);
             const questions = response.data;
 
+            // Initialisation de la partie et envoi de la première question
             game.isStarted = true;
             // game.questions = questions; // Retiré pour ne pas "stocker" les questions sur l'api
             game.currentQuestion = questions[0];
             game.countdown = game.options.questionTime;
-
             // await collection.updateOne({ code }, { $set: { isStarted: game.isStarted, questions: game.questions, currentQuestion: game.currentQuestion } }); // Retiré pour ne pas "stocker" les questions sur l'api
             await collection.updateOne({ code }, { $set: { isStarted: game.isStarted, currentQuestion: game.currentQuestion, showAnswer:game.showAnswer, countdown:game.countdown} }); // Ajouté pour ne pas "stocker" les questions sur l'api
  
@@ -193,10 +195,11 @@ module.exports = (collection, questionCollection) => {
 
                     const answerTime = 5000;
                     sendQuestion(); // Première question
-                    setInterval(sendQuestion, questionTime + answerTime); // Questions suivantes
+                    setInterval(sendQuestion, questionTime + answerTime); // Questions suivantes toutes les (questionTime + answerTime) secondes
                 }
             }, 1000);
 
+            // Compte à rebours pour chaque question
             let countdownInterval = setInterval(async () => {
                 if (!game.showAnswer && game.countdown > 0) {
                     game.countdown--;
@@ -204,6 +207,7 @@ module.exports = (collection, questionCollection) => {
                 }
             }, 1000);
 
+            // Fonction pour envoyer une question aux joueurs
             async function sendQuestion() {
                 currentQuestionIndex++;
                 // if (currentQuestionIndex >= game.questions.length) { // Retiré pour ne pas "stocker" les questions sur l'api
@@ -222,18 +226,20 @@ module.exports = (collection, questionCollection) => {
                     // console.log("Scoreboard:");
                     // console.log(game.players);
 
+                    // Afficher la réponse après (questionTime) secondes
                     setTimeout(async () => {
                         console.log(`Réponse : ${game.currentQuestion.answerText}`);
                         game.showAnswer = true;
                         game.countdown = -1;
                         await collection.updateOne({ code }, { $set: { showAnswer: game.showAnswer, countdown:game.countdown } });
 
-                        
-
                         // Afficher le scoreboard
                         // console.log("Scoreboard:");
                         // console.log(game.players);
+
                     }, questionTime);
+
+                    // Réinitialisation du compteur pour la prochaine question
                     game.showAnswer = false;
                     game.countdown = game.options.questionTime;
                     await collection.updateOne({ code }, { $set: { showAnswer: game.showAnswer, countdown:game.countdown } });

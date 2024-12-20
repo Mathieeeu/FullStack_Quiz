@@ -15,8 +15,9 @@ export class AuthService {
     return this.http.post<boolean>(`${this.baseUrl}/login`, body);
   }
 
-  register(user: any): Observable<any> {
-    return this.http.post(`${this.baseUrl}/add`, user);
+  register(login: string, password: string, superuser: boolean): Observable<boolean> {
+    const user = { login, password, superuser };
+    return this.http.post<boolean>(`${this.baseUrl}/add`, user);
   }
 
   editUser(user: any): Observable<any> {

@@ -100,8 +100,8 @@ input[type=text],input[type=password]{
   background-color: var(--box);
   border: none;
   border-bottom: 2px solid #000000b6;
-  padding: 15px 10px;
-  margin-bottom: 18px;
+  padding: 2vh 0.5vw;
+  margin-bottom: 2vh;
   height:3vh;
   width:20vw;
   font-size:2vw;
@@ -119,14 +119,7 @@ input[type=submit]{
   font-size: 16px;
   transition: background-color 0.3s, transform 0.3s;
 }
-input[type=submit]:hover {
-  background-color: var(--txt);
-  transform: scale(1.02);
-}
-input[type=submit]:active {
-  background-color: var(--txt);
-  transform: scale(0.95);
-}
+
 
 input[type=text]:focus,input[type=password]:focus{
   transform: translateY(-7.5px);
@@ -137,9 +130,13 @@ input[type=text]:focus,input[type=password]:focus{
   border-bottom: 2px solid var(--txt);
 }
 
-a{
-  margin-top: 1vh;
-  text-decoration: none;  
-  color :#757171
+input[type=submit]:hover {
+  transform: scale(1.02);
+}
+
+p{
+  margin-top: 1vh;  
+  color :#757171;
+  cursor: pointer;
 }
 

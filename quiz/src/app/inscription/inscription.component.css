@@ -1,0 +1,135 @@
+.page-container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  /* Fond animé couvrant tout l'écran */
+  .background-animation {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0; 
+  }
+  
+  section {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-content: flex-start;
+    align-items: center;
+    overflow: hidden;
+    position: relative;
+  }
+  
+  section::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(var(--bg), var(--grn), var(--bg));
+    animation: animate 5s linear infinite;
+    z-index: 0;
+  }
+  
+  @keyframes animate 
+  {
+    0%
+    {
+      transform: translateY(-100%);
+    }
+    100%
+    {
+      transform: translateY(100%);
+    }
+  }
+  
+  /* Style pour chaque carré de l'animation */
+  section span {
+    display: block;
+    width: 100px;
+    height: 100px;
+    background: var(--bg);
+    transition: 1.5s;
+    z-index: 1;
+  }
+  
+  section span:hover {
+    background: var(--grn);
+    transition: 0s;
+  }
+  
+  /* Formulaire d'inscription */
+  .inscription {
+    display: flex;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    height: 65vh;
+    width: 33vw;
+    background: var(--box);
+    z-index: 1; /* Au-dessus du fond animé */
+    border-radius: 20px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 9);
+  }
+  
+  .content {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  h2{
+    color: var(--txt);
+    font-size: 4vw;
+  }
+  
+  input[type=text],input[type=password]{
+    background-color: var(--box);
+    border: none;
+    border-bottom: 2px solid #000000b6;
+    padding: 2vh 0.5vw;
+    margin-bottom: 2vh;
+    height:3vh;
+    width:25vw;
+    font-size:1.8vw;
+    transition: 0.5s;
+    color : var(--txt);
+  }
+  
+  input[type=submit]{
+    padding: 2vh 6vw;
+    background-color: var(--txt);
+    color: var(--box);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s, transform 0.3s;
+  }
+  
+  
+  input[type=text]:focus,input[type=password]:focus{
+    transform: translateY(-7.5px);
+    font-size: 1.5vw;
+    outline:none;
+    border-radius: 20px;
+    background-color: var(--bg-button);
+    border-bottom: 2px solid var(--txt);
+  }
+
+  input[type=submit]:hover {
+    transform: scale(1.02);
+  }

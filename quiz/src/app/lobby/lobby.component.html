@@ -3,7 +3,7 @@
     <app-informations></app-informations>
     <br>
     <div class="boutons"> 
-      <button (click)="startGame()">Démarrer la partie</button>
+      <button (click)="startGame()" [disabled]="gameDetails.isStarted">Démarrer la partie</button>
       <button (click)="leaveGame()">Quittez</button>
     </div> 
   </div>

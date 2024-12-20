@@ -40,4 +40,8 @@ export class ConnexionComponent {
       }
     }
 
+  goToInscription(): void {
+    this.router.navigate(['/inscription']);
+  }
+
 }

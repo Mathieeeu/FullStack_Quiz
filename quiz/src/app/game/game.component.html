@@ -1,27 +1,38 @@
 <div *ngIf="gameDetails">
-    <h2>Game - Code: {{ gameDetails.code }}</h2>
-    
-    <div *ngIf="gameDetails.currentQuestionIndex === -1">
-      <p>La partie commence...</p>
+  <h2>Game - Code: {{ gameDetails.code }}</h2>
+
+  <main id="starting" *ngIf="gameDetails.currentQuestionIndex === -1">
+    <p>La partie commence...</p>
+  </main>
+
+  <main *ngIf="gameDetails.currentQuestionIndex !== -1">
+    <div id="timer">
+      <div id="circle">
+        <div id="dot"></div>
+        <svg>
+          <circle cx="70" cy="70" r="50" id="bc"></circle>
+          <circle cx="70" cy="70" r="50" id="sc"></circle>
+        </svg>
+        <div id="time">{{ gameDetails.countdown }}</div>
+      </div>
     </div>
-    
-    <div *ngIf="gameDetails.currentQuestionIndex !== -1">
-      <h3>Thème: {{ gameDetails.currentQuestion.themeText }}</h3>
-      <p>Temps restant: {{ gameDetails.countdown }}</p>
-      <p>Question {{ gameDetails.currentQuestionIndex + 1 }}: {{ gameDetails.currentQuestion.questionText }}</p>
-      
+    <div id="question">
+      <span id="question-theme">Thème: {{ gameDetails.currentQuestion.themeText }}</span>
+      <span id="question-nb">Question {{ gameDetails.currentQuestionIndex + 1 }}</span>
+      <span id="question-text">{{ gameDetails.currentQuestion.questionText }}</span>
+
+      <div *ngIf="!gameDetails.showAnswer">
+        <input type="text" [(ngModel)]="answer" placeholder="Votre réponse">
+      </div>
+
       <div *ngIf="gameDetails.showAnswer">
         <p><strong>Réponse :</strong> {{ gameDetails.currentQuestion.answerText }}</p>
       </div>
-      
-      <div *ngIf="!gameDetails.showAnswer">
-        <input type="text" [(ngModel)]="answer" placeholder="Votre réponse">
-        <button (click)="checkAnswer()">Soumettre</button>
-      </div>
     </div>
-  
-    <ul>
-      <li *ngFor="let player of gameDetails.players">{{ player.username }} - Score: {{ player.score }}</li>
-    </ul>
-  </div>
-  
+
+  </main>
+
+  <ul>
+    <li *ngFor="let player of gameDetails.players">{{ player.username }} - Score: {{ player.score }}</li>
+  </ul>
+</div>

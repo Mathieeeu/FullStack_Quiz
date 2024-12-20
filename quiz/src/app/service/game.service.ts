@@ -40,4 +40,8 @@ export class GameService {
   leaveGame(code: string, username: string): Observable<any> {
     return this.http.post(`${this.apiUrl}/leave/${code}`, { username });
   }
+
+  increaseScore(code: string, username: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/score/${code}`, { username });
+  }
 }

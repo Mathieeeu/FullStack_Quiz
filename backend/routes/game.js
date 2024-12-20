@@ -50,7 +50,9 @@ module.exports = (collection, questionCollection) => {
             host: req.body.host,
             players: [],
             currentQuestion: null,
-            currentQuestionIndex: -1
+            currentQuestionIndex: -1,
+            showAnswer: false,
+            countdown:-1
         };
 
         try {
@@ -86,6 +88,10 @@ module.exports = (collection, questionCollection) => {
                 return res.status(404).send({ message: "Game not found" });
             }
 
+            if (game.isOver) {
+                return res.status(400).send({ message: "Game is over" });
+            }
+
             // Vérifier si le pseudo existe déjà
             const existingPlayer = game.players.find(p => p.username === player.username);
             if (existingPlayer) {
@@ -102,9 +108,6 @@ module.exports = (collection, questionCollection) => {
 
     // Route pour déconnecter un joueur
     router.post('/leave/:code', async (req, res) => {
-
-        // PAS ENCORE TESTEE, SIMPLEMENT ECRITE POUR LE MOMENT !!!!
-
         const code = req.params.code;
         const username = req.body.username;
 
@@ -113,7 +116,6 @@ module.exports = (collection, questionCollection) => {
             if (!game) {
                 return res.status(404).send({ message: "Game not found" });
             }
-
             const playerIndex = game.players.findIndex(p => p.username === username);
             if (playerIndex === -1) {
                 return res.status(404).send({ message: "Player not found" });
@@ -164,8 +166,10 @@ module.exports = (collection, questionCollection) => {
             game.isStarted = true;
             // game.questions = questions; // Retiré pour ne pas "stocker" les questions sur l'api
             game.currentQuestion = questions[0];
+            game.countdown = game.options.questionTime;
+
             // await collection.updateOne({ code }, { $set: { isStarted: game.isStarted, questions: game.questions, currentQuestion: game.currentQuestion } }); // Retiré pour ne pas "stocker" les questions sur l'api
-            await collection.updateOne({ code }, { $set: { isStarted: game.isStarted, currentQuestion: game.currentQuestion } }); // Ajouté pour ne pas "stocker" les questions sur l'api
+            await collection.updateOne({ code }, { $set: { isStarted: game.isStarted, currentQuestion: game.currentQuestion, showAnswer:game.showAnswer, countdown:game.countdown} }); // Ajouté pour ne pas "stocker" les questions sur l'api
  
             // Changer les questions toutes les x secondes
             const questionTime = game.options.questionTime * 1000;
@@ -193,6 +197,13 @@ module.exports = (collection, questionCollection) => {
                 }
             }, 1000);
 
+            let countdownInterval = setInterval(async () => {
+                if (!game.showAnswer && game.countdown > 0) {
+                    game.countdown--;
+                    await collection.updateOne({ code }, { $set: { countdown: game.countdown } });
+                }
+            }, 1000);
+
             async function sendQuestion() {
                 currentQuestionIndex++;
                 // if (currentQuestionIndex >= game.questions.length) { // Retiré pour ne pas "stocker" les questions sur l'api
@@ -202,9 +213,10 @@ module.exports = (collection, questionCollection) => {
                     console.log("La partie est terminée !");
                 } else {
                     // game.currentQuestion = game.questions[currentQuestionIndex]; // Retiré pour ne pas "stocker" les questions sur l'api
+                    game.countdown = game.options.questionTime;
                     game.currentQuestion = questions[currentQuestionIndex]; // Ajouté pour ne pas "stocker" les questions sur l'api
                     console.log(`Question ${currentQuestionIndex + 1}: ${game.currentQuestion.questionText}`);
-                    await collection.updateOne({ code }, { $set: { currentQuestionIndex, currentQuestion: game.currentQuestion } });
+                    await collection.updateOne({ code }, { $set: { currentQuestionIndex, currentQuestion: game.currentQuestion, countdown:game.countdown } });
 
                     // Afficher le scoreboard
                     // console.log("Scoreboard:");
@@ -212,11 +224,19 @@ module.exports = (collection, questionCollection) => {
 
                     setTimeout(async () => {
                         console.log(`Réponse : ${game.currentQuestion.answerText}`);
+                        game.showAnswer = true;
+                        game.countdown = -1;
+                        await collection.updateOne({ code }, { $set: { showAnswer: game.showAnswer, countdown:game.countdown } });
+
+                        
 
                         // Afficher le scoreboard
                         // console.log("Scoreboard:");
                         // console.log(game.players);
                     }, questionTime);
+                    game.showAnswer = false;
+                    game.countdown = game.options.questionTime;
+                    await collection.updateOne({ code }, { $set: { showAnswer: game.showAnswer, countdown:game.countdown } });
                 }
             }
 
@@ -257,6 +277,30 @@ module.exports = (collection, questionCollection) => {
             res.status(500).send(error);
         }
     });
+
+    router.post('/increaseScore/:code', async (req, res) => {
+        const code = req.params.code;
+        const username = req.body.username;
+      
+        try {
+          const game = await collection.findOne({ code });
+          if (!game) {
+            return res.status(404).send({ message: "Game not found" });
+          }
+      
+          // Trouve le joueur et augmente son score
+          game.players = game.players.map(player => {
+            if (player.username === username) {
+              player.score += 1; // Augmenter le score de 1
+            }
+            return player;
+          });
+          await collection.updateOne({ code }, { $set: { players: game.players, answerCorrect: true } });
+          res.send(game);
+        } catch (error) {
+          res.status(500).send(error);
+        }
+      });      
 
     // Route pour mettre à jour le score d'un joueur
     router.post('/update-score/:code', async (req, res) => {

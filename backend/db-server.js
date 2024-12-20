@@ -19,10 +19,12 @@ if (!process.env.MONGO_USER || !process.env.MONGO_PASSWORD || !process.env.MONGO
     console.error('Les variables d\'environnement MONGO_USER, MONGO_PASSWORD, MONGO_ADDRESS et MONGO_DB doivent être définies !');
     process.exit(1);
 }
+const scheme = process.env.MONGO_SCHEME || 'mongodb';
 const user = process.env.MONGO_USER;
 const password = process.env.MONGO_PASSWORD;
 const address = process.env.MONGO_ADDRESS;
-const url = `mongodb://${user}:${password}@${address}:27017/?authMechanism=DEFAULT&authSource=admin`;
+const options = process.env.MONGO_OPTIONS || '';
+const url = `${scheme}://${user}:${password}@${address}/${options}`;
 
 client = new MongoClient(url, { useUnifiedTopology: true });
 client.connect()

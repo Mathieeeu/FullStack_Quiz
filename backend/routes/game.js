@@ -91,13 +91,13 @@ module.exports = (collection, questionCollection) => {
             }
 
             if (game.isOver) {
-                return res.status(400).send({ message: "Game is over" });
+                return res.status(410).send({ message: "Game is over" });
             }
 
             // Vérifier si le pseudo existe déjà
             const existingPlayer = game.players.find(p => p.username === player.username);
             if (existingPlayer) {
-                return res.status(400).send({ message: "Username already taken" });
+                return res.status(409).send({ message: "Username already taken" });
             }
 
             game.players.push(player);
@@ -209,18 +209,26 @@ module.exports = (collection, questionCollection) => {
 
             // Fonction pour envoyer une question aux joueurs
             async function sendQuestion() {
+                if (game.isOver) {
+                    clearInterval(countdownInterval);
+                    return;
+                }
                 currentQuestionIndex++;
                 // if (currentQuestionIndex >= game.questions.length) { // Retiré pour ne pas "stocker" les questions sur l'api
                 if (currentQuestionIndex >= questions.length) { // Ajouté pour ne pas "stocker" les questions sur l'api
                     game.isOver = true;
                     await collection.updateOne({ code }, { $set: { isOver: game.isOver } });
                     console.log("La partie est terminée !");
+                    clearInterval(countdownInterval);
+
+
                 } else {
                     // game.currentQuestion = game.questions[currentQuestionIndex]; // Retiré pour ne pas "stocker" les questions sur l'api
                     game.countdown = game.options.questionTime;
+                    game.showAnswer = false;
                     game.currentQuestion = questions[currentQuestionIndex]; // Ajouté pour ne pas "stocker" les questions sur l'api
                     console.log(`Question ${currentQuestionIndex + 1}: ${game.currentQuestion.questionText}`);
-                    await collection.updateOne({ code }, { $set: { currentQuestionIndex, currentQuestion: game.currentQuestion, countdown:game.countdown } });
+                    await collection.updateOne({ code }, { $set: { currentQuestionIndex, currentQuestion: game.currentQuestion, countdown:game.countdown, showAnswer:game.showAnswer } });
 
                     // Afficher le scoreboard
                     // console.log("Scoreboard:");
@@ -238,14 +246,8 @@ module.exports = (collection, questionCollection) => {
                         // console.log(game.players);
 
                     }, questionTime);
-
-                    // Réinitialisation du compteur pour la prochaine question
-                    game.showAnswer = false;
-                    game.countdown = game.options.questionTime;
-                    await collection.updateOne({ code }, { $set: { showAnswer: game.showAnswer, countdown:game.countdown } });
                 }
             }
-
             res.send(game);
 
         } catch (error) {
@@ -307,29 +309,6 @@ module.exports = (collection, questionCollection) => {
           res.status(500).send(error);
         }
       });      
-
-    // Route pour mettre à jour le score d'un joueur
-    router.post('/update-score/:code', async (req, res) => {
-        const code = req.params.code;
-        const { username, score } = req.body;
-
-        try {
-            const game = await collection.findOne({ code });
-            if (!game) {
-                return res.status(404).send({ message: "Game not found" });
-            }
-            const player = game.players.find(p => p.username === username);
-            if (player) {
-                player.score = score;
-                await collection.updateOne({ code }, { $set: { players: game.players } });
-                res.send(game);
-            } else {
-                res.status(404).send({ message: "Player not found" });
-            }
-        } catch (error) {
-            res.status(500).send(error);
-        }
-    });
 
     return router;
 };

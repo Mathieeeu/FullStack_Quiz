@@ -29,6 +29,7 @@ export class GameService {
   }
 
   getGameDetails(code: string): Observable<any> {
+    // console.log(`${this.apiUrl}/${code}`);
     return this.http.get(`${this.apiUrl}/${code}`).pipe(
       tap((gameDetails: any) => {
         // console.log(`${this.apiUrl}/${code}`);
@@ -42,6 +43,6 @@ export class GameService {
   }
 
   increaseScore(code: string, username: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/score/${code}`, { username });
+    return this.http.post(`${this.apiUrl}/increaseScore/${code}`, { username });
   }
 }

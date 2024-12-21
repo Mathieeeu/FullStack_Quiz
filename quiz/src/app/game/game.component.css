@@ -14,68 +14,19 @@ main {
     justify-content: space-between;
 }
 
-#timer {
-    display: flex;
-    gap: 30px;
-}
-#timer .circle {
-    position: relative;
-    width:150px;
-    height:150px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transform: translateY(-30px);
-}
-#timer .circle svg {
-    position: relative;
-    width:150px;
-    height:150px;
-    transform: rotate(270deg);
-}
-
-#timer .circle svg circle{
-    width:100%;
-    height:100%;
-    fill:transparent;
-    stroke-width: 6;
-    stroke:var(--clr);
-    stroke-linecap: round;
-    transform:translate(5px,5px);
-}
-#timer .circle svg circle:nth-child(2){
-    stroke: var(--clr);
-    /* 314 = 2 * 50px * pi avec 50px le rayon des cercles*/
-    stroke-dasharray: 314;
-    stroke-dashoffset: 314;
-    transition: none;
-}
-#timer div {
-    position: absolute;
+#time {
     text-align: center;
     font-weight:600;
     color:var(--clr);
     font-size:1.5em;
 }
-#timer .dot {
-    position:absolute;
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    z-index: 1000;
-}
-#timer .dot:before{
-    content:'';
-    position: absolute;
-    top:18px;
-    width: 15px;
-    height: 15px;
-    background: var(--clr);
-    border-radius: 50%;
-    box-shadow: 0 0 20px var(--clr), 0 0 60px var(--clr)
+
+p, li {
+    font-size: 20px;
+    font-weight: bold;
+    color: var(--txt);
+    text-align: center;
+    margin-bottom: 20px;
 }
 
 div#question {
@@ -91,4 +42,33 @@ div#question {
     justify-content: space-evenly;
     text-align: center;
     transform: translateY(-30px);
+}
+
+input#answer-input {
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    -khtml-user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-user-drag: none;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-autofill: none;
+    background-color: transparent;
+    border: none;
+    border-bottom: 2px solid #fff;
+    color: var(--txt);
+    font-size: 20px;
+    text-align: center;
+    width: 80%;
+    margin-bottom: 20px;
+    padding: 10px;
+    font-weight: bold;
+    transition: border-color 0.3s, width 0.3s;
+}
+
+input#answer-input:focus {
+    outline: none;
+    border-bottom: 2px solid green;
+    width: 85%;
 }

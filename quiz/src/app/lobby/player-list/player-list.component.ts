@@ -41,8 +41,8 @@ export class PlayerListComponent {
   ngOnInit(): void {
     this.username = this.sessionService.getUsername();
 
-    console.log(this.username);
-    console.log(this.gameCode);
+    // console.log(this.username);
+    // console.log(this.gameCode);
 
     if (!this.username) {
       this.router.navigate(['/']);

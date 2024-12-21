@@ -4,32 +4,26 @@
   <main id="starting" *ngIf="gameDetails.currentQuestionIndex === -1">
     <p>La partie commence...</p>
   </main>
-
-  <main *ngIf="gameDetails.currentQuestionIndex !== -1">
-    <div id="timer">
-      <div id="circle">
-        <div id="dot"></div>
-        <svg>
-          <circle cx="70" cy="70" r="50" id="bc"></circle>
-          <circle cx="70" cy="70" r="50" id="sc"></circle>
-        </svg>
-        <div id="time">{{ gameDetails.countdown }}</div>
-      </div>
-    </div>
+  <main *ngIf="gameDetails.currentQuestionIndex !== -1 && !gameDetails.isOver">
+    <div id="time" *ngIf="gameDetails.countdown !== -1">{{ gameDetails.countdown }}</div>
     <div id="question">
       <span id="question-theme">Thème: {{ gameDetails.currentQuestion.themeText }}</span>
       <span id="question-nb">Question {{ gameDetails.currentQuestionIndex + 1 }}</span>
       <span id="question-text">{{ gameDetails.currentQuestion.questionText }}</span>
 
-      <div *ngIf="!gameDetails.showAnswer">
-        <input type="text" [(ngModel)]="answer" placeholder="Votre réponse">
+      <div *ngIf="!gameDetails.showAnswer ">
+        <input type="text" id="answer-input" #answerInput [(ngModel)]="answer" placeholder="Votre réponse" (keydown.enter)="checkAnswer()" autocomplete="off" autofocus>
       </div>
 
       <div *ngIf="gameDetails.showAnswer">
         <p><strong>Réponse :</strong> {{ gameDetails.currentQuestion.answerText }}</p>
       </div>
     </div>
+  </main>
 
+  <main id="ending" *ngIf="gameDetails.isOver">
+    <p>La partie est terminée !</p>
+    <span id="best-score"></span>
   </main>
 
   <ul>

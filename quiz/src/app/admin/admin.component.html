@@ -1,1 +1,8 @@
 <p>admin works!</p>
+<p>admin works!</p>
+<p>admin works!</p>
+<div class="admin">
+    <p>Connecté en tant que : {{ login }}</p>
+    <p *ngIf="superUser">Vous êtes un super utilisateur.</p>
+    <p *ngIf="!superUser">Vous êtes un utilisateur normal.</p>
+  </div>

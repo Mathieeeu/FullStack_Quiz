@@ -7,10 +7,13 @@ module.exports = (collection) => {
     const router = express.Router();
 
     // Route pour récupérer les noms d'utilisateur inscrits (provisoire)
-    router.get('/names', async (req, res) => {
+    router.get('/superuser', async (req, res) => {
+        const user = {
+            username: req.query.login,
+        };
         try {
-            const names = await collection.distinct("username");
-            res.send(names);
+            const result = await collection.findOne({ username: user.username});
+            res.send(result.Superuser);
         } catch (error) {
             res.status(500).send(error);
         }
@@ -19,25 +22,25 @@ module.exports = (collection) => {
     // Route pour créer un nouvel utilisateur
     router.post('/add', async (req, res) => {
         const user = {
-            userLogin: req.body.login,
-            userPW: req.body.password,
+            username: req.body.login,
+            password: req.body.password,
             Superuser: req.body.superuser
         };
         
         try {
             // Recherche si login déjà dans la bd
-            const result = await collection.findOne({ username: user.userLogin});
+            const result = await collection.findOne({ username: user.username});
             if (result != null){
                 res.status(409).send({ message: "User name already used" });
             }
             else{
                 // Hachage du mot de passe
                 const saltRounds = 10; // Plus le nombre est élevé, plus le hachage est sécurisé mais lent
-                user.userPW = await bcrypt.hash(user.userPW, saltRounds);
+                user.password = await bcrypt.hash(user.password, saltRounds);
 
                 await collection.insertOne(user);
-                res.send("User added");
-                console.log(`User ${user.userLogin} added`);
+                res.status(200).send({ isAuthenticated: true });
+                console.log(`User ${user.username} added`);
             }
         } catch (error) {
             res.status(500).send(error);
@@ -48,21 +51,21 @@ module.exports = (collection) => {
     //Rajouter vérification mdp !!!!
     router.post('/edit', async (req, res) => {
         const user = {
-            userLogin: req.body.login,
-            userPW: req.body.password,
+            username: req.body.login,
+            password: req.body.password,
             Superuser: req.body.superuser
         };
         
         try {
              // Recherche si login déjà dans la bd
-             const result = await collection.findOne({ username: user.userLogin});
+             const result = await collection.findOne({ username: user.username});
              if (result === null){
                  res.status(404).send({ message: "User not found" });
              }
              else{
-                user.userPW = await bcrypt.hash(user.userPW, 10);
-                const result = await collection.updateOne({ username: user.userLogin }, { $set: { password: user.userPW, Superuser: user.Superuser } });
-                console.log(`User ${user.userLogin} edited: `);
+                user.password = await bcrypt.hash(user.password, 10);
+                const result = await collection.updateOne({ username: user.username }, { $set: { password: user.password, Superuser: user.Superuser } });
+                console.log(`User ${user.username} edited: `);
                 res.send("User edited");
              }
         } catch (error) {
@@ -73,11 +76,11 @@ module.exports = (collection) => {
     // Route pour supprimer un utilisateur
     //Rajouter vérification mdp !!!!
     router.post('/delete', async (req, res) => {
-        const userLogin = req.body.login;
-        const userPW = req.body.password;
+        const username = req.body.login;
+        const password = req.body.password;
 
         try {
-            const deleteResult = await collection.deleteOne({userLogin});
+            const deleteResult = await collection.deleteOne({username});
             if (deleteResult.deletedCount === 0) {
                 return res.status(404).send({ message: "User not found" });
             }
@@ -87,26 +90,28 @@ module.exports = (collection) => {
         }
     });
 
-    // Route pour permettre à un utilisateur de se connecter
+    //Route pour permettre à un utilisateur de se connecter
     router.post('/login', async (req, res) => {
         const user = {
-            userLogin: req.body.login,
-            userPW: req.body.password
+            username: req.body.login,
+            password: req.body.password
         };
 
         // Recherche de l'utilisateur
         try {
-            const result = await collection.findOne({ username: user.userLogin, password: user.userPW});
+            const result = await collection.findOne({ username: user.username});
             if(!result){
                 res.send(false)
             }
             else{
                  // Comparez le mot de passe saisi avec le mot de passe haché
-                const isMatch = await bcrypt.compare(password, result.password);
+                const isMatch = await bcrypt.compare(user.password, result.password);
                 if (!isMatch) {
                     res.status(401).send({ success: false, message: "Invalid credentials" });
                 }
-                res.send(true)
+                else{
+                    res.status(200).send({ success: true, message: "Login successful" });
+                }
             }
         } catch (error) {
             res.status(500).send(error);

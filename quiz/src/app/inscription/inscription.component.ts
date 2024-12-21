@@ -4,6 +4,8 @@ import { AuthService } from '../service/auth.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
+import { SessionAdminService} from '../service/session-admin.service';
+
 @Component({
   selector: 'app-inscription',
   standalone: true,
@@ -15,8 +17,15 @@ export class InscriptionComponent {
   login: string = '';
   password: string = '';
   password_conf: string = '';
+  superUser: boolean = false; // valeur par défaut
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(
+    private authService: AuthService, 
+    private router: Router,
+    private sessionAdmin: SessionAdminService
+  ) 
+  {}
+
 
   // Méthode appelée au clic du bouton
   goToAdmin(): void {
@@ -25,13 +34,16 @@ export class InscriptionComponent {
         this.authService.register(this.login, this.password, false).subscribe({
           next: (isAuthenticated) => {
             if (isAuthenticated) {
+              this.sessionAdmin.setUsername(this.login);
               this.router.navigate(['/admin']);
-            } else {
-              alert('Erreur - indentifiant déjà utilisé');
             }
           },
-          error: (error) => {
-            console.error('Erreur lors de la tentative de connexion', error);
+          error: (error) =>{
+             if (error.status === 409) { // Code d'état HTTP pour conflit (identifiant pris)
+              alert('Identifiant déjà utilisé');
+            } else {
+              alert('Erreur lors de l\'inscription');
+            }
           },
           complete: () => {
             console.log('Requête terminée');
@@ -44,5 +56,5 @@ export class InscriptionComponent {
     else{
       alert('Mots de passe différents');
     }  
-    }
+  }
 }

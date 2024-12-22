@@ -31,7 +31,9 @@
 
     <ul id="scoreboard">
       <h3>Scoreboard</h3>
-      <li *ngFor="let player of gameDetails.players"><span>{{ player.username }}</span> {{ player.score }}</li>
+      <li *ngFor="let player of gameDetails.players" [ngClass]="{'answered': player.answerCorrect}">
+        <span class="username">{{ player.username }}</span> {{ player.score }}
+      </li>
     </ul>
   </div>
 </div>

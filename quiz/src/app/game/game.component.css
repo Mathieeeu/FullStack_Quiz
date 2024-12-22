@@ -7,7 +7,7 @@
     padding-right: 5%;
     align-content: center;
     flex-direction: row;
-    margin-top: --var(--header-height)+10px;
+    margin-top: var(--header-height);
 }
 
 main {
@@ -57,7 +57,13 @@ hr {
     width: 250px;
 }
 
-#scoreboard li span {
+#scoreboard li .username {
+    font-weight: bold;
+}
+
+#scoreboard li.answered {
+    background-color: var(--bg);
+    color: var(--txt);
     font-weight: bold;
 }
 

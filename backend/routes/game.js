@@ -81,7 +81,8 @@ module.exports = (collection, questionCollection) => {
         const code = req.params.code;
         const player = {
             username: req.body.username,
-            score: 0
+            score: 0,
+            answerCorrect: false
         };
 
         try {
@@ -289,24 +290,30 @@ module.exports = (collection, questionCollection) => {
     router.post('/increaseScore/:code', async (req, res) => {
         const code = req.params.code;
         const username = req.body.username;
-      
+        
         try {
-          const game = await collection.findOne({ code });
-          if (!game) {
-            return res.status(404).send({ message: "Game not found" });
-          }
-      
-          // Trouve le joueur et augmente son score
-          game.players = game.players.map(player => {
-            if (player.username === username) {
-              player.score += 1; // Augmenter le score de 1
+            const game = await collection.findOne({ code });
+            if (!game) {
+                return res.status(404).send({ message: "Game not found" });
             }
-            return player;
-          });
-          await collection.updateOne({ code }, { $set: { players: game.players, answerCorrect: true } });
-          res.send(game);
+        
+            // Trouve le joueur et augmente son score
+            game.players = game.players.map(player => {
+                if (player.username === username) {
+                    player.score += 1; // Augmenter le score de 1
+                    player.answerCorrect = true;
+                }
+                return player;
+            });
+        
+            // Trie les joueurs par score croissant
+            game.players.sort((a, b) => b.score - a.score);
+        
+            await collection.updateOne({ code }, { $set: { players: game.players } });
+            res.send(game);
+        
         } catch (error) {
-          res.status(500).send(error);
+            res.status(500).send(error);
         }
       });      
 

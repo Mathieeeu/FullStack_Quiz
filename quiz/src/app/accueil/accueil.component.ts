@@ -24,11 +24,22 @@ export class AccueilComponent {
     private gameService: GameService,
     private sessionService: SessionService,
     private router: Router,
-    sessionAdmin: SessionAdminService
+    private sessionAdmin: SessionAdminService
   ) 
   {
     this.login = sessionAdmin.getUsername();
     this.superUser = sessionAdmin.getSuperUser();
+  }
+
+  ngOnInit(): void {
+    // S'abonner aux changements de session
+    this.sessionAdmin.username$.subscribe((username) => {
+      this.login = username;
+    });
+
+    this.sessionAdmin.superUser$.subscribe((isSuperUser) => {
+      this.superUser = isSuperUser;
+    });
   }
 
   joinGame() {

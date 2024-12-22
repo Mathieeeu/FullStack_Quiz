@@ -3,6 +3,6 @@
     <div class="button-group">
         <button *ngIf="login !== '' && superUser" id="admin" class="button">Administration</button>
         <button *ngIf="login === ''" id="settings" class="button" (click)="goToConnexion()">Interface admin</button>
-        <button *ngIf="login !== ''" id="logout" class="button" >Déconnexion</button>
+        <button *ngIf="login !== ''" id="logout" class="button" (click)="deconnexion()">Déconnexion</button>
     </div>
 </header>

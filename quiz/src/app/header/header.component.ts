@@ -39,4 +39,10 @@ export class HeaderComponent implements OnInit {
   goToAccueil(): void {
     this.router.navigate(['']);
   }
+
+  deconnexion(){
+    this.sessionAdmin.clearSession();
+    this.login = '';
+    this.superUser = false;
+  }
 }

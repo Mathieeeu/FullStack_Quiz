@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { GameService } from '../service/game.service';
 import { SessionService } from '../service/session.service';
+import { SessionAdminService } from '../service/session-admin.service';
 
 @Component({
   selector: 'app-accueil',
@@ -16,12 +17,19 @@ import { SessionService } from '../service/session.service';
 export class AccueilComponent {
   username: string = '';
   gameCode: string = '';
+  login: string = '';
+  superUser: boolean = false;
   
   constructor(
     private gameService: GameService,
     private sessionService: SessionService,
-    private router: Router
-  ) {}
+    private router: Router,
+    sessionAdmin: SessionAdminService
+  ) 
+  {
+    this.login = sessionAdmin.getUsername();
+    this.superUser = sessionAdmin.getSuperUser();
+  }
 
   joinGame() {
     this.gameService.joinGame(this.gameCode, this.username).subscribe(
@@ -34,3 +42,4 @@ export class AccueilComponent {
     );
   }
 }
+

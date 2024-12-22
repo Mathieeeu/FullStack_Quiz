@@ -9,6 +9,10 @@
             <input type="text" placeholder="Code de partie" required minlength="4" maxlength="4" autocomplete="off" id="gameCode" [(ngModel)]="gameCode" name="gameCode"/>
             <input type="submit" id="submit" value="Rejoindre" />
           </form>
+          <p>Connecté en tant que : {{ login }} {{superUser}}</p>
+          <button *ngIf="login !== ''">Créer une nouvelle partie</button>
+          <br>
+          <button *ngIf="login !== '' && superUser">Ajouter de nouvelles questions</button>
     </div>
     <div class = "div_droite">
         <img src = "img accueil (1).png"/>

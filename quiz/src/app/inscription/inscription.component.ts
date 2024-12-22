@@ -35,7 +35,7 @@ export class InscriptionComponent {
           next: (isAuthenticated) => {
             if (isAuthenticated) {
               this.sessionAdmin.setUsername(this.login);
-              this.router.navigate(['/admin']);
+              this.router.navigate(['']);
             }
           },
           error: (error) =>{

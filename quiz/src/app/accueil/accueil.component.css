@@ -73,3 +73,28 @@ input[type=text]{
 p{
     text-align : justify;
 }
+
+button {
+  text-decoration: none;
+  font-size: 3vh;
+  border: none;
+  background: none;
+  font-weight: 100;
+}
+
+button::before {
+  margin-left: auto;
+}
+
+button::after, button::before {
+  content: '';
+  width: 0%;
+  height: 2px;
+  background: var(--txt);
+  display: block;
+  transition: 0.5s;
+}
+
+button:hover::after, button:hover::before {
+  width: 100%;
+}

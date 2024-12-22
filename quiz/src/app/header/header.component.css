@@ -16,6 +16,12 @@ header {
     padding-bottom: 15px;
     z-index: 1000;
 }
+
+.button-group {
+    display: flex;
+    gap: 10px; 
+}
+
 .button {
     padding: 10px 20px;
     background-color: var(--txt);
@@ -26,10 +32,12 @@ header {
     font-size: 16px;
     transition: background-color 0.3s, transform 0.3s;
 }
+
 .button:hover {
     background-color: var(--txt);
     transform: scale(1.02);
 }
+
 .button:active {
     background-color: var(--txt);
     transform: scale(0.95);

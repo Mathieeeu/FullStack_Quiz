@@ -1,25 +1,42 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { SessionAdminService } from '../service/session-admin.service';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [],
+  imports: [
+    CommonModule
+  ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css'
 })
-export class HeaderComponent {
-  constructor(private router: Router) {}
+export class HeaderComponent implements OnInit {
+  login: string = '';
+  superUser: boolean = false;
 
-  // Méthodes appelées au clic du bouton
+  constructor(
+    private router: Router,
+    private sessionAdmin: SessionAdminService
+  ) {}
+
+  ngOnInit(): void {
+    // S'abonner aux changements de session
+    this.sessionAdmin.username$.subscribe((username) => {
+      this.login = username;
+    });
+
+    this.sessionAdmin.superUser$.subscribe((isSuperUser) => {
+      this.superUser = isSuperUser;
+    });
+  }
+
   goToConnexion(): void {
     this.router.navigate(['/connexion']);
-
   }
 
   goToAccueil(): void {
     this.router.navigate(['']);
-
   }
 }
-

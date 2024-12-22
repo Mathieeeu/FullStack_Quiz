@@ -46,7 +46,7 @@ export class ConnexionComponent {
           this.sessionAdmin.setSuperUser(this.superUser);
   
           // Redirection
-          this.router.navigate(['/admin']);
+          this.router.navigate(['']);
         },
         error: (err) => {
           console.error('Erreur', err);

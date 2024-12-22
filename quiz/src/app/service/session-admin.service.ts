@@ -1,30 +1,35 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class SessionAdminService {
-  private username: string = '';
-  private superUser: boolean = false;
+  private usernameSubject = new BehaviorSubject<string>('');
+  private superUserSubject = new BehaviorSubject<boolean>(false);
+
+  // Observables pour suivre les changements
+  username$ = this.usernameSubject.asObservable();
+  superUser$ = this.superUserSubject.asObservable();
 
   setUsername(username: string): void {
-    this.username = username;
+    this.usernameSubject.next(username);
   }
 
   getUsername(): string {
-    return this.username;
+    return this.usernameSubject.getValue();
   }
 
   setSuperUser(superUser: boolean): void {
-    this.superUser = superUser;
+    this.superUserSubject.next(superUser);
   }
 
   getSuperUser(): boolean {
-    return this.superUser;
+    return this.superUserSubject.getValue();
   }
 
   clearSession(): void {
-    this.username = '';
-    this.superUser = false;
+    this.usernameSubject.next('');
+    this.superUserSubject.next(false);
   }
 }

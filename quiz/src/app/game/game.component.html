@@ -1,32 +1,37 @@
 <div *ngIf="gameDetails">
-  <h2>Game - Code: {{ gameDetails.code }}</h2>
+  <!-- <h2>Partie {{ gameDetails.code }}</h2> -->
+  <div class="game-container">
+    <main id="starting" *ngIf="gameDetails.currentQuestionIndex === -1">
+      <!-- Chargement de la partie -->
+      <p>La partie commence...</p>
+    </main>
+    <main *ngIf="gameDetails.currentQuestionIndex !== -1 && !gameDetails.isOver">
+      <!-- Partie en cours -->
+      <div id="question">
+        <div id="time" *ngIf="gameDetails.countdown !== -1">{{ gameDetails.countdown }}</div>
+        <span id="question-nb">Question {{ gameDetails.currentQuestionIndex + 1 }}/{{ gameDetails.options.nbQuestions }}</span>
+        <hr>
+        <span id="question-text">{{ gameDetails.currentQuestion.questionText }}</span>
 
-  <main id="starting" *ngIf="gameDetails.currentQuestionIndex === -1">
-    <p>La partie commence...</p>
-  </main>
-  <main *ngIf="gameDetails.currentQuestionIndex !== -1 && !gameDetails.isOver">
-    <div id="time" *ngIf="gameDetails.countdown !== -1">{{ gameDetails.countdown }}</div>
-    <div id="question">
-      <span id="question-theme">Thème: {{ gameDetails.currentQuestion.themeText }}</span>
-      <span id="question-nb">Question {{ gameDetails.currentQuestionIndex + 1 }}</span>
-      <span id="question-text">{{ gameDetails.currentQuestion.questionText }}</span>
+        <div *ngIf="!gameDetails.showAnswer ">
+          <input type="text" id="answer-input" #answerInput [(ngModel)]="answer" placeholder="Votre réponse" (keydown.enter)="checkAnswer()" autocomplete="off" autofocus>
+        </div>
 
-      <div *ngIf="!gameDetails.showAnswer ">
-        <input type="text" id="answer-input" #answerInput [(ngModel)]="answer" placeholder="Votre réponse" (keydown.enter)="checkAnswer()" autocomplete="off" autofocus>
+        <div *ngIf="gameDetails.showAnswer">
+          <p><strong>Réponse :</strong> {{ gameDetails.currentQuestion.answerText }}</p>
+        </div>
       </div>
+    </main>
 
-      <div *ngIf="gameDetails.showAnswer">
-        <p><strong>Réponse :</strong> {{ gameDetails.currentQuestion.answerText }}</p>
-      </div>
-    </div>
-  </main>
+    <main id="ending" *ngIf="gameDetails.isOver">
+      <!-- Partie terminée -->
+      <p>La partie est terminée !</p>
+      <span id="best-score"></span>
+    </main>
 
-  <main id="ending" *ngIf="gameDetails.isOver">
-    <p>La partie est terminée !</p>
-    <span id="best-score"></span>
-  </main>
-
-  <ul>
-    <li *ngFor="let player of gameDetails.players">{{ player.username }} - Score: {{ player.score }}</li>
-  </ul>
+    <ul id="scoreboard">
+      <h3>Scoreboard</h3>
+      <li *ngFor="let player of gameDetails.players"><span>{{ player.username }}</span> {{ player.score }}</li>
+    </ul>
+  </div>
 </div>

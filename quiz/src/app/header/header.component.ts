@@ -40,6 +40,10 @@ export class HeaderComponent implements OnInit {
     this.router.navigate(['']);
   }
 
+  goToAdmin(): void {
+    this.router.navigate(['/admin']);
+  }
+
   deconnexion(){
     this.sessionAdmin.clearSession();
     this.login = '';

@@ -11,6 +11,8 @@ import { QuestionFormComponent } from './question-form/question-form.component';
 import { LobbyComponent } from './lobby/lobby.component';
 import { CreateGameComponent } from './create-game/create-game.component';
 import { GameComponent } from './game/game.component';
+import {AjoutQuestionComponent} from './ajout-question/ajout-question.component';
+import { CreationPartieComponent } from './creation-partie/creation-partie.component';
 
 export const routes: Routes = [
   { path: '', component: AccueilComponent },
@@ -22,6 +24,8 @@ export const routes: Routes = [
   { path: 'lobby/:code', component: LobbyComponent},
   { path: 'create', component: CreateGameComponent },
   { path: 'game/:code', component: GameComponent },
+  { path: 'ajout-question', component: AjoutQuestionComponent },
+  { path: 'creation-partie', component: CreationPartieComponent },
   { path: '**', component: NotFoundComponent }
 ];
 

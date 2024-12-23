@@ -42,6 +42,14 @@ export class AccueilComponent {
     });
   }
 
+  goToAjoutQuestion(){
+    this.router.navigate(['/ajout-question']);
+  }
+
+  goToCreateGame(){
+    this.router.navigate(['/creation-partie']);
+  }
+
   joinGame() {
     this.gameService.joinGame(this.gameCode, this.username).subscribe(
       res => {

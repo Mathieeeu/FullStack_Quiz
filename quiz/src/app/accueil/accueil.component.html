@@ -11,14 +11,14 @@
             <input type="submit" id="submit" value="Rejoindre" />
           </form>
 
-          <button *ngIf="login !== ''" class="learn-more">
+          <button *ngIf="login !== ''" class="learn-more" (click)="goToCreateGame()">
             <span class="circle">
             <span class="icon arrow"></span>
             </span>
             <span class="button-text">Créer une nouvelle partie</span>
           </button>
           <br>
-          <button *ngIf="login !== '' && superUser" class="learn-more">
+          <button *ngIf="login !== '' && superUser" class="learn-more" (click)="goToAjoutQuestion()">
             <span class="circle">
             <span class="icon arrow"></span>
             </span>

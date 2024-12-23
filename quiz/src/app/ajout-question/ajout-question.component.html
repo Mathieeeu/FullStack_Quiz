@@ -1,0 +1,59 @@
+<div class="page_container">
+    <h2>Ajouter une nouvelle question au quiz</h2>
+    <div class="tab-buttons">
+        <button 
+          *ngFor="let tab of tabs; let i = index"
+          [class.active]="currentTab === i"
+          (click)="showTab(i)">
+          {{ tab }}
+        </button>
+      </div>
+    
+      <form (ngSubmit)="onSubmit()">
+        <!-- Onglet 1 - Question simple -->
+        <div *ngIf="currentTab === 0" class="tab">
+          <h2>Basique</h2>
+          <input type="text" placeholder="Entrer la question" id="question" [(ngModel)]="formData.questionText" name="questionText" required autocomplete="off"><br><br>
+          <input type="text" placeholder="Entrer la réponse attendue" id="réponse" [(ngModel)]="formData.answerText" name="answerText" required autocomplete="off"><br><br>
+          <h3>Choisir un thème</h3>
+          <select name="theme" id="theme" [(ngModel)]="formData.themeText" required>
+            <option value="" disabled selected>-- Sélectionner --</option>
+            <option *ngFor="let theme of themes" [value]="theme">{{ theme }}</option> 
+          </select>
+          <br>
+          <div class="radio-button">
+            <h3>Niveau de difficulté</h3>
+            <input type="radio" id="niveau1" name="difficulty" value="1" [(ngModel)]="formData.difficulty"/>
+            <label for="niveau1">Ma petite cousine a la réponse</label>
+            <br>
+            <input type="radio" id="niveau2" name="difficulty" value="2" [(ngModel)]="formData.difficulty"/>
+            <label for="niveau2">Un coup d'oeil chez le voisin peut être utile</label>
+            <br>
+            <input type="radio" id="niveau3" name="difficulty" value="3" [(ngModel)]="formData.difficulty"/>
+            <label for="niveau3">Kant peut se rhabiller</label>
+        </div>
+      </div>
+    
+        <!-- Onglet 2 - QCM-->
+        <div *ngIf="currentTab === 1" class="tab">
+          <h2>QCM</h2>
+          
+        </div>
+    
+        <!-- Onglet 3  - Plusieurs réponses -->
+        <div *ngIf="currentTab === 2" class="tab">
+          <h2>Plusieurs réponses justes possibles</h2>
+          
+        </div>
+    
+        <!-- Onglet 4 - Vrai/faux-->
+        <div *ngIf="currentTab === 3" class="tab">
+          <h2>Vrai/Faux</h2>
+          
+        </div>
+    
+        <div class="form-footer">
+          <button type="submit">Ajouter</button>
+        </div>
+      </form>
+</div>

@@ -51,6 +51,7 @@ input[type=submit] {
   margin-bottom: 1vh;
   max-width: 200px;
   width: 70%;
+  text-align: center;
 }
 
 input:hover {
@@ -88,7 +89,7 @@ button {
 }
 
 button.learn-more {
-  width: 80%;
+  width: 45%;
   height: auto;
 }
 

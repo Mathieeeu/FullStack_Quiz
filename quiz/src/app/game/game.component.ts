@@ -160,10 +160,10 @@ export class GameComponent implements OnInit, OnDestroy {
     bestScore.innerText = scores[0];
     console.log('Meilleur score : ' + scores[0]);
 
-    // Au bout de 5 secondes, on redirige vers le menu (peut etre qu'on pourrait faire une page de fin de partie)
+    // Au bout de 10 secondes, on redirige vers le menu (peut etre qu'on pourrait faire une page de fin de partie)
     setTimeout(() => {
       this.router.navigate(['/']);
-    }, 5000);
+    }, 10000);
     
   }
 

@@ -21,6 +21,15 @@ module.exports = (collection, questionCollection) => {
         return code;
     }
 
+    router.get('/generate-code', async (req, res) => {
+        try {
+            const code = await generateGameCode();
+            res.json({ code });  // Renvoie le code généré
+          } catch (error) {
+            res.status(500).send('Erreur lors de la génération du code');
+          }
+        });
+
     // Route pour récupérer la liste des parties
     router.get('/', async (req, res) => {
         try {

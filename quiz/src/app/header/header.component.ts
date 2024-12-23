@@ -48,5 +48,6 @@ export class HeaderComponent implements OnInit {
     this.sessionAdmin.clearSession();
     this.login = '';
     this.superUser = false;
+    this.router.navigate(['']);
   }
 }

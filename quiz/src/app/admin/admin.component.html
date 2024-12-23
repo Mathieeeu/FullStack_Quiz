@@ -1,8 +1,34 @@
-<p>admin works!</p>
-<p>admin works!</p>
-<p>admin works!</p>
-<div class="admin">
-    <p>Connecté en tant que : {{ login }}</p>
-    <p *ngIf="superUser">Vous êtes un super utilisateur.</p>
-    <p *ngIf="!superUser">Vous êtes un utilisateur normal.</p>
-  </div>
+<div class="page_container">
+  <div class="tab-buttons">
+      <button 
+        *ngFor="let tab of tabs; let i = index"
+        [class.active]="currentTab === i"
+        (click)="showTab(i)">
+        {{ tab }}
+      </button>
+    </div>
+  
+    <form (ngSubmit)="onSubmit()">
+      <!-- Onglet 1 - Question simple -->
+      <div *ngIf="currentTab === 0" class="tab">
+        <h2>Gestion du compte</h2>
+      </div>
+
+  
+      <!-- Onglet 2 - QCM-->
+      <div *ngIf="currentTab === 1" class="tab">
+        <h2>Droit super Administrateur</h2>
+        
+      </div>
+  
+      <!-- Onglet 3  - Plusieurs réponses -->
+      <div *ngIf="currentTab === 2" class="tab">
+        <h2>Supprimer des parties</h2>
+        
+      </div>
+
+      <div class="form-footer">
+        <button type="submit">Valider</button>
+      </div>
+    </form>
+</div>

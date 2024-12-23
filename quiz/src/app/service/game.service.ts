@@ -18,6 +18,10 @@ export class GameService {
   createGame(options: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/create`, options);
   }
+  
+  generateGameCode(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/generate-code`);
+  }
 
   joinGame(code: string, username: string): Observable<any> {
     this.sessionService.setUsername(username);

@@ -14,6 +14,8 @@ import { SessionAdminService} from '../service/session-admin.service';
 export class AdminComponent {
   login: string = '';
   superUser: boolean = false;
+  tabs: string[] = ['Mon compte', 'Droit Super Admin', 'Supprimer parties'];
+  currentTab: number = 0;
 
   constructor(
     private sessionAdmin: SessionAdminService
@@ -22,4 +24,22 @@ export class AdminComponent {
     this.login = sessionAdmin.getUsername();
     this.superUser = sessionAdmin.getSuperUser();
   }
+
+  // Les données du formulaire
+  formData: any = {
+    questionText: '',
+    answerText: '',
+    themeText: '',
+    difficulty: ''
+  };
+
+  // Changer d'onglet
+  showTab(index: number): void {
+    this.currentTab = index;
+  }
+
+  onSubmit(): void {
+    console.log('Données du formulaire:', this.formData);
+  }
+  
 }

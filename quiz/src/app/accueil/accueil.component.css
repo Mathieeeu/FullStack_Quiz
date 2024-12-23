@@ -1,78 +1,76 @@
 .page_container {
-    display: flex;
-    justify-content: space-between; 
-    padding: 8vh; 
-    align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 8vh 2vw;
+  align-items: center;
 }
 
-.div_gauche {
-    flex: 1; 
-    margin-right : 8vh; 
-}
-
-.div_droite {
-    flex: 1; 
-    display: flex;
-    justify-content: center; 
-    align-items: center; 
+.div_gauche, .div_droite {
+  flex: 1;
+  margin: 2vh 0;
 }
 
 .div_gauche h2 {
-    margin-bottom: 2vw; 
+  margin-bottom: 2vw;
 }
 
 form {
-    margin-top:3vw; 
+  margin-top: 3vw;
 }
 
 img {
-    max-width: 100%; 
-    height: auto; 
+  max-width: 100%;
+  height: auto;
 }
 
-input[type=text]{
-    border: none;
-    border-bottom: 2px solid #000000b6;
-    padding: 15px 10px;
-    margin-bottom: 18px;
-    margin-right: 3vw;
-    height:3vh;
-    width:18vw;
-    transition: 0.5s;
-    font-size: 1.2vw;
-    border-radius: 20px;
-    background-color: var(--bg-button);
-  }
-  
-  input[type=submit]{
-    padding: 2vh 4vw;
-    background-color: var(--txt);
-    color: var(--box);
-    border: none;
-    border-radius: 20px;
-    cursor: pointer;
-    font-size: 1.2vw;
-    transition: background-color 0.3s, transform 0.3s;
-    margin-bottom: 1vh;
-  }
-  input:hover {
-    transform: scale(1.02);
-  }
+input[type=text] {
+  border: none;
+  border-bottom: 2px solid #000000b6;
+  padding: 15px 10px;
+  margin-bottom: 18px;
+  margin-right: 3vw;
+  height: 3vh;
+  width: 80%;
+  transition: 0.5s;
+  font-size: 1em;
+  border-radius: 20px;
+  background-color: var(--bg-button);
+  max-width: 300px;
+}
 
-  input[type=submit]:active {
-    background-color: var(--txt);
-    transform: scale(0.95);
-  }
-  
-  input:focus{
-    font-size: 1.5vw;
-    outline:none;
-    border-radius: 20px;
-    background-color:var(--bg-button);
-  }
+input[type=submit] {
+  padding: 2vh 4vw;
+  background-color: var(--txt);
+  color: var(--box);
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 1em;
+  transition: background-color 0.3s, transform 0.3s;
+  margin-bottom: 1vh;
+  max-width: 200px;
+  width: 70%;
+}
 
-p{
-    text-align : justify;
+input:hover {
+  transform: scale(1.02);
+}
+
+input[type=submit]:active {
+  background-color: var(--txt);
+  transform: scale(0.95);
+}
+
+input:focus {
+  font-size: 1.2rem;
+  outline: none;
+  border-radius: 20px;
+  background-color: var(--bg-button);
+}
+
+p {
+  text-align: justify;
 }
 
 button {
@@ -81,20 +79,20 @@ button {
   cursor: pointer;
   outline: none;
   border: 0;
-  vertical-align:auto;
+  vertical-align: auto;
   text-decoration: none;
   background: transparent;
   padding: 0;
   font-size: inherit;
   font-family: inherit;
- }
- 
- button.learn-more {
-  width: 19rem;
+}
+
+button.learn-more {
+  width: 80%;
   height: auto;
- }
- 
- button.learn-more .circle {
+}
+
+button.learn-more .circle {
   transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
   position: relative;
   display: block;
@@ -103,26 +101,26 @@ button {
   height: 3rem;
   background: var(--txt);
   border-radius: 1.625rem;
- }
- 
- button.learn-more .circle .icon {
+}
+
+button.learn-more .circle .icon {
   transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
   position: absolute;
   top: 0;
   bottom: 0;
   margin: auto;
   background: #fff;
- }
- 
- button.learn-more .circle .icon.arrow {
+}
+
+button.learn-more .circle .icon.arrow {
   transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
   left: 0.625rem;
   width: 1.125rem;
   height: 0.125rem;
   background: none;
- }
- 
- button.learn-more .circle .icon.arrow::before {
+}
+
+button.learn-more .circle .icon.arrow::before {
   position: absolute;
   content: "";
   top: -0.29rem;
@@ -132,9 +130,9 @@ button {
   border-top: 0.125rem solid #fff;
   border-right: 0.125rem solid #fff;
   transform: rotate(45deg);
- }
- 
- button.learn-more .button-text {
+}
+
+button.learn-more .button-text {
   transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
   position: absolute;
   top: 0;
@@ -144,20 +142,40 @@ button {
   padding: 0.75rem 0;
   margin: 0 0 0 3.5rem;
   line-height: 1.6;
-  text-align:left;
-  text-transform:uppercase;
-  color :var(--box);
- }
- 
- button:hover .circle {
+  text-align: left;
+  text-transform: uppercase;
+  color: var(--box);
+}
+
+button:hover .circle {
   width: 100%;
- }
- 
- button:hover .circle .icon.arrow {
+}
+
+button:hover .circle .icon.arrow {
   background: #fff;
   transform: translate(1rem, 0);
- }
- 
- button:hover .button-text {
+}
+
+button:hover .button-text {
   color: #fff;
- }
+}
+
+@media (max-width: 768px) {
+  .page_container {
+      flex-direction: column;
+      padding: 8vh 2vw;
+      width: 90%;
+  }
+
+  .div_gauche, .div_droite {
+      margin: 2vh 0;
+  }
+
+  input[type=text] {
+      width: 80%;
+  }
+
+  button.learn-more {
+      width: 80%;
+  }
+}

@@ -7,19 +7,20 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    position:fixed;
-    top:0;
-    left:0;
-    right:0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
     padding: 10px;
     max-height: var(--header-height);
     padding-bottom: 15px;
+    padding-right: 20px;
     z-index: 1000;
 }
 
 .button-group {
     display: flex;
-    gap: 10px; 
+    gap: 10px;
 }
 
 .button {
@@ -44,5 +45,47 @@ header {
 }
 
 h1 {
-    cursor: pointer; 
-  }
+    cursor: pointer;
+}
+
+.burger-menu {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+}
+
+.burger-menu .bar {
+    width: 25px;
+    height: 3px;
+    background-color: var(--txt);
+    margin: 4px 0;
+    transition: 0.4s;
+}
+
+@media (max-width: 500px) {
+    .button-group {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 60px;
+        right: 10px;
+        background-color: var(--box);
+        border-radius: 5px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        max-height: 0;
+        opacity: 0;
+        visibility: hidden;
+        transition: max-height 1s, opacity 0.3s, visibility 1s;
+    }
+
+    .button-group.open {
+        max-height: 500px; /* Adjust as needed */
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .burger-menu {
+        display: flex;
+    }
+}

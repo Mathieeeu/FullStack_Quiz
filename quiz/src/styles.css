@@ -26,3 +26,10 @@ html, body {
     flex-direction: column;
     overflow: hidden;
 }
+
+/* Si la fenetre fait moins de 740px de hauteur : */
+@media (max-height: 740px) {
+    html, body {
+        overflow: auto;
+    }
+}

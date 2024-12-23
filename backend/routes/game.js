@@ -223,6 +223,11 @@ module.exports = (collection, questionCollection) => {
                     clearInterval(countdownInterval);
                     return;
                 }
+                else {
+                    // Récupère le score des joueurs (qui a été changé par d'autres routes)
+                    game.players = await collection.findOne({ code }).then(game => game.players);
+                }
+
                 currentQuestionIndex++;
                 // if (currentQuestionIndex >= game.questions.length) { // Retiré pour ne pas "stocker" les questions sur l'api
                 if (currentQuestionIndex >= questions.length) { // Ajouté pour ne pas "stocker" les questions sur l'api
@@ -237,8 +242,19 @@ module.exports = (collection, questionCollection) => {
                     game.countdown = game.options.questionTime;
                     game.showAnswer = false;
                     game.currentQuestion = questions[currentQuestionIndex]; // Ajouté pour ne pas "stocker" les questions sur l'api
+                    // met à jour la valeur de answerCorrect pour tous les joueurs
+                    game.players = game.players.map(player => {
+                        player.answerCorrect = false;
+                        return player;
+                    });
                     console.log(`Question ${currentQuestionIndex + 1}: ${game.currentQuestion.questionText}`);
-                    await collection.updateOne({ code }, { $set: { currentQuestionIndex, currentQuestion: game.currentQuestion, countdown:game.countdown, showAnswer:game.showAnswer } });
+                    await collection.updateOne({ code }, { $set: { 
+                        currentQuestionIndex, 
+                        currentQuestion: game.currentQuestion, 
+                        countdown:game.countdown, 
+                        showAnswer:game.showAnswer, 
+                        players: game.players
+                    } });
 
                     // Afficher le scoreboard
                     // console.log("Scoreboard:");
@@ -299,32 +315,34 @@ module.exports = (collection, questionCollection) => {
     router.post('/increaseScore/:code', async (req, res) => {
         const code = req.params.code;
         const username = req.body.username;
-        
+        // const points = req.body.points; // TODO : Pondération des points en fonction du temps de réponse
+        const points = 1;
+
         try {
             const game = await collection.findOne({ code });
             if (!game) {
                 return res.status(404).send({ message: "Game not found" });
             }
-        
-            // Trouve le joueur et augmente son score
-            game.players = game.players.map(player => {
-                if (player.username === username) {
-                    player.score += 1; // Augmenter le score de 1
-                    player.answerCorrect = true;
-                }
-                return player;
-            });
-        
-            // Trie les joueurs par score croissant
-            game.players.sort((a, b) => b.score - a.score);
-        
+    
+            // Vérifier si le joueur existe dans le jeu :)
+            const playerIndex = game.players.findIndex(player => player.username === username);
+            if (playerIndex === -1) {
+                return res.status(404).send({ message: "Player not found" });
+            }
+    
+            // Augmenter le score du joueur
+            game.players[playerIndex].score += points;
+            game.players[playerIndex].answerCorrect = true;
+    
+            // Metttre à jour le jeu dans la base de données
             await collection.updateOne({ code }, { $set: { players: game.players } });
+    
             res.send(game);
-        
+
         } catch (error) {
             res.status(500).send(error);
         }
-      });      
+    });    
 
     return router;
 };

@@ -1,8 +1,13 @@
 <header>
-    <h1 (click)="goToAccueil()">Un magnifique site de quiz</h1>
-    <div class="button-group">
+    <h1 (click)="goToAccueil()">Kouise</h1>
+    <div class="button-group" [class.open]="menuOpen">
         <button *ngIf="login !== '' && superUser" id="admin" class="button" (click)="goToAdmin()">Administration</button>
         <button *ngIf="login === ''" id="settings" class="button" (click)="goToConnexion()">Interface admin</button>
         <button *ngIf="login !== ''" id="logout" class="button" (click)="deconnexion()">Déconnexion</button>
+    </div>
+    <div class="burger-menu" (click)="toggleMenu()">
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
     </div>
 </header>

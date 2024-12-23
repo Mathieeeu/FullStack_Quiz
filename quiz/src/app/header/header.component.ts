@@ -12,9 +12,11 @@ import { SessionAdminService } from '../service/session-admin.service';
   templateUrl: './header.component.html',
   styleUrl: './header.component.css'
 })
+
 export class HeaderComponent implements OnInit {
   login: string = '';
   superUser: boolean = false;
+  menuOpen: boolean = false;
 
   constructor(
     private router: Router,
@@ -37,7 +39,7 @@ export class HeaderComponent implements OnInit {
   }
 
   goToAccueil(): void {
-    this.router.navigate(['']);
+    this.router.navigate(['/']);
   }
 
   goToAdmin(): void {
@@ -48,5 +50,9 @@ export class HeaderComponent implements OnInit {
     this.sessionAdmin.clearSession();
     this.login = '';
     this.superUser = false;
+  }
+
+  toggleMenu(): void {
+    this.menuOpen = !this.menuOpen;
   }
 }

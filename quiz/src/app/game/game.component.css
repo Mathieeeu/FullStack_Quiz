@@ -10,6 +10,28 @@
     margin-top: var(--header-height);
 }
 
+
+@keyframes typing {
+    from { width: 0; }
+    to { width: var(--stepsch); }
+}
+
+@keyframes blink-caret {
+    from, to { border-color: transparent; }
+    50% { border-color: white; }
+}
+
+p.motd {
+    color: white;
+    font-style: italic;
+    white-space: nowrap;
+    overflow: hidden;
+    border-right: 0.15em solid white;
+    animation: typing 3s steps(var(--steps), end), blink-caret 0.75s step-end infinite;
+    width: fit-content;
+    display: inline-block;
+}
+
 main {
     background-color: var(--box);
     max-width: 60%;
@@ -41,6 +63,14 @@ hr {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     list-style-type: none;
     height: fit-content;
+    max-height: 800px;
+    overflow-y: auto;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE 10+ */
+}
+
+#scoreboard::-webkit-scrollbar {
+    display: none; /* Safari, Chrome et Opera */
 }
 
 #scoreboard li {

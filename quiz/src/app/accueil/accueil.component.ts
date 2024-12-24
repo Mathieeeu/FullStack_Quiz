@@ -51,11 +51,11 @@ export class AccueilComponent {
   }
 
   joinGame() {
-    this.gameService.joinGame(this.gameCode, this.username).subscribe(
+    this.gameService.joinGame(this.gameCode.toUpperCase(), this.username).subscribe(
       res => {
         this.sessionService.setUsername(this.username);
-        this.sessionService.setGameCode(this.gameCode);
-        this.router.navigate(['/lobby', this.gameCode]);
+        this.sessionService.setGameCode(this.gameCode.toUpperCase());
+        this.router.navigate(['/lobby', this.gameCode.toUpperCase()]);
       },
       err => console.error(err)
     );

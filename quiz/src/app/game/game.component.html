@@ -4,6 +4,8 @@
     <main id="starting" *ngIf="gameDetails.currentQuestionIndex === -1">
       <!-- Chargement de la partie -->
       <p>La partie commence...</p>
+      <!-- Petit mot du chef : -->
+      <p class="motd">{{ motd }}</p>
     </main>
     <main *ngIf="gameDetails.currentQuestionIndex !== -1 && !gameDetails.isOver">
       <!-- Partie en cours -->
@@ -26,7 +28,8 @@
     <main id="ending" *ngIf="gameDetails.isOver">
       <!-- Partie terminée -->
       <p>La partie est terminée !</p>
-      <span id="best-score"></span>
+      <p>Le gagnant est <strong>{{ gameDetails.players[0].username }}</strong> avec {{ gameDetails.players[0].score }} points.</p>
+      <button (click)="leaveGame()">Retour à l'accueil</button>
     </main>
 
     <ul id="scoreboard">

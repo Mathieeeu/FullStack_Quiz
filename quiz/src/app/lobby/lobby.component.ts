@@ -28,6 +28,7 @@ export class LobbyComponent implements OnInit, OnDestroy {
   gameDetails: any;
   private subscription: Subscription = new Subscription();
   private isNavigatingToGame: boolean = false;
+  private readonly tickRate: number = 2; // Frequence de rafraichissement des données du jeu (en Hz)
 
   constructor(
     private gameService: GameService,
@@ -59,7 +60,7 @@ export class LobbyComponent implements OnInit, OnDestroy {
     }
     
     this.loadGameDetails();
-    this.subscription = interval(1000).subscribe(() => this.loadGameDetails());
+    this.subscription = interval(1000/this.tickRate).subscribe(() => this.loadGameDetails());
   
     window.addEventListener('beforeunload', () => this.handleBeforeUnload());
   }

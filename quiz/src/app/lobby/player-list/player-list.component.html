@@ -1,5 +1,6 @@
-<div class="liste_joueur">
-    <ul>
-        <li *ngFor="let player of gameDetails.players">{{player.username}}</li>
-    </ul>
-</div>
+<ul id="scoreboard">
+    <h3>Scoreboard</h3>
+    <li *ngFor="let player of gameDetails.players">
+      <span class="username">{{ player.username }}</span>
+    </li>
+  </ul>

@@ -4,7 +4,7 @@ const express = require('express');
 const axios = require('axios');
 const router = express.Router();
 
-module.exports = (collection, questionCollection) => {
+module.exports = (collection) => {
     
     // Fonction pour générer un code de jeu aléatoire
     async function generateGameCode() {
@@ -330,9 +330,10 @@ module.exports = (collection, questionCollection) => {
                 return res.status(404).send({ message: "Player not found" });
             }
     
-            // Augmenter le score du joueur
+            // Augmenter le score du joueur et trier les joueurs par score
             game.players[playerIndex].score += points;
             game.players[playerIndex].answerCorrect = true;
+            game.players.sort((a, b) => b.score - a.score); 
     
             // Metttre à jour le jeu dans la base de données
             await collection.updateOne({ code }, { $set: { players: game.players } });

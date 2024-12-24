@@ -6,6 +6,7 @@ const cors = require('cors');
 const questionRoutes = require('./routes/question');
 const userRoutes = require('./routes/user');
 const gameRoutes = require('./routes/game');
+const assetsRoutes = require('./routes/assets');
 
 const app = express();
 const port = 3000;
@@ -34,11 +35,13 @@ client.connect()
         const questionCollection = database.collection("question");
         const userCollection = database.collection("user");
         const gameCollection = database.collection("game");
+        const assetsCollection = database.collection("assets");
 
         // Routes (la collection est passée en paramètre pour qu'elles puissent l'utiliser)
         app.use('/api/question', questionRoutes(questionCollection));
         app.use('/api/user', userRoutes(userCollection));
-        app.use('/api/game', gameRoutes(gameCollection, questionCollection));
+        app.use('/api/game', gameRoutes(gameCollection));
+        app.use('/api/assets', assetsRoutes(assetsCollection));
     })
     .catch(err => {
         console.error('Failed to connect to MongoDB', err);

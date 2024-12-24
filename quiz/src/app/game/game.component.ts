@@ -23,8 +23,10 @@ export class GameComponent implements OnInit, OnDestroy {
   username: string = '';
   gameDetails: any;
   answer: string = '';
+  motd: string = '';
   private subscription: Subscription = new Subscription();
   private isNavigatingAway: boolean = false;
+  private readonly tickRate: number = 4; // Frequence de rafraichissement des données du jeu (en Hz)
 
   constructor(
     private gameService: GameService,
@@ -44,12 +46,28 @@ export class GameComponent implements OnInit, OnDestroy {
       this.router.navigate(['/']);
     } else {
       this.loadGameDetails();
-      this.subscription = interval(1000).subscribe(() => this.loadGameDetails());
+      this.subscription = interval(1000/this.tickRate).subscribe(() => this.loadGameDetails());
     }
+
+    this.gameService.getMotd().subscribe(
+      (data: any) => {
+        this.motd = data.motd;
+        this.setMotdAnimationSteps(this.motd.length);
+      },
+      (error: any) => {
+        console.error(error);
+      }
+    );
 
     if (typeof window !== 'undefined') {
       window.addEventListener('beforeunload', this.handleBeforeUnload);
     }
+  }
+
+  setMotdAnimationSteps(length: number): void {
+    const root = document.documentElement;
+    root.style.setProperty('--steps', `${length}`);
+    root.style.setProperty('--stepsch', `${length}ch`);
   }
 
   ngOnDestroy(): void {
@@ -66,7 +84,7 @@ export class GameComponent implements OnInit, OnDestroy {
   }
 
   loadGameDetails(): void {
-    console.log(this.gameDetails);
+    // console.log(this.gameDetails);
     try {
       this.gameService.getGameDetails(this.gameCode).subscribe(
         data => {
@@ -134,9 +152,45 @@ export class GameComponent implements OnInit, OnDestroy {
     }
   }
 
+  levenshtein(a: string, b: string): number {
+    const matrix: number[][] = [];
+
+    // Initialisation de la première ligne et de la première colonne
+    for (let i = 0; i <= b.length; i++) {
+      matrix[i] = [i];
+    }
+    for (let j = 0; j <= a.length; j++) {
+      matrix[0][j] = j;
+    }
+
+    // Calcul de la distance de Levenshtein
+    for (let i = 1; i <= b.length; i++) {
+      for (let j = 1; j <= a.length; j++) {
+        if (b.charAt(i - 1) === a.charAt(j - 1)) {
+          matrix[i][j] = matrix[i - 1][j - 1];
+        } else {
+          matrix[i][j] = Math.min(
+            matrix[i - 1][j - 1] + 1, // Substitution
+            Math.min(
+              matrix[i][j - 1] + 1, // Insertion
+              matrix[i - 1][j] + 1 // Suppression
+            )
+          );
+        }
+      }
+    }
+
+    // Retourne la distance de Levenshtein
+    return matrix[b.length][a.length];
+  }
+
   isCorrectAnswer(): boolean {
-    // TODO : Mettre le mécanisme de "distance" entre les réponses ici pour les fautes de frappes (algorithme de Levenshtein par exemple)
-    return this.answer.toLowerCase() === this.gameDetails.currentQuestion.answerText.toLowerCase();
+    // Vérification de la réponse en fonction de la distance de Levenshtein
+    const distance = this.levenshtein(this.answer.toLowerCase(), this.gameDetails.currentQuestion.answerText.toLowerCase());
+    const tolerance = 0.2; // Nombre de fautes autorisées par caractère de la réponse
+    
+    const maxDistance = Math.floor(tolerance * this.gameDetails.currentQuestion.answerText.length);
+    return distance <= maxDistance;
   }
 
   showEndScreen(): void {
@@ -160,10 +214,10 @@ export class GameComponent implements OnInit, OnDestroy {
     bestScore.innerText = scores[0];
     console.log('Meilleur score : ' + scores[0]);
 
-    // Au bout de 10 secondes, on redirige vers le menu (peut etre qu'on pourrait faire une page de fin de partie)
+    // on redirige vers le menu (peut etre qu'on pourrait faire une page de fin de partie) au bout de 120sec si le joueur ne fait rien
     setTimeout(() => {
-      this.router.navigate(['/']);
-    }, 10000);
+      this.leaveGame();
+    }, 120000);
     
   }
 

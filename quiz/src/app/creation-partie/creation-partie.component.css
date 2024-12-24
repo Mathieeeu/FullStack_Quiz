@@ -1,3 +1,196 @@
 .page_container {
     padding: 8vh; 
   }
+
+
+/* Bouton choix thèmes */
+.tabs {
+  display: flex;
+  position: relative;
+  background-color: #e0e0e0;
+  box-shadow: 0 0 1px 0 rgba(24, 94, 224, 0.15), 0 6px 12px 0 rgba(24, 94, 224, 0.15);
+  padding: 1vh;
+  border-radius: 99px;
+  width:15vw;
+  overflow: hidden;
+}
+
+.tabs * {
+  z-index: 2;
+}
+
+.container input[type="radio"] {
+  display: none;
+}
+
+.tab {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 2vh;
+  width: 10vw;
+  font-size: .8rem;
+  color: var(--box);
+  font-weight: 500;
+  border-radius: 99px;
+  cursor: pointer;
+  transition: color 0.15s ease-in;
+  z-index: 3;
+}
+
+.container input[type="radio"]:checked + label {
+  color: black;
+  font-weight: bold;
+}
+
+
+.container input[id="radio-1"]:checked ~ .glider {
+  transform: translateX(0);
+}
+
+.container input[id="radio-2"]:checked ~ .glider {
+  transform: translateX(100%);
+}
+
+.container input[id="radio-3"]:checked ~ .glider {
+  transform: translateX(200%);
+}
+
+.glider {
+  position: absolute;
+  display: flex;
+  height: 2.5vh;
+  width: 5vw;
+  background-color: var(--txt);
+  opacity: 60%;
+  z-index: 1;
+  border-radius: 99px;
+  transition: 0.25s ease-out;
+}
+
+@media (max-width: 700px) {
+ 
+  .tabs {
+    transform: scale(0.6);
+  }
+}
+
+/* Liste des thèmes */
+.theme-list {
+  max-height: 200px;
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 5px;
+  width : 20vw;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  padding: 10px;
+  cursor: pointer;
+  margin-bottom: 5px;
+  border-radius: 5px;
+  text-align: center;
+}
+
+li.grayed-out {
+  background-color: #e0e0e0;
+  color: #7d7d7d;
+  cursor: not-allowed;
+}
+
+li.include {
+  background-color: #d4edda;
+  color: var(--txt);
+}
+
+li.exclude {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+li:hover:not(.grayed-out) {
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+.theme-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.theme-list::-webkit-scrollbar-thumb {
+  background: #ddd;
+  border-radius: 15px;
+}
+
+.theme-list::-webkit-scrollbar-thumb:hover {
+  background: #bbb;
+}
+
+.theme-list::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+
+/*form number */ 
+input[type=number]{
+  border: none;
+  border-bottom: 2px solid #000000b6;
+  padding: 15px 10px;
+  margin-right: 3vw;
+  margin-bottom: 0.5vh;
+  height:2vh;
+  width:15vw;
+  transition: 0.5s;
+  font-size: 1vw;
+  border-radius: 20px;
+  background-color: var(--bg-button);
+  appearance: none;
+  -moz-appearance: textfield;
+}
+
+input:hover {
+  transform: scale(1.02);
+}
+
+input[type=submit]:active {
+  background-color: var(--txt);
+  transform: scale(0.95);
+}
+
+input:focus{
+  font-size: 1.5vw;
+  outline:none;
+  border-radius: 20px;
+  background-color:var(--bg-button);
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  appearance: none; /* Supprime les styles par défaut des flèches */
+  margin: 0;
+}
+
+
+/* Bouton création partie */
+button{
+  padding: 2vh 4vw;
+  background-color: var(--txt);
+  color: white;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 1.2vw;
+  transition: background-color 0.3s, transform 0.3s;
+  margin-top: 3vh;
+}
+button:hover{
+  transform: scale(1.02);
+}
+button:active {
+  background-color: var(--txt);
+  transform: scale(0.95);
+}

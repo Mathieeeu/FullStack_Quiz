@@ -16,7 +16,7 @@ export class GameService {
   ) { }
 
   createGame(options: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/create`, options);
+    return this.http.post(`${this.apiUrl}/create/:${options.code}`, options);
   }
   
   generateGameCode(): Observable<any> {

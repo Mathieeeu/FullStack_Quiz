@@ -1,20 +1,41 @@
 <div class="page_container">
-    <p>Le code du jeu généré est : <strong>{{ gameCode }}</strong></p>
-    <button (click)="generateCode()">Régénérer le code</button>
+    <h2>Code de la partie : <strong>{{ gameCode }}</strong></h2>
+    <!-- <button (click)="generateCode()">Régénérer le code</button> -->
     <form (ngSubmit)="onSubmit()">        
         <div>
-          <label for="nbQuestions">Nombre de questions :</label>
-          <input type="number" id="nbQuestions" [(ngModel)]="gameData.nbQuestions" name="nbQuestions" required />
+          <input type="number" placeholder="Nombre de questions"id="nbQuestions" [(ngModel)]="gameData.nbQuestions" name="nbQuestions" required />
         </div>
-    
+        
+
         <div>
-          <label for="filters">Filtres :</label>
-          <input type="text" id="filters" [(ngModel)]="gameData.filters" name="filters" />
+          <input type="number" placeholder="Temps par question"id="questionTime" [(ngModel)]="gameData.questionTime" name="questionTime" required />
         </div>
-    
+
         <div>
-          <label for="questionTime">Temps par question (en secondes) :</label>
-          <input type="number" id="questionTime" [(ngModel)]="gameData.questionTime" name="questionTime" required />
+        <h3>Sélectionnez les thèmes</h3>
+          <div class="container">
+            <div class="tabs">
+              <input type="radio" id="radio-1" name="tabs" (change)="setDefaultMode('tous')" checked>
+              <label class="tab" for="radio-1">Tous</label>
+              <input type="radio" id="radio-2" name="tabs" (change)="setDefaultMode('inclure')">
+              <label class="tab" for="radio-2">Inclure</label>
+              <input type="radio" id="radio-3" name="tabs" (change)="setDefaultMode('exclure')">
+              <label class="tab" for="radio-3">Exclure</label>
+              <span class="glider"></span>
+            </div>
+          </div>
+        
+          <div class="theme-list">
+            <ul>
+              <li *ngFor="let theme of themes"
+                  [class.grayed-out]="currentMode === 'tous'"
+                  [class.include]="theme.status === 'include'"
+                  [class.exclude]="theme.status === 'exclude'"
+                  (click)="currentMode !== 'tous' && toggleThemeStatus(theme)">
+                {{ theme.name }}
+              </li>
+            </ul>
+          </div>
         </div>
     
         <button type="submit">Créer la partie</button>

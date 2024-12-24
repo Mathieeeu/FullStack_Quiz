@@ -132,7 +132,6 @@ export class CreationPartieComponent {
 
   onSubmit(): void {
     this.updateGameData();
-    this.resetForm();
     this.gameService.createGame(this.gameData).subscribe(
       (response) => {
         console.log('Partie créée avec succès :', response);
@@ -143,5 +142,6 @@ export class CreationPartieComponent {
         alert('Il y a eu une erreur lors de la création de la partie.');
       }
     );
+    this.resetForm();
   }
 }

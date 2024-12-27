@@ -12,7 +12,7 @@
       <!-- Partie en cours -->
 
 
-      <div id="question-ouverte">
+      <div id="question">
         <span id="question-type">{{ gameDetails.currentQuestion.questionType }}</span>
         <div id="time" *ngIf="gameDetails.countdown !== -1">{{ gameDetails.countdown }}</div>
         <span id="question-nb">Question {{ gameDetails.currentQuestionIndex + 1 }}/{{ gameDetails.options.nbQuestions }}</span>

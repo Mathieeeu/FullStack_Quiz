@@ -157,8 +157,6 @@ input#answer-input:focus {
 
 .selection-container {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
     margin-bottom: 20px;
 }
 
@@ -167,14 +165,14 @@ input#answer-input:focus {
 }
 
 .validate-button {
-    margin-top: 20px;
-    padding: 10px 20px;
+    padding: 5px 10px;
     background-color: blue;
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s;
+    font-size: large;
 }
 
 .validate-button:hover {
@@ -187,13 +185,14 @@ button.selected {
 }
 
 button {
-    padding: 10px 20px;
+    padding: 5px 10px;
     margin: 5px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s, transform 0.3s;
     user-select: none;
+    font-size:large;
 }
 
 button:hover {

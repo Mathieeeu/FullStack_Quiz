@@ -57,7 +57,10 @@ export class AccueilComponent {
         this.sessionService.setGameCode(this.gameCode.toUpperCase());
         this.router.navigate(['/lobby', this.gameCode.toUpperCase()]);
       },
-      err => console.error(err)
+      err => {
+        console.log(err);
+        alert(err.error.message);
+      }
     );
   }
 }

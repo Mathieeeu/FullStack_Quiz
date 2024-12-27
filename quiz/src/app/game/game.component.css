@@ -1,7 +1,7 @@
 .game-container {
     display: flex;
     justify-content: center;
-    align-items: stretch;
+    align-items: center;
     max-width: 90%;
     padding-left: 10%;
     padding-right: 5%;
@@ -63,7 +63,7 @@ hr {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     list-style-type: none;
     height: fit-content;
-    max-height: 800px;
+    max-height: 600px;
     overflow-y: auto;
     scrollbar-width: none; /* Firefox */
     -ms-overflow-style: none; /* IE 10+ */

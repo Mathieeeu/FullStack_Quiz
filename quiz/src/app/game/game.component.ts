@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, QueryList, ViewChildren } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription, interval } from 'rxjs';
 import { FormsModule } from '@angular/forms';
@@ -19,10 +19,16 @@ import { SessionService } from '../service/session.service';
 })
 export class GameComponent implements OnInit, OnDestroy {
   @ViewChild('answerInput') answerInput!: ElementRef;
+  @ViewChild('trueButton') trueButton!: ElementRef;
+  @ViewChild('falseButton') falseButton!: ElementRef;
+  @ViewChildren('qcmButton') qcmButtons!: QueryList<ElementRef>;
+  @ViewChildren('selectionButton') selectionButtons!: QueryList<ElementRef>;
+  @ViewChild('validateButton') validateButton!: ElementRef;
   gameCode: string = '';
   username: string = '';
   gameDetails: any;
   answer: string = '';
+  selectedOptions: string[] = [];
   motd: string = '';
   private subscription: Subscription = new Subscription();
   private isNavigatingAway: boolean = false;
@@ -111,28 +117,67 @@ export class GameComponent implements OnInit, OnDestroy {
     }
   }
 
-  checkAnswer(): void {
-    console.log('Answer=' + this.answer);
-
-    const answerInput = document.getElementById('answer-input');
-    if (!answerInput) {
-      console.error('Erreur bizarre - input introuvable lol');
-      return;
+  checkAnswer(selectedAnswer?: string, event?: Event): void {
+    console.log('Answer=' + (selectedAnswer || this.answer));
+  
+    const questionType = this.gameDetails.currentQuestion.questionType;
+    const clickedButton = event?.target as HTMLElement;
+  
+    switch (questionType) {
+      case 'ouverte':
+        this.checkOpenAnswer();
+        break;
+      case 'VF':
+        this.checkTrueFalseAnswer(selectedAnswer);
+        break;
+      case 'QCM':
+        this.checkMultipleChoiceAnswer(selectedAnswer, clickedButton);
+        break;
+      case 'Selection':
+        this.checkSelectionAnswer();
+        break;
+      default:
+        console.error('Type de question inconnu');
     }
-
-    // Vérication de la réponse
+  }
+  
+  checkOpenAnswer(): void {
+  
     if (this.isCorrectAnswer()) {
       console.log('Bonne réponse');
 
-      // Potite animation de couleur
-      answerInput.style.color = 'cyan';
+      // Ptite animation de couleur
+      this.answerInput.nativeElement.style.color = 'cyan';
       setTimeout(() => {
-        answerInput.style.color = '';
+        this.answerInput.nativeElement.style.color = '';
         this.answer = '';
-        answerInput.style.display = 'none';
+        this.answerInput.nativeElement.style.display = 'none';
       }, 300);
-
-      // Ajout d'un point au score du joueur
+  
+      // Augmentation du score du joueur
+      this.gameService.increaseScore(this.gameCode, this.username).subscribe(
+        res => {
+          console.log(res);
+        },
+        err => console.error(err)
+      );
+    } else {
+      console.log('Mauvaise réponse');
+      
+      this.answerInput.nativeElement.style.color = 'red';
+      setTimeout(() => {
+        this.answerInput.nativeElement.style.color = '';
+        this.answer = '';
+      }, 300);
+    }
+  }
+  
+  checkTrueFalseAnswer(selectedAnswer?: string): void {
+    const clickedButton = selectedAnswer === 'Vrai' ? this.trueButton : this.falseButton;
+    if (this.isCorrectAnswer(selectedAnswer)) {
+      console.log('Bonne réponse');
+      clickedButton.nativeElement.style.backgroundColor = 'var(--grn)';
+    
       this.gameService.increaseScore(this.gameCode, this.username).subscribe(
         res => {
           console.log(res);
@@ -142,14 +187,99 @@ export class GameComponent implements OnInit, OnDestroy {
 
     } else {
       console.log('Mauvaise réponse');
-      
-      answerInput.style.color = 'red';
-      setTimeout(() => {
-        answerInput.style.color = '';
-        this.answer = '';
-      }, 300);
-
+      clickedButton.nativeElement.style.backgroundColor = 'var(--red)';
     }
+
+    setTimeout(() => {
+      clickedButton.nativeElement.style.backgroundColor = '';
+      this.trueButton.nativeElement.style.display = 'none';
+      this.falseButton.nativeElement.style.display = 'none';
+    }, 300);
+  }
+  
+  checkMultipleChoiceAnswer(selectedAnswer?: string, clickedButton?: HTMLElement): void {
+    // console.log('Clicked button=' + selectedAnswer); 
+    if (clickedButton) {
+      if (this.isCorrectAnswer(selectedAnswer)) {
+        console.log('Bonne réponse');
+        clickedButton.style.backgroundColor = 'var(--grn)';
+
+        this.gameService.increaseScore(this.gameCode, this.username).subscribe(
+          res => {
+            console.log(res);
+          },
+          err => console.error(err)
+        );
+
+      } else{
+        console.log('Mauvaise réponse');
+        clickedButton.style.backgroundColor = 'var(--red)';
+      }
+      
+      setTimeout(() => {
+        this.qcmButtons.forEach((button: ElementRef) => {
+          button.nativeElement.style.backgroundColor = '';
+          button.nativeElement.style.display = 'none';
+        });
+      }, 300);
+      
+    } else {
+      console.log('Aucune réponse sélectionnée');
+    }
+  }
+
+  checkSelectionAnswer(): void {
+    const correctAnswerString = this.gameDetails.currentQuestion.trueAnswers.toString().split(',').sort().join(',');
+    
+    this.validateButton.nativeElement.style.display = 'none';
+
+    if (this.selectedOptions.sort().join(',') === correctAnswerString) {
+      console.log('Bonne réponse');
+      
+      this.selectedOptions.forEach(option => {
+        const button = this.selectionButtons.find((btn: ElementRef) => btn.nativeElement.textContent.trim() === option);
+        if (button) {
+          button.nativeElement.style.backgroundColor = 'var(--grn)';
+        }
+      });
+
+      this.gameService.increaseScore(this.gameCode, this.username).subscribe(
+        res => {
+          console.log(res);
+        },
+        err => console.error(err)
+      );
+
+    } else {
+      console.log('Mauvaise réponse');
+      this.selectedOptions.forEach(option => {
+        const button = this.selectionButtons.find((btn: ElementRef) => btn.nativeElement.textContent.trim() === option);
+        if (button) {
+          button.nativeElement.style.backgroundColor = 'var(--red)';
+        }
+      });
+    }
+
+    setTimeout(() => {
+      this.selectedOptions = [];
+      this.selectionButtons.forEach((button: ElementRef) => {
+        button.nativeElement.style.backgroundColor = '';
+        button.nativeElement.style.display = 'none';
+      });
+    }, 300);
+  }
+
+  toggleSelection(option: string): void {
+    const index = this.selectedOptions.indexOf(option);
+    if (index > -1) {
+      this.selectedOptions.splice(index, 1);
+    } else {
+      this.selectedOptions.push(option);
+    }
+  }
+
+  isSelected(option: string): boolean {
+    return this.selectedOptions.includes(option);
   }
 
   levenshtein(a: string, b: string): number {
@@ -179,18 +309,34 @@ export class GameComponent implements OnInit, OnDestroy {
         }
       }
     }
-
     // Retourne la distance de Levenshtein
     return matrix[b.length][a.length];
   }
 
-  isCorrectAnswer(): boolean {
-    // Vérification de la réponse en fonction de la distance de Levenshtein
-    const distance = this.levenshtein(this.answer.toLowerCase(), this.gameDetails.currentQuestion.answerText.toLowerCase());
-    const tolerance = 0.2; // Nombre de fautes autorisées par caractère de la réponse
-    
-    const maxDistance = Math.floor(tolerance * this.gameDetails.currentQuestion.answerText.length);
-    return distance <= maxDistance;
+  isCorrectAnswer(selectedAnswer?: string): boolean {
+    const questionType = this.gameDetails.currentQuestion.questionType;
+    const correctAnswer = this.gameDetails.currentQuestion.answerText || this.gameDetails.currentQuestion.trueAnswers;
+    // console.log('Correct answer=' + correctAnswer);
+  
+    switch (questionType) {
+      case 'ouverte':
+        const distance = this.levenshtein(this.answer.toLowerCase(), correctAnswer.toLowerCase());
+        const tolerance = 0.2; // Nombre de fautes autorisées par caractère de la réponse
+        const maxDistance = Math.floor(tolerance * correctAnswer.length);
+        return distance <= maxDistance;
+  
+      case 'VF':
+        return selectedAnswer === correctAnswer;
+  
+      case 'QCM':
+        return selectedAnswer === correctAnswer;
+  
+      case 'Selection':
+        return this.selectedOptions.sort().join(',') === correctAnswer.toString().split(',').sort().join(',');
+  
+      default:
+        return false;
+    }
   }
 
   showEndScreen(): void {

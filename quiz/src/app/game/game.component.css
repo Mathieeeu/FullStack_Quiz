@@ -154,3 +154,49 @@ input#answer-input:focus {
     border-bottom: 2px solid green;
     width: 85%;
 }
+
+.selection-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.selection-button button {
+    width: 100%;
+}
+
+.validate-button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: blue;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.validate-button:hover {
+    background-color: darkblue;
+}
+
+button.selected {
+    background-color: green;
+    color: white;
+}
+
+button {
+    padding: 10px 20px;
+    margin: 5px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+    user-select: none;
+}
+
+button:hover {
+    transform: scale(1.02) translateY(-1px);
+    transition: transform 0.3s;
+}

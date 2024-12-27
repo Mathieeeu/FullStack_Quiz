@@ -91,7 +91,7 @@ module.exports = (collection) => {
         const player = {
             username: req.body.username,
             score: 0,
-            answerCorrect: false
+            hasAnswered: false
         };
 
         try {
@@ -242,9 +242,9 @@ module.exports = (collection) => {
                     game.countdown = game.options.questionTime;
                     game.showAnswer = false;
                     game.currentQuestion = questions[currentQuestionIndex]; // Ajouté pour ne pas "stocker" les questions sur l'api
-                    // met à jour la valeur de answerCorrect pour tous les joueurs
+                    // met à jour la valeur de hasAnswered pour tous les joueurs
                     game.players = game.players.map(player => {
-                        player.answerCorrect = false;
+                        player.hasAnswered = false;
                         return player;
                     });
                     console.log(`Question ${currentQuestionIndex + 1}: ${game.currentQuestion.questionText}`);
@@ -332,7 +332,7 @@ module.exports = (collection) => {
     
             // Augmenter le score du joueur et trier les joueurs par score
             game.players[playerIndex].score += points;
-            game.players[playerIndex].answerCorrect = true;
+            game.players[playerIndex].hasAnswered = true;
             game.players.sort((a, b) => b.score - a.score); 
     
             // Metttre à jour le jeu dans la base de données
@@ -343,7 +343,7 @@ module.exports = (collection) => {
         } catch (error) {
             res.status(500).send(error);
         }
-    });    
+    });
 
     return router;
 };

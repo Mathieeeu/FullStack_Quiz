@@ -39,12 +39,56 @@ export class GameService {
     return this.http.post(`${this.baseUrl}/start/${code}`, {});
   }
 
+  // Fonction de hashage pour creer une seed à partir du code de la 
+  private hashCode(str: string): number {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+      const char = str.charCodeAt(i);
+      hash = ((hash << 5) - hash) + char; // ça décale de 5 bits à gauche (donc hash*2^5-hash donc hash*31 en gros) et ça ajoute le code ascii du caractère
+      hash = hash & hash; // Convertit en 32-bit integer
+    }
+    return Math.abs(hash);
+  }
+
+  // Fonction de génération de nombre aléatoire à partir d'une seed
+  private random(seed: number): number {
+    let x = Math.sin(seed++) * 10000;
+    return x - Math.floor(x);
+  }
+
+  // Fonction de mélange qui utilise une graine pour garantir que le mélange est le même à chaque fois
+  private shuffleArray(array: any[], seed: number): any[] {
+    let currentIndex = array.length, temporaryValue, randomIndex;
+
+    while (currentIndex !== 0) {
+      randomIndex = Math.floor(this.random(seed) * currentIndex);
+      currentIndex--;
+
+      // Echange de valeurs
+      temporaryValue = array[currentIndex];
+      array[currentIndex] = array[randomIndex];
+      array[randomIndex] = temporaryValue;
+
+      // Mise à jour de la graine
+      seed++;
+    }
+
+    return array;
+  }
+
   getGameDetails(code: string): Observable<any> {
-    // console.log(`${this.baseUrl}/${code}`);
     return this.http.get(`${this.baseUrl}/${code}`).pipe(
       tap((gameDetails: any) => {
-        // console.log(`${this.baseUrl}/${code}`);
-        // console.log(gameDetails);
+        if (gameDetails.currentQuestion && gameDetails.currentQuestion.questionType === 'QCM') {
+          const allAnswers = [gameDetails.currentQuestion.answerText, ...gameDetails.currentQuestion.fakeAnswer];
+          const seed = this.hashCode(code);
+          gameDetails.currentQuestion.allAnswers = this.shuffleArray(allAnswers, seed);
+        } 
+        else if (gameDetails.currentQuestion && gameDetails.currentQuestion.questionType === 'Selection') {
+          const allAnswers = [...gameDetails.currentQuestion.trueAnswers, ...gameDetails.currentQuestion.fakeAnswers];
+          const seed = this.hashCode(code);
+          gameDetails.currentQuestion.allAnswers = this.shuffleArray(allAnswers, seed);
+        }
       })
     );
   }

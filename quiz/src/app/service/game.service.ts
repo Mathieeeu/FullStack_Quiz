@@ -100,4 +100,8 @@ export class GameService {
   increaseScore(code: string, username: string): Observable<any> {
     return this.http.post(`${this.baseUrl}/increaseScore/${code}`, { username });
   }
+
+  hasAnswered(code: string, username: string): Observable<any> {
+    return this.http.post(`${this.baseUrl}/hasAnswered/${code}`, { username });
+  }
 }

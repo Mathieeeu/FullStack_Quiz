@@ -187,6 +187,12 @@ export class GameComponent implements OnInit, OnDestroy {
 
     } else {
       console.log('Mauvaise réponse');
+      this.gameService.hasAnswered(this.gameCode, this.username).subscribe(
+        res => {
+          console.log(res);
+        },
+        err => console.error(err)
+      );
       clickedButton.nativeElement.style.backgroundColor = 'var(--red)';
     }
 
@@ -213,6 +219,13 @@ export class GameComponent implements OnInit, OnDestroy {
 
       } else{
         console.log('Mauvaise réponse');
+        this.gameService.hasAnswered(this.gameCode, this.username).subscribe(
+          res => {
+            console.log(res);
+          },
+          err => console.error(err)
+        );
+
         clickedButton.style.backgroundColor = 'var(--red)';
       }
       
@@ -252,6 +265,13 @@ export class GameComponent implements OnInit, OnDestroy {
 
     } else {
       console.log('Mauvaise réponse');
+      this.gameService.hasAnswered(this.gameCode, this.username).subscribe(
+        res => {
+          console.log(res);
+        },
+        err => console.error(err)
+      );
+
       this.selectedOptions.forEach(option => {
         const button = this.selectionButtons.find((btn: ElementRef) => btn.nativeElement.textContent.trim() === option);
         if (button) {

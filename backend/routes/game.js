@@ -345,5 +345,31 @@ module.exports = (collection) => {
         }
     });
 
+    router.post('/hasAnswered/:code', async (req, res) => {
+        const code = req.params.code;
+        const username = req.body.username;
+
+        try {
+            const game = await collection.findOne({ code });
+            if (!game) {
+                return res.status(404).send({ message: "Game not found" });
+            }
+
+            // Vérifier si le joueur existe dans le jeu :)
+            const playerIndex = game.players.findIndex(player => player.username === username);
+            if (playerIndex === -1) {
+                return res.status(404).send({ message: "Player not found" });
+            }
+
+            game.players[playerIndex].hasAnswered = true;
+            await collection.updateOne({ code }, { $set: { players: game.players } });
+
+            res.send(game);
+
+        } catch (error) {
+            res.status(500).send(error);
+        }
+    });
+
     return router;
 };

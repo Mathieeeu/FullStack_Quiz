@@ -9,6 +9,7 @@ module.exports = (collection) => {
     const generateQuery = (conditions) => {
         let themes = [];
         let difficulties = [];
+        let types = [];
         let n = null;
 
         // Récupération des valeurs des conditions si elles sont précisées
@@ -18,6 +19,8 @@ module.exports = (collection) => {
                 themes = value.split(',');
             } else if (key === "difficulty") {
                 difficulties = value.split(',');
+            } else if (key === "type") {
+                types = value.split(',');
             } else if (key === "n") {
                 n = parseInt(value);
             }
@@ -47,6 +50,19 @@ module.exports = (collection) => {
             }
             if (excludeDifficulties.length > 0) {
                 query.difficulty.$nin = excludeDifficulties;
+            }
+        }
+
+        // Conditions sur le type de question
+        if (types.length > 0) {
+            const includeTypes = types.filter(type => !type.startsWith('!'));
+            const excludeTypes = types.filter(type => type.startsWith('!')).map(type => type.substring(1));
+            query.questionType = {};
+            if (includeTypes.length > 0) {
+                query.questionType.$in = includeTypes;
+            }
+            if (excludeTypes.length > 0) {
+                query.questionType.$nin = excludeTypes;
             }
         }
 

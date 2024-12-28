@@ -10,26 +10,29 @@
     margin-top: var(--header-height);
 }
 
-
 @keyframes typing {
     from { width: 0; }
-    to { width: var(--stepsch); }
+    to { width: var(--stepsch)}
 }
 
 @keyframes blink-caret {
     from, to { border-color: transparent; }
-    50% { border-color: white; }
+    50% { border-color: var(--motd); }
 }
 
 p.motd {
-    color: white;
+    color: var(--motd);
     font-style: italic;
     white-space: nowrap;
+    font-family: monospace;
+    width: var(--stepsch);
+    max-width: 100%;
     overflow: hidden;
-    border-right: 0.15em solid white;
-    animation: typing 3s steps(var(--steps), end), blink-caret 0.75s step-end infinite;
-    width: fit-content;
+    border-right: 0.15em solid var(--motd);
+    justify-content: left;
+    animation: typing 3s steps(var(--steps)), blink-caret 0.75s step-end infinite;
     display: inline-block;
+    font-size: 0.7em;
 }
 
 main {
@@ -91,14 +94,15 @@ hr {
     font-weight: bold;
 }
 
-#scoreboard li.answered {
-    color: var(--bg);
-    background-color: var(--dark-red);
-}
 
 #scoreboard li.correct {
     color: var(--bg);
     background-color: var(--txt);
+}
+
+#scoreboard li.incorrect {
+    color: var(--bg);
+    background-color: var(--dark-red);
 }
 
 #scoreboard h3 {
@@ -112,7 +116,7 @@ hr {
 #time {
     text-align: center;
     font-weight: 600;
-    color: var(--clr);
+    color: var(--txt);
     font-size: 1.5em;
 }
 
@@ -164,33 +168,31 @@ input#answer-input:focus {
     margin-bottom: 20px;
 }
 
-.selection-button button {
-    width: 100%;
-}
-
 .validate-button {
     padding: 5px 10px;
-    background-color: blue;
-    color: white;
+    background-color: var(--txt);
+    color: var(--box);
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    font-size: 16px;
     transition: background-color 0.3s;
-    font-size: large;
 }
 
 .validate-button:hover {
-    background-color: darkblue;
+    background-color: var(--txt);
+    transform: scale(1.02);
 }
 
-button.selected {
-    background-color: green;
-    color: white;
+.validate-button:active {
+    background-color: var(--txt);
+    transform: scale(0.95);
 }
 
-button {
+.selection-button button {
+    width: 100%;
+    gap: 2px;
     padding: 5px 10px;
-    margin: 5px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -199,7 +201,38 @@ button {
     font-size:large;
 }
 
-button:hover {
+.selection-button:hover {
     transform: scale(1.02) translateY(-1px);
     transition: transform 0.3s;
 }
+
+.selection-button:active {
+    transform: scale(0.95);
+}
+
+.selection-button .selected {
+    background-color: green;
+    color: white;
+}
+
+#leave-game-button {
+    padding: 5px 10px;
+    background-color: var(--dark-red);
+    color: var(--box);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+#leave-game-button:hover {
+    background-color: var(--txt);
+    transform: scale(1.02);
+}
+
+#leave-game-button:active {
+    background-color: var(--txt);
+    transform: scale(0.95);
+}
+

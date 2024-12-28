@@ -12,15 +12,6 @@ export class QuestionService {
 
   constructor(private http: HttpClient) { }
 
-  /*
-  QuestionSchema : {
-      questionText: String,
-      answerText: String,
-      themeText: String,
-      difficulty: String
-  }
-  */
- // URL : http://localhost:3000/api/question/add
   submitQuestion(QuestionData: any): Observable<any> {
     return this.http.post(`${this.baseUrl}/question/add`, QuestionData);
   }

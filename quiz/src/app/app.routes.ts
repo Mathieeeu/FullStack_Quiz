@@ -8,7 +8,7 @@ import { ConnexionComponent } from './connexion/connexion.component';
 import { InscriptionComponent } from './inscription/inscription.component';
 import { LobbyComponent } from './lobby/lobby.component';
 import { GameComponent } from './game/game.component';
-import {AjoutQuestionComponent} from './ajout-question/ajout-question.component';
+import { AjoutQuestionComponent } from './ajout-question/ajout-question.component';
 import { CreationPartieComponent } from './creation-partie/creation-partie.component';
 
 export const routes: Routes = [

@@ -40,18 +40,14 @@ input[type=text] {
 }
 
 input[type=submit] {
-  padding: 2vh 4vw;
+  padding: 10px 20px;
   background-color: var(--txt);
   color: var(--box);
   border: none;
-  border-radius: 20px;
+  border-radius: 5px;
   cursor: pointer;
-  font-size: 1em;
+  font-size: 16px;
   transition: background-color 0.3s, transform 0.3s;
-  margin-bottom: 1vh;
-  max-width: 200px;
-  width: 70%;
-  text-align: center;
 }
 
 input:hover {

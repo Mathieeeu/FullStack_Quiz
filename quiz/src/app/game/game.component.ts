@@ -72,8 +72,8 @@ export class GameComponent implements OnInit, OnDestroy {
 
   setMotdAnimationSteps(length: number): void {
     const root = document.documentElement;
-    root.style.setProperty('--steps', `${length}`);
-    root.style.setProperty('--stepsch', `${length}ch`);
+    root.style.setProperty('--steps', `${length+2}`);
+    root.style.setProperty('--stepsch', `${length+2}ch`);
   }
 
   ngOnDestroy(): void {

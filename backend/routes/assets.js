@@ -27,7 +27,17 @@ module.exports = (collection) => {
         }
     });
 
+    // Route pour récupérer les thèmes
+    router.get('/themes', async(req,res) => {
+        try {
+            const result = await collection.find().toArray();
+            const themes = result[0].themes;
+            res.json({ themes: themes });
+
+        } catch (error) {
+            res.status(500).send(error);
+        }
+    });
 
     return router;
-
 };

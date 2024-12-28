@@ -109,14 +109,25 @@ module.exports = (collection) => {
 
     // Route pour ajouter une question
     router.post('/add', async (req, res) => {
-        // req.body contient {questionText, answerText, themeText, difficulty}
+        // req.body contient {questionText, answerText, themeText, difficulty, questionType, fakeAnswer?, trueAnswers?, fakeAnswers?}
         const question = {
             questionId: "",
             questionText: req.body.questionText,
-            answerText: req.body.answerText,
             themeText: req.body.themeText,
-            difficulty: req.body.difficulty
+            difficulty: req.body.difficulty,
+            questionType: req.body.questionType
         };
+
+        // Ajouter les champs spécifiques selon le type de question
+        if (req.body.questionType === 'QCM') {
+            question.fakeAnswer = req.body.fakeAnswer;
+        } else if (req.body.questionType === 'Selection') {
+            question.trueAnswers = req.body.trueAnswers;
+            question.fakeAnswers = req.body.fakeAnswers;
+        }
+        if (req.body.questionType !== 'Selection') {
+            question.answerText = req.body.answerText;
+        }
 
         // Récupération du nombre de questions pour générer un nouvel id
         const nbQuestions = await collection.countDocuments();

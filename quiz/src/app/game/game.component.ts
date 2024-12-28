@@ -129,7 +129,7 @@ export class GameComponent implements OnInit, OnDestroy {
   }
 
   checkAnswer(selectedAnswer?: string, event?: Event): void {
-    console.log('Answer=' + (selectedAnswer || this.answer));
+    // console.log('Answer=' + (selectedAnswer || this.answer));
 
     // Jouer un son de plop aléatoire à chaque réponse (parce que c'est marrant non ??)
     const plopSound = new Audio();

@@ -47,7 +47,7 @@ export class InformationsComponent {
         console.log(this.gameDetails);
       },
       error => {
-        console.error(error);
+        // console.error(error);
       }
     );
   }

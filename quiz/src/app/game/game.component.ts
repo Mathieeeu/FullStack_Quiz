@@ -97,8 +97,19 @@ export class GameComponent implements OnInit, OnDestroy {
           this.gameDetails = data;
 
           // Focus sur l'input de réponse si une question est en cours (pour éviter de cliquer dessus à chaque fois)
-          if (this.answerInput && this.gameDetails.currentQuestion !== -1 && !this.gameDetails.isOver) {
+          if (this.answerInput && this.gameDetails.currentQuestionIndex !== -1 && !this.gameDetails.isOver) {
             setTimeout(() => this.answerInput.nativeElement.focus(), 0);
+          }
+
+          // Si le timer est égal à 0 et que la question est en cours, on check la réponse si c'est une question ouverte et vide la réponse
+          if (this.gameDetails.currentQuestionIndex !== -1  && this.gameDetails.countdown === -1) {
+            try {
+              this.answerInput.nativeElement.style.display = 'none';
+              this.answer = '';
+            }
+            catch (error) {
+              
+            }
           }
         },
         error => {
@@ -107,8 +118,8 @@ export class GameComponent implements OnInit, OnDestroy {
       );
 
       if (this.gameDetails.isOver) {
-        console.log(this.gameDetails);
-        console.log('Game is over');
+        // console.log(this.gameDetails);
+        // console.log('Game is over');
         this.showEndScreen();
         return;
       }
@@ -150,7 +161,7 @@ export class GameComponent implements OnInit, OnDestroy {
   checkOpenAnswer(): void {
   
     if (this.isCorrectAnswer()) {
-      console.log('Bonne réponse');
+      // console.log('Bonne réponse');
 
       // Ptite animation de couleur
       this.answerInput.nativeElement.style.color = 'cyan';
@@ -163,16 +174,16 @@ export class GameComponent implements OnInit, OnDestroy {
       // Augmentation du score du joueur
       this.gameService.increaseScore(this.gameCode, this.username).subscribe(
         res => {
-          console.log(res);
+          // console.log(res);
         },
         err => console.error(err)
       );
     } else {
-      console.log('Mauvaise réponse');
+      // console.log('Mauvaise réponse');
 
       this.gameService.hasTriedToAnswer(this.gameCode, this.username).subscribe(
         res => {
-          console.log(res);
+          // console.log(res);
         },
         err => console.error(err)
       );
@@ -188,21 +199,21 @@ export class GameComponent implements OnInit, OnDestroy {
   checkTrueFalseAnswer(selectedAnswer?: string): void {
     const clickedButton = selectedAnswer === 'Vrai' ? this.trueButton : this.falseButton;
     if (this.isCorrectAnswer(selectedAnswer)) {
-      console.log('Bonne réponse');
+      // console.log('Bonne réponse');
       clickedButton.nativeElement.style.backgroundColor = 'var(--grn)';
     
       this.gameService.increaseScore(this.gameCode, this.username).subscribe(
         res => {
-          console.log(res);
+          // console.log(res);
         },
         err => console.error(err)
       );
 
     } else {
-      console.log('Mauvaise réponse');
+      // console.log('Mauvaise réponse');
       this.gameService.hasAnswered(this.gameCode, this.username).subscribe(
         res => {
-          console.log(res);
+          // console.log(res);
         },
         err => console.error(err)
       );
@@ -220,21 +231,21 @@ export class GameComponent implements OnInit, OnDestroy {
     // console.log('Clicked button=' + selectedAnswer); 
     if (clickedButton) {
       if (this.isCorrectAnswer(selectedAnswer)) {
-        console.log('Bonne réponse');
+        // console.log('Bonne réponse');
         clickedButton.style.backgroundColor = 'var(--grn)';
 
         this.gameService.increaseScore(this.gameCode, this.username).subscribe(
           res => {
-            console.log(res);
+            // console.log(res);
           },
           err => console.error(err)
         );
 
       } else{
-        console.log('Mauvaise réponse');
+        // console.log('Mauvaise réponse');
         this.gameService.hasAnswered(this.gameCode, this.username).subscribe(
           res => {
-            console.log(res);
+            // console.log(res);
           },
           err => console.error(err)
         );
@@ -250,7 +261,7 @@ export class GameComponent implements OnInit, OnDestroy {
       }, 300);
       
     } else {
-      console.log('Aucune réponse sélectionnée');
+      // console.log('Aucune réponse sélectionnée');
     }
   }
 
@@ -260,7 +271,7 @@ export class GameComponent implements OnInit, OnDestroy {
     this.validateButton.nativeElement.style.display = 'none';
 
     if (this.selectedOptions.sort().join(',') === correctAnswerString) {
-      console.log('Bonne réponse');
+      // console.log('Bonne réponse');
       
       this.selectedOptions.forEach(option => {
         const button = this.selectionButtons.find((btn: ElementRef) => btn.nativeElement.textContent.trim() === option);
@@ -272,16 +283,16 @@ export class GameComponent implements OnInit, OnDestroy {
       // Augmentation du score du joueur (100% de réussite sur la selection)
       this.gameService.increaseScore(this.gameCode, this.username, 1).subscribe(
         res => {
-          console.log(res);
+          // console.log(res);
         },
         err => console.error(err)
       );
 
     } else {
-      console.log('Mauvaise réponse');
+      // console.log('Mauvaise réponse');
       this.gameService.hasAnswered(this.gameCode, this.username).subscribe(
         res => {
-          console.log(res);
+          // console.log(res);
         },
         err => console.error(err)
       );
@@ -313,11 +324,11 @@ export class GameComponent implements OnInit, OnDestroy {
       let accuracy;
       const seuil = 0.2;
       if (correctSelected >= seuil * correctAnswers.length && incorrectNotSelected >= seuil * (allAnswers.length - correctAnswers.length)) {
-        console.log('Précision suffisante pour accorder un score');
         accuracy = totalCorrect / allAnswers.length;
+        console.log(`Précision suffisante pour accorder un score (${accuracy.toFixed(2)})`);
       } else {
-        console.log('Précision insuffisante pour accorder un score');
         accuracy = 0;
+        console.log(`Précision insuffisante pour accorder un score (${accuracy.toFixed(2)})`);
       }
       
       // // Debug
@@ -326,11 +337,10 @@ export class GameComponent implements OnInit, OnDestroy {
       // console.log('Réponses correctes sélectionnées : ' + correctSelected);
       // console.log('Réponses incorrectes non-sélectionnées : ' + incorrectNotSelected);
       // console.log('Réponses bien répondues : ' + totalCorrect);
-      console.log('Précision : ' + accuracy);
 
       this.gameService.increaseScore(this.gameCode, this.username, accuracy).subscribe(
         res => {
-          console.log(res);
+          // console.log(res);
         },
         err => console.error(err)
       );
@@ -434,7 +444,7 @@ export class GameComponent implements OnInit, OnDestroy {
       return;
     }
     bestScore.innerText = scores[0];
-    console.log('Meilleur score : ' + scores[0]);
+    // console.log('Meilleur score : ' + scores[0]);
 
     // on redirige vers le menu (peut etre qu'on pourrait faire une page de fin de partie) au bout de 120sec si le joueur ne fait rien
     setTimeout(() => {

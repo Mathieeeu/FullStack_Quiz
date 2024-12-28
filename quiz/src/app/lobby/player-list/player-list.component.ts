@@ -58,7 +58,7 @@ export class PlayerListComponent {
         this.gameDetails = data;
       },
       error => {
-        console.error(error);
+        // console.error(error);
       }
     );
   }

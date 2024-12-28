@@ -28,14 +28,14 @@
             <p *ngIf="gameDetails.showAnswer"><strong>Réponse :</strong> {{ gameDetails.currentQuestion.answerText }}</p>
           </div>
 
-          <div *ngSwitchCase="'VF'">
+          <div id="VF" *ngSwitchCase="'VF'">
             <!-- Question Vrai/Faux -->
-            <button *ngIf="!gameDetails.showAnswer" #trueButton (click)="checkAnswer('Vrai')">Vrai</button>
-            <button *ngIf="!gameDetails.showAnswer" #falseButton (click)="checkAnswer('Faux')">Faux</button>
+            <button id="trueButton" *ngIf="!gameDetails.showAnswer" #trueButton (click)="checkAnswer('Vrai')">Vrai</button>
+            <button id="falseButton" *ngIf="!gameDetails.showAnswer" #falseButton (click)="checkAnswer('Faux')">Faux</button>
             <p *ngIf="gameDetails.showAnswer"><strong>Réponse :</strong> {{ gameDetails.currentQuestion.answerText }}</p>
           </div>
 
-          <div *ngSwitchCase="'QCM'">
+          <div id="QCM" *ngSwitchCase="'QCM'">
             <!-- Question QCM -->
             <ng-container *ngIf="!gameDetails.showAnswer">
               <button #qcmButton class="qcm-button" *ngFor="let option of gameDetails.currentQuestion.allAnswers" (click)="checkAnswer(option, $event)">{{ option }}</button>

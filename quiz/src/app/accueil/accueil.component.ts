@@ -58,7 +58,7 @@ export class AccueilComponent {
         this.router.navigate(['/lobby', this.gameCode.toUpperCase()]);
       },
       err => {
-        console.log(err);
+        // console.log(err);
         alert(err.error.message);
       }
     );

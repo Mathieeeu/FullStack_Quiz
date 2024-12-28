@@ -52,8 +52,8 @@ export class LobbyComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.username = this.sessionService.getUsername();
 
-    console.log(this.username);
-    console.log(this.gameCode);
+    // console.log(this.username);
+    // console.log(this.gameCode);
 
     if (!this.username) {
       this.router.navigate(['/']);
@@ -88,7 +88,7 @@ export class LobbyComponent implements OnInit, OnDestroy {
           console.error(error);
         }
       );
-      console.log(this.gameDetails);
+      // console.log(this.gameDetails);
     }
   }
 

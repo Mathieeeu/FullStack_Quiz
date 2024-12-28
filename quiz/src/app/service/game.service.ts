@@ -97,11 +97,15 @@ export class GameService {
     return this.http.post(`${this.baseUrl}/leave/${code}`, { username });
   }
 
-  increaseScore(code: string, username: string): Observable<any> {
-    return this.http.post(`${this.baseUrl}/increaseScore/${code}`, { username });
+  increaseScore(code: string, username: string, pourcentageSelectionCorrecte?: number): Observable<any> {
+    return this.http.post(`${this.baseUrl}/increaseScore/${code}`, { username, pourcentageSelectionCorrecte });
   }
 
   hasAnswered(code: string, username: string): Observable<any> {
     return this.http.post(`${this.baseUrl}/hasAnswered/${code}`, { username });
+  }
+
+  hasTriedToAnswer(code: string, username: string): Observable<any> {
+    return this.http.post(`${this.baseUrl}/hasTriedToAnswer/${code}`, { username });
   }
 }

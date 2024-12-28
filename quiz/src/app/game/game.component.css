@@ -80,11 +80,11 @@ hr {
     margin-bottom: 10px;
     padding: 10px;
     border-radius: 10px;
-    background-color: var(--clr);
-    color: var(--box);
     font-weight: bold;
     text-align: left;
     width: 250px;
+    color: var(--box);
+    background-color: var(--bg);
 }
 
 #scoreboard li .username {
@@ -92,9 +92,13 @@ hr {
 }
 
 #scoreboard li.answered {
-    background-color: var(--bg);
-    color: var(--txt);
-    font-weight: bold;
+    color: var(--bg);
+    background-color: var(--dark-red);
+}
+
+#scoreboard li.correct {
+    color: var(--bg);
+    background-color: var(--txt);
 }
 
 #scoreboard h3 {

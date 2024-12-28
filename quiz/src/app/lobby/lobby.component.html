@@ -3,7 +3,7 @@
     <app-informations></app-informations>
     <br>
     <div class="boutons"> 
-      <button (click)="startGame()" [disabled]="gameDetails.isStarted">Démarrer la partie</button>
+      <button *ngIf="username === gameDetails.host" (click)="startGame()" [disabled]="gameDetails.isStarted">Démarrer la partie</button>
       <button (click)="leaveGame()">Quitter</button>
     </div> 
   </div>

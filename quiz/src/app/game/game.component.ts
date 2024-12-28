@@ -119,6 +119,12 @@ export class GameComponent implements OnInit, OnDestroy {
 
   checkAnswer(selectedAnswer?: string, event?: Event): void {
     console.log('Answer=' + (selectedAnswer || this.answer));
+
+    // Jouer un son de plop aléatoire à chaque réponse (parce que c'est marrant non ??)
+    const plopSound = new Audio();
+    plopSound.src = `/sounds/plop${Math.floor(Math.random() * 5)}.wav`;
+    plopSound.load();
+    plopSound.play();
   
     const questionType = this.gameDetails.currentQuestion.questionType;
     const clickedButton = event?.target as HTMLElement;
@@ -163,6 +169,13 @@ export class GameComponent implements OnInit, OnDestroy {
       );
     } else {
       console.log('Mauvaise réponse');
+
+      this.gameService.hasTriedToAnswer(this.gameCode, this.username).subscribe(
+        res => {
+          console.log(res);
+        },
+        err => console.error(err)
+      );
       
       this.answerInput.nativeElement.style.color = 'red';
       setTimeout(() => {
@@ -256,7 +269,8 @@ export class GameComponent implements OnInit, OnDestroy {
         }
       });
 
-      this.gameService.increaseScore(this.gameCode, this.username).subscribe(
+      // Augmentation du score du joueur (100% de réussite sur la selection)
+      this.gameService.increaseScore(this.gameCode, this.username, 1).subscribe(
         res => {
           console.log(res);
         },
@@ -278,6 +292,48 @@ export class GameComponent implements OnInit, OnDestroy {
           button.nativeElement.style.backgroundColor = 'var(--red)';
         }
       });
+
+      // Calcul du score du joueur en fonction des réponses correctes et incorrectes
+      const allAnswers = this.gameDetails.currentQuestion.allAnswers;
+      const correctAnswers = correctAnswerString.split(',');
+      const selectedAnswers = this.selectedOptions;
+
+      // Nombre de réponses correctes sélectionnées et incorrectes non-sélectionnées
+      const correctSelected = selectedAnswers.filter(answer => correctAnswers.includes(answer)).length;
+      const incorrectNotSelected = allAnswers.filter((answer: string) => !correctAnswers.includes(answer)).filter((answer: string) => !selectedAnswers.includes(answer)).length;
+
+      // // Nobmre de réponses correctes et incorrectes dans la question
+      // const correct = correctAnswers.length;
+      // const incorrect = allAnswers.length - correct;
+
+      // Nombre de réponses bien répondues (correctes sélectionnées + incorrectes non-sélectionnées)
+      const totalCorrect = correctSelected + incorrectNotSelected;
+
+      // On accorde un score proportionnel à la précision du joueur s'il y a au moins 20% de réponses correctes selectionnées et de réponses incorrectes non-sélectionnées
+      let accuracy;
+      const seuil = 0.2;
+      if (correctSelected >= seuil * correctAnswers.length && incorrectNotSelected >= seuil * (allAnswers.length - correctAnswers.length)) {
+        console.log('Précision suffisante pour accorder un score');
+        accuracy = totalCorrect / allAnswers.length;
+      } else {
+        console.log('Précision insuffisante pour accorder un score');
+        accuracy = 0;
+      }
+      
+      // // Debug
+      // console.log('Réponses correctes dans la question : ' + correct);
+      // console.log('Réponses incorrectes dans la question : ' + incorrect);
+      // console.log('Réponses correctes sélectionnées : ' + correctSelected);
+      // console.log('Réponses incorrectes non-sélectionnées : ' + incorrectNotSelected);
+      // console.log('Réponses bien répondues : ' + totalCorrect);
+      console.log('Précision : ' + accuracy);
+
+      this.gameService.increaseScore(this.gameCode, this.username, accuracy).subscribe(
+        res => {
+          console.log(res);
+        },
+        err => console.error(err)
+      );
     }
 
     setTimeout(() => {

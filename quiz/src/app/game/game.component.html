@@ -69,7 +69,7 @@
 
     <ul id="scoreboard">
       <h3>Scoreboard</h3>
-      <li *ngFor="let player of gameDetails.players" [ngClass]="{'answered': player.hasAnswered}">
+      <li *ngFor="let player of gameDetails.players" [ngClass]="{'answered': player.hasAnswered, 'correct': player.answerCorrect}">
         <span class="username">{{ player.username }}</span> {{ player.score }}
       </li>
     </ul>

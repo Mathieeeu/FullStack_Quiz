@@ -91,7 +91,8 @@ module.exports = (collection) => {
         const player = {
             username: req.body.username,
             score: 0,
-            hasAnswered: false
+            hasAnswered: false,
+            answerCorrect: false
         };
 
         try {
@@ -245,6 +246,7 @@ module.exports = (collection) => {
                     // met à jour la valeur de hasAnswered pour tous les joueurs
                     game.players = game.players.map(player => {
                         player.hasAnswered = false;
+                        player.answerCorrect = false;
                         return player;
                     });
                     console.log(`Question ${currentQuestionIndex + 1}: ${game.currentQuestion.questionText}`);
@@ -315,8 +317,10 @@ module.exports = (collection) => {
     router.post('/increaseScore/:code', async (req, res) => {
         const code = req.params.code;
         const username = req.body.username;
-        // const points = req.body.points; // TODO : Pondération des points en fonction du temps de réponse
-        const points = 1;
+        const pourcentageSelectionCorrecte = req.body.pourcentageSelectionCorrecte;
+
+        // Points de base pour une question (score max en gros)
+        const base_points = 10;
 
         try {
             const game = await collection.findOne({ code });
@@ -329,10 +333,18 @@ module.exports = (collection) => {
             if (playerIndex === -1) {
                 return res.status(404).send({ message: "Player not found" });
             }
-    
-            // Augmenter le score du joueur et trier les joueurs par score
-            game.players[playerIndex].score += points;
+
+            // Augmenter le score du joueur (différemment selon le type de question si c'est selection) et trier les joueurs par score
+            if (game.currentQuestion.questionType === "Selection") {
+                // Pour la selection, le score est égal à la base_points multiplié par le pourcentage de réponses correctes (passé en paramètre)
+                game.players[playerIndex].score += Math.floor(base_points * pourcentageSelectionCorrecte);
+            }
+            else {
+                game.players[playerIndex].score += Math.ceil(game.countdown * base_points / game.options.questionTime); // Max = base_points, diminue linéairement avec le temps
+            }
+
             game.players[playerIndex].hasAnswered = true;
+            game.players[playerIndex].answerCorrect = true;
             game.players.sort((a, b) => b.score - a.score); 
     
             // Metttre à jour le jeu dans la base de données
@@ -344,7 +356,8 @@ module.exports = (collection) => {
             res.status(500).send(error);
         }
     });
-
+ 
+    // Route pour indiquer qu'un joueur a répondu à une question avec une seule réponse possible
     router.post('/hasAnswered/:code', async (req, res) => {
         const code = req.params.code;
         const username = req.body.username;
@@ -362,12 +375,47 @@ module.exports = (collection) => {
             }
 
             game.players[playerIndex].hasAnswered = true;
+            game.players[playerIndex].answerCorrect = false;
             await collection.updateOne({ code }, { $set: { players: game.players } });
 
             res.send(game);
 
         } catch (error) {
             res.status(500).send(error);
+        }
+    });
+
+    // Route pour indiquer qu'un joueur a répondu à une question avec plusieurs réponses possibles (hasAnswered = true pedant 1sec
+    router.post('/hasTriedToAnswer/:code', async (req, res) => {
+        const code = req.params.code;
+        const username = req.body.username;
+
+        try {
+            const game = await collection.findOne({ code });
+            if (!game) {
+                return res.status(404).send({ message: "Game not found" });
+            }
+
+            // Vérifier si le joueur existe dans le jeu :)
+            const playerIndex = game.players.findIndex(player => player.username === username);
+            if (playerIndex === -1) {
+                return res.status(404).send({ message: "Player not found" });
+            }
+
+            game.players[playerIndex].hasAnswered = true;
+            game.players[playerIndex].answerCorrect = false;
+            await collection.updateOne({ code }, { $set: { players: game.players } });
+
+            setTimeout(async () => {
+                game.players[playerIndex].hasAnswered = false;
+                await collection.updateOne({ code }, { $set: { players: game.players } });
+            }, 750);
+
+            res.send(game);
+
+        } catch (error) {
+            res.status(500).send(error);
+
         }
     });
 

@@ -13,14 +13,22 @@
         <!-- Onglet 1 - Question simple -->
         <div *ngIf="currentTab === 0" class="tab">
           <h2>Basique</h2>
-          <input type="text" placeholder="Entrer la question" id="question" [(ngModel)]="formData.questionText" name="questionText" required autocomplete="off"><br><br>
-          <input type="text" placeholder="Entrer la réponse attendue" id="réponse" [(ngModel)]="formData.answerText" name="answerText" required autocomplete="off"><br><br>
-          <h3>Choisir un thème</h3>
-          <select name="theme" id="theme" [(ngModel)]="formData.themeText" required>
-            <option value="" disabled selected>-- Sélectionner --</option>
-            <option *ngFor="let theme of themes" [value]="theme">{{ theme }}</option> 
-          </select>
+          <input type="text" placeholder="Entrer la question" id="question" [(ngModel)]="formData.questionText" name="questionText" required autocomplete="off"><br>
+          <input type="text" placeholder="Entrer la réponse attendue" id="réponse" [(ngModel)]="formData.answerText" name="answerText" required autocomplete="off"><br>
           <br>
+          <h3>Choisir un thème</h3>
+          <div class="theme-list">
+            <ul>
+              <li *ngFor="let theme of themes"
+                  [class.selected]="theme.status === 'selected'"
+                  (click)="selectTheme(theme)">
+                {{ theme.name }}
+              </li>
+            </ul>
+          </div>
+
+          <br>
+
           <div class="radio-button">
             <h3>Niveau de difficulté</h3>
             <input type="radio" id="niveau1" name="difficulty" value="1" [(ngModel)]="formData.difficulty"/>
@@ -49,7 +57,51 @@
         <!-- Onglet 4 - Vrai/faux-->
         <div *ngIf="currentTab === 3" class="tab">
           <h2>Vrai/Faux</h2>
+          <input type="text" placeholder="Entrer la question" id="question" [(ngModel)]="formData.questionText" name="questionText" required autocomplete="off"><br>
+
+          <div class="true-false-buttons">
+            <button 
+            type="button" 
+            class="btn-true" 
+            [class.selected]="selectedValue === 'Vrai'"
+            (click)="selectValue('Vrai')">
+              Vrai
+            </button>
+            <button 
+            type="button" 
+            class="btn-false" 
+            [class.selected]="selectedValue === 'Faux'"
+            (click)="selectValue('Faux')">
+              Faux
+            </button>
+          </div>
+
+          <br>
           
+          <h3>Choisir un thème</h3>
+          <div class="theme-list">
+            <ul>
+              <li *ngFor="let theme of themes" 
+                  [class.selected]="theme.status === 'selected'"
+                  (click)="selectTheme(theme)">
+                {{ theme.name }}
+              </li>
+            </ul>
+          </div>
+
+          <br>
+
+          <div class="radio-button">
+            <h3>Niveau de difficulté</h3>
+            <input type="radio" id="niveau1" name="difficulty" value="1" [(ngModel)]="formData.difficulty"/>
+            <label for="niveau1">Ma petite cousine a la réponse</label>
+            <br>
+            <input type="radio" id="niveau2" name="difficulty" value="2" [(ngModel)]="formData.difficulty"/>
+            <label for="niveau2">Un coup d'oeil chez le voisin peut être utile</label>
+            <br>
+            <input type="radio" id="niveau3" name="difficulty" value="3" [(ngModel)]="formData.difficulty"/>
+            <label for="niveau3">Kant peut se rhabiller</label>
+        </div>
         </div>
     
         <div class="form-footer">

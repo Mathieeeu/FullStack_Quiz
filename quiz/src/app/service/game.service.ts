@@ -23,7 +23,7 @@ export class GameService {
   }
 
   createGame(options: any): Observable<any> {
-    return this.http.post(`${this.baseUrl}/create/:${options.code}`, options);
+    return this.http.post(`${this.baseUrl}/create/${options.code}`, options);
   }
   
   generateGameCode(): Observable<any> {

@@ -58,7 +58,7 @@ export class CreationPartieComponent {
   generateCode(): void {
     this.gameService.generateGameCode().subscribe(
       (response) => {
-        this.gameCode = response.code; 
+        this.gameCode = response.code;
         this.updateGameData();
       },
       (error) => {
@@ -83,7 +83,7 @@ export class CreationPartieComponent {
   updateGameData(): void {
     this.gameData.host = this.hote;
     this.gameData.code = this.gameCode;
-    this.gameData.filters = this.generateFilters();
+    this.gameData.filters = this.toLowercaseWithoutAccents(this.generateFilters());
   }
 
   // Définit le mode par défaut
@@ -128,6 +128,11 @@ export class CreationPartieComponent {
     }
   
     return ''; // Par défaut, renvoie une chaîne vide
+  }
+
+  toLowercaseWithoutAccents(text: string): string {
+    // Supprimer les accents et convertir en minuscule
+    return text.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
   }
 
   onSubmit(): void {

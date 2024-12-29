@@ -115,7 +115,6 @@ export class GameComponent implements OnInit, OnDestroy {
                 console.log('Error while checking answer');
               }
             } else if (this.gameDetails.currentQuestion.questionType === 'Selection') {
-              console.log('Selection question, checking answer');
               if (!this.checked)  {
                 this.checkAnswer();
               }
@@ -127,7 +126,7 @@ export class GameComponent implements OnInit, OnDestroy {
           // console.log(this.gameDetails.options.questionTime);
           // console.log(this.gameDetails.countdown === this.gameDetails.options.questionTime);
           // console.log(this.checked);
-          if (this.gameDetails.countdown === this.gameDetails.options.questionTime) {
+          if (this.gameDetails.countdown === -1 && this.checked) {
             console.log('Resetting checked');
             this.checked = false;
           }
@@ -150,14 +149,8 @@ export class GameComponent implements OnInit, OnDestroy {
 
   checkAnswer(selectedAnswer?: string, event?: Event): void {
     // console.log('Answer=' + (selectedAnswer || this.answer));
-
-    // Si la réponse a déjà été vérifiée, on ne fait rien
-    if (this.checked) {
-      return;
-    }
-    else {
-      this.checked = true;
-    }
+    console.log('Checking answer');
+    this.checked = true;
 
     // Jouer un son de plop aléatoire à chaque réponse (parce que c'est marrant non ??)
     const plopSound = new Audio();
@@ -353,10 +346,10 @@ export class GameComponent implements OnInit, OnDestroy {
       const seuil = 0.2;
       if (correctSelected >= seuil * correctAnswers.length && incorrectNotSelected >= seuil * (allAnswers.length - correctAnswers.length)) {
         accuracy = totalCorrect / allAnswers.length;
-        console.log(`Précision suffisante pour accorder un score (${accuracy.toFixed(2)})`);
+        // console.log(`Précision suffisante pour accorder un score (${accuracy.toFixed(2)})`);
       } else {
         accuracy = 0;
-        console.log(`Précision insuffisante pour accorder un score (${accuracy.toFixed(2)})`);
+        // console.log(`Précision insuffisante pour accorder un score (${accuracy.toFixed(2)})`);
       }
       
       // // Debug

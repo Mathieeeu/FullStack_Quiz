@@ -20,7 +20,7 @@ input[type=text]{
   height:10px;
   width:21vw;
   transition: 0.5s;
-  font-size: 1.2vw;
+  font-size: 17px;
   border-radius: 20px;
   background-color: var(--bg-button);
 }
@@ -74,13 +74,13 @@ input:focus{
 }
 
 .form-footer button{
-  padding: 2vh 4vw;
+  padding: 15px 30px;
   background-color: var(--txt);
   color: white;
   border: none;
   border-radius: 20px;
   cursor: pointer;
-  font-size: 1.2vw;
+  font-size: 17px;
   transition: background-color 0.3s, transform 0.3s;
   margin-bottom: 1vh;
 }
@@ -121,12 +121,12 @@ button:hover{
 button:focus {
   outline: none;
 }
-/* Checkbox */ 
+/* radio button */ 
 .radio-button{
   margin:0;
 }
 input[type=radio] {
-  --s: 2vh;     /* control the size */
+  --s: 15px;     /* control the size */
 
   height: var(--s);
   aspect-ratio: 1;
@@ -165,9 +165,45 @@ label {
   cursor: pointer;
 }
 
+/* Checkbox */
+input[type=checkbox] {
+  --s: 15px;     /* control the size */
+
+  height: var(--s);
+  aspect-ratio: 1;
+  border: calc(var(--s)/8) solid #939393;
+  padding: calc(var(--s)/8);
+  background: 
+     radial-gradient(farthest-side,var(--txt) 94%,#0000) 
+     50%/0 0 no-repeat content-box;
+  border-radius: 50%;
+  outline-offset: calc(var(--s)/10);
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  cursor: pointer;
+  font-size: inherit;
+  transition: .3s;
+}
+input[type=checkbox]:checked {
+  border-color: var(--txt);
+  background-size: 100% 100%;
+}
+
+
+@media print {
+  input[type=checkbox] {
+    -webkit-appearance: auto;
+    -moz-appearance: auto;
+    appearance: auto;
+    background: none;
+  }
+}
+
+
 /* Liste thèmes*/
 .theme-list {
-  max-height: 100px;
+  max-height: 14vh;
   overflow-y: auto;
   border: 1px solid #ccc;
   border-radius: 5px;
@@ -216,7 +252,7 @@ li:hover:not(.grayed-out):not(.selected) {
 
 /* Réponses QCM */
 .reponses {
-  max-height: 100px;
+  max-height: 12vh;
   width : 45vw;
   overflow-y: auto;
   padding : 5px;
@@ -230,7 +266,7 @@ li:hover:not(.grayed-out):not(.selected) {
   height: 5px;
   width:21vw;
   transition: 0.5s;
-  font-size: 1.2vw;
+  font-size: 17px;
   border-radius: 20px;
   background-color: var(--bg-button);
 }

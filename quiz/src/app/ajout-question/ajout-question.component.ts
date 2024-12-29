@@ -32,6 +32,7 @@ export class AjoutQuestionComponent {
   // Liste des réponses pour le QCM
   answers: string[] = ['', ''];
   correctAnswerIndex: number | null = null;
+  correctAnswerIndices: number[] = [];
 
 
   // Les données du formulaire
@@ -75,7 +76,7 @@ export class AjoutQuestionComponent {
 
   // QCM
   addAnswer(): void {
-    if (this.answers.length < 4) {
+    if (this.answers.length < 10) {
       this.answers.push('');
     }
   }
@@ -83,6 +84,18 @@ export class AjoutQuestionComponent {
   removeAnswer(): void {
     if (this.answers.length > 2) {
       this.answers.pop();
+      if (this.currentTab === 2){
+        const removedIndex = this.answers.length - 1;
+        this.correctAnswerIndices = this.correctAnswerIndices.filter(index => index !== removedIndex);
+      }
+    }
+  }
+
+  toggleCorrectAnswer(index: number): void {
+    if (this.correctAnswerIndices.includes(index)) {
+      this.correctAnswerIndices = this.correctAnswerIndices.filter(i => i !== index);
+    } else {
+      this.correctAnswerIndices.push(index);
     }
   }
 
@@ -105,6 +118,8 @@ export class AjoutQuestionComponent {
       }
     } else if (this.currentTab === 2) {
       this.formData.questionType = 'Selection';
+      this.formData.trueAnswers = this.correctAnswerIndices.map(index => this.answers[index]);
+      this.formData.fakeAnswers = this.answers.filter((_, index) => !this.correctAnswerIndices.includes(index));
     } else if (this.currentTab === 3) {
       this.formData.questionType = 'Vrai/Faux';
     } else {
@@ -133,18 +148,18 @@ export class AjoutQuestionComponent {
 
   // Soumettre le formulaire
   onSubmit(): void {
-    // Vérifiez que toutes les réponses sont renseignées (QCM)
-    const nonEmptyAnswers = this.answers.filter(answer => answer.trim() !== '');
-    if (nonEmptyAnswers.length < 2) {
-      alert('Veuillez entrer au moins deux réponses valides.');
-      return;
-    }
+    // // Vérifiez que toutes les réponses sont renseignées (QCM)
+    // const nonEmptyAnswers = this.answers.filter(answer => answer.trim() !== '');
+    // if (nonEmptyAnswers.length < 2) {
+    //   alert('Veuillez entrer au moins deux réponses valides.');
+    //   return;
+    // }
 
-    // Vérifiez qu'une réponse correcte est sélectionnée
-    if (this.correctAnswerIndex === null || this.correctAnswerIndex < 0 || this.correctAnswerIndex >= this.answers.length) {
-      alert('Veuillez sélectionner une réponse correcte.');
-      return;
-    }
+    // // Vérifiez qu'une réponse correcte est sélectionnée
+    // if (this.correctAnswerIndex === null || this.correctAnswerIndex < 0 || this.correctAnswerIndex >= this.answers.length) {
+    //   alert('Veuillez sélectionner une réponse correcte.');
+    //   return;
+    // }
 
 
     this.remplirForm();

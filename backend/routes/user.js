@@ -19,6 +19,16 @@ module.exports = (collection) => {
         }
     });
 
+    // Route pour récupérer la liste des utilisateurs 
+    router.get('/users', async (req, res) => { 
+        try { 
+            const users = await collection.find({}, { projection: { _id: 0, username: 1, Superuser: 1 } }).toArray();
+            res.send(users); 
+        } catch (error) { 
+            res.status(500).send(error); 
+        }
+    });
+
     // Route pour créer un nouvel utilisateur
     router.post('/add', async (req, res) => {
         const user = {
@@ -51,25 +61,40 @@ module.exports = (collection) => {
     //Rajouter vérification mdp !!!!
     router.post('/edit', async (req, res) => {
         const user = {
-            username: req.body.login,
-            password: req.body.password,
-            Superuser: req.body.superuser
+            username: req.body.user.username,
+            password: req.body.user.password,
+            Superuser: req.body.user.Superuser
         };
-        
-        try {
-             // Recherche si login déjà dans la bd
-             const result = await collection.findOne({ username: user.username});
-             if (result === null){
-                 res.status(404).send({ message: "User not found" });
-             }
-             else{
-                user.password = await bcrypt.hash(user.password, 10);
-                const result = await collection.updateOne({ username: user.username }, { $set: { password: user.password, Superuser: user.Superuser } });
-                console.log(`User ${user.username} edited: `);
-                res.send("User edited");
-             }
-        } catch (error) {
-            res.status(500).send(error);
+        const action = req.body.action;
+        // console.log(user, action);
+
+        // Recherche si login déjà dans la bd
+        const result = await collection.findOne({ username: user.username});
+        if (result === null){
+                console.log(`User ${user.username} not found\n` );
+                res.status(404).send({ message: `User ${user.username} not found` });
+        }
+        else{
+            if (action === "rename") {
+                const newUsername = req.body.newUsername;
+                const result = await collection.updateOne({ username: user.username }, { $set: { username: newUsername } });
+                console.log(`User ${user.username} edited\n`);
+                res.status(200).send({ message: `User ${user.username} edited` });
+            }
+            else if (action === "password") {
+                // Ici on pourrait ajouter une modification du mot de passe mais flemme
+                // user.password = await bcrypt.hash(user.password, 10);
+                console.log("Password modification not implemented yet\n");
+            }
+            else if (action === "superuser") {
+                const result = await collection.updateOne({ username: user.username }, { $set: { Superuser: user.Superuser } });
+                console.log(`User ${user.username} edited\n`);
+                res.status(200).send({ message: `User ${user.username} edited` });
+            } 
+            else {
+                console.log("Invalid action\n");
+                res.status(400).send({ message: "Invalid action" });
+            }
         }
     });
 
@@ -84,7 +109,7 @@ module.exports = (collection) => {
             if (deleteResult.deletedCount === 0) {
                 return res.status(404).send({ message: "User not found" });
             }
-            res.send("User deleted");
+            res.status(200).send({ message: "User deleted" });
         } catch (error) {
             res.status(500).send(error);
         }

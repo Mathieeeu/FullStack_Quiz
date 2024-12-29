@@ -1,12 +1,12 @@
 .page_container {
-    padding: 8vh; 
-  }
+  padding: 8vh; 
+}
 
-/* bouton  haut */ 
+/* Boutons en haut */
 .tab {
-    margin-top: 1vh;
-  }
-  
+  margin-top: 1vh;
+}
+
 .tab-buttons {
   margin-bottom: 1vh;
   transition: background-color 0.3s, transform 0.3s;
@@ -21,34 +21,62 @@
   background-color: var(--bg-button);
 }
 
-.tab-buttons button:hover{
-  transform: scale(1.02)
+.tab-buttons button:hover {
+  transform: scale(1.02);
 }
+
 .tab-buttons button.active {
   background-color: var(--txt);
   color: white;
 }
 
-/* bouton valider */ 
-.form-footer {
-  margin-top: 3vh;
+/* Styles des boutons de super utilisateur */
+ul.user-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  list-style-type: none;
+  padding: 0;
+  max-width: fit-content;
 }
 
-.form-footer button{
-  padding: 2vh 4vw;
-  background-color: var(--txt);
-  color: white;
-  border: none;
-  border-radius: 20px;
-  cursor: pointer;
-  font-size: 1.2vw;
-  transition: background-color 0.3s, transform 0.3s;
-  margin-bottom: 1vh;
+ul.user-grid li {
+  display: contents;
 }
-.form-footer button:hover{
+
+ul.user-grid li label {
+  grid-column: 1;
+  align-self: center;
+}
+
+ul.user-grid li button {
+  margin-left: 10px;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+ul.user-grid li button:hover {
   transform: scale(1.02);
 }
-.form-footer button:active {
-  background-color: var(--txt);
-  transform: scale(0.95);
+
+ul.user-grid li button.renameButton {
+  background-color: red;
+  color: white;
+}
+
+ul.user-grid li button.deleteButton {
+  background-color: red;
+  color: white;
+}
+
+ul.user-grid li button.superUserButton:not(.superuser) {
+  background-color: green;
+  color: white;
+}
+
+ul.user-grid li button.superUserButton.superuser {
+  background-color: red;
+  color: white;
 }

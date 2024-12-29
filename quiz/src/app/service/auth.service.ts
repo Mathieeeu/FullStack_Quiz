@@ -14,13 +14,16 @@ export class AuthService {
 
   // Méthode pour récupérer le statut superUser
   getSuperUser(login: string): Observable<boolean> {
-    return this.http.get<boolean>(`${this.baseUrl}/superuser`, {
-      params: { login} 
-    });
+    return this.http.get<boolean>(`${this.baseUrl}/superuser`, {params: { login } });
+  }
+
+  getUsers(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseUrl}/users`);
   }
 
   login(login: string, password: string): Observable<boolean> {
     const body = { login, password };
+    console.log(body);
     return this.http.post<boolean>(`${this.baseUrl}/login`, body);
   }
 
@@ -29,12 +32,11 @@ export class AuthService {
     return this.http.post<boolean>(`${this.baseUrl}/add`, user);
   }
 
-  editUser(user: any): Observable<any> {
-    return this.http.post(`${this.baseUrl}/edit`, user);
+  editUser(user: any, action: string, newUsername?: string): Observable<any> {
+    return this.http.post(`${this.baseUrl}/edit`, { user, action, newUsername });
   }
 
-  deleteUser(login: string, password: string): Observable<any> {
-    const body = { login, password };
-    return this.http.post(`${this.baseUrl}/delete`, body);
+  deleteUser(login: string, password?: string): Observable<any> {
+    return this.http.post(`${this.baseUrl}/delete`, { login, password });
   }
 }

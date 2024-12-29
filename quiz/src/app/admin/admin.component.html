@@ -1,34 +1,37 @@
 <div class="page_container">
   <div class="tab-buttons">
-      <button 
-        *ngFor="let tab of tabs; let i = index"
-        [class.active]="currentTab === i"
-        (click)="showTab(i)">
-        {{ tab }}
-      </button>
-    </div>
-  
-    <form (ngSubmit)="onSubmit()">
-      <!-- Onglet 1 - Question simple -->
-      <div *ngIf="currentTab === 0" class="tab">
-        <h2>Gestion du compte</h2>
-      </div>
+    <button 
+      *ngFor="let tab of tabs; let i = index"
+      [class.active]="currentTab === i"
+      (click)="showTab(i)">
+      {{ tab }}
+    </button>
+  </div>
 
-  
-      <!-- Onglet 2 - QCM-->
-      <div *ngIf="currentTab === 1" class="tab">
-        <h2>Droit super Administrateur</h2>
-        
-      </div>
-  
-      <!-- Onglet 3  - Plusieurs réponses -->
-      <div *ngIf="currentTab === 2" class="tab">
-        <h2>Supprimer des parties</h2>
-        
-      </div>
+  <!-- Onglet 1 - Gestion du compte-->
+  <div *ngIf="currentTab === 0" class="tab">
+    <h2>Gestion du compte</h2>
+  </div>
 
-      <div class="form-footer">
-        <button type="submit">Valider</button>
-      </div>
-    </form>
+  <!-- Onglet 2 - Droit super Administrateur -->
+  <div *ngIf="currentTab === 1 && superUser" class="tab">
+    <h2>Gestion des comptes</h2>
+    <ul class="user-grid">
+      <li *ngFor="let user of users" class="user-grid-item">
+        <label>{{ user.username }}</label>
+        <button class="renameButton" (click)="editUsername(user)">Renommer</button>
+        <button class="deleteButton" (click)="deleteUser(user)">Supprimer</button>
+        <button class="superUserButton" [class.superuser]="user.Superuser" (click)="toggleSuperUser(user)">
+          {{ user.Superuser ? 'Retirer Superuser' : 'Donner Superuser' }}
+        </button>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Onglet 3  - Supprimer des parties -->
+  <div *ngIf="currentTab === 2" class="tab">
+    <h2>Gestion des parties</h2>
+    <p>Si on est un superuser : on voit ici <b>toutes les parties</b>, avec leur code et leur date de création, le nom de leur créateur et le nombre de joueurs, on peut les lancer "à distance" si plus de 0 joueur et les supprimer</p>
+    <p>Si on est un utilisateur normal : on voit ici seulement les parties <b>qu'on a créées</b>, avec leur code, leur date de création et le nombre de joueurs, on peut les lancer "à distance" si plus de 0 joueur et les supprimer</p>
+  </div>
 </div>

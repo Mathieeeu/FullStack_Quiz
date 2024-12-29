@@ -457,14 +457,7 @@ export class GameComponent implements OnInit, OnDestroy {
 
     // Tri des scores
     scores.sort((a: any, b: any) => b.score - a.score);
-
-    // Affichage du meilleur score dans le span prévu à cet effet :)
-    const bestScore = document.getElementById('best-score');
-    if (!bestScore) {
-      console.error('Erreur bizarre - span introuvable lol');
-      return;
-    }
-    bestScore.innerText = scores[0];
+    
     // console.log('Meilleur score : ' + scores[0]);
 
     // on redirige vers le menu (peut etre qu'on pourrait faire une page de fin de partie) au bout de 120sec si le joueur ne fait rien

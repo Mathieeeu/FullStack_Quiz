@@ -181,6 +181,7 @@ module.exports = (collection) => {
             // game.questions = questions; // Retiré pour ne pas "stocker" les questions sur l'api
             game.currentQuestion = questions[0];
             game.countdown = game.options.questionTime;
+
             // await collection.updateOne({ code }, { $set: { isStarted: game.isStarted, questions: game.questions, currentQuestion: game.currentQuestion } }); // Retiré pour ne pas "stocker" les questions sur l'api
             await collection.updateOne({ code }, { $set: { isStarted: game.isStarted, currentQuestion: game.currentQuestion, showAnswer:game.showAnswer, countdown:game.countdown} }); // Ajouté pour ne pas "stocker" les questions sur l'api
  
@@ -243,6 +244,7 @@ module.exports = (collection) => {
                     game.countdown = game.options.questionTime;
                     game.showAnswer = false;
                     game.currentQuestion = questions[currentQuestionIndex]; // Ajouté pour ne pas "stocker" les questions sur l'api
+
                     // met à jour la valeur de hasAnswered pour tous les joueurs
                     game.players = game.players.map(player => {
                         player.hasAnswered = false;
@@ -336,6 +338,7 @@ module.exports = (collection) => {
 
             // Augmenter le score du joueur (différemment selon le type de question si c'est selection) et trier les joueurs par score
             if (game.currentQuestion.questionType === "Selection") {
+                
                 // Pour la selection, le score est égal à la base_points multiplié par le pourcentage de réponses correctes (passé en paramètre)
                 game.players[playerIndex].score += Math.floor(base_points * pourcentageSelectionCorrecte);
             }

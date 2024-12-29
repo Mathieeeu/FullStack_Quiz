@@ -30,6 +30,7 @@ export class GameComponent implements OnInit, OnDestroy {
   answer: string = '';
   selectedOptions: string[] = [];
   motd: string = '';
+  checked: boolean = false;
   private subscription: Subscription = new Subscription();
   private isNavigatingAway: boolean = false;
   private readonly tickRate: number = 4; // Frequence de rafraichissement des données du jeu (en Hz)
@@ -98,18 +99,37 @@ export class GameComponent implements OnInit, OnDestroy {
 
           // Focus sur l'input de réponse si une question est en cours (pour éviter de cliquer dessus à chaque fois)
           if (this.answerInput && this.gameDetails.currentQuestionIndex !== -1 && !this.gameDetails.isOver) {
-            setTimeout(() => this.answerInput.nativeElement.focus(), 0);
+            if (this.gameDetails.currentQuestion.questionType === 'ouverte') {
+              setTimeout(() => this.answerInput.nativeElement.focus(), 0);
+            }
           }
 
           // Si le timer est égal à 0 et que la question est en cours, on check la réponse si c'est une question ouverte et vide la réponse
-          if (this.gameDetails.currentQuestionIndex !== -1  && this.gameDetails.countdown === -1) {
-            try {
-              this.answerInput.nativeElement.style.display = 'none';
-              this.answer = '';
+          if (this.gameDetails.currentQuestionIndex !== -1  && this.gameDetails.countdown === 0) {
+            if (this.gameDetails.currentQuestion.questionType === 'ouverte') {
+              try {
+                this.answerInput.nativeElement.style.display = 'none';
+                this.answer = '';
+              } catch (error) {
+                console.error(error);
+                console.log('Error while checking answer');
+              }
+            } else if (this.gameDetails.currentQuestion.questionType === 'Selection') {
+              console.log('Selection question, checking answer');
+              if (!this.checked)  {
+                this.checkAnswer();
+              }
             }
-            catch (error) {
-              
-            }
+          }
+
+          // Si le timer est de retour au max, on réinitialise le check
+          // console.log(this.gameDetails.countdown);
+          // console.log(this.gameDetails.options.questionTime);
+          // console.log(this.gameDetails.countdown === this.gameDetails.options.questionTime);
+          // console.log(this.checked);
+          if (this.gameDetails.countdown === this.gameDetails.options.questionTime) {
+            console.log('Resetting checked');
+            this.checked = false;
           }
         },
         error => {
@@ -130,6 +150,14 @@ export class GameComponent implements OnInit, OnDestroy {
 
   checkAnswer(selectedAnswer?: string, event?: Event): void {
     // console.log('Answer=' + (selectedAnswer || this.answer));
+
+    // Si la réponse a déjà été vérifiée, on ne fait rien
+    if (this.checked) {
+      return;
+    }
+    else {
+      this.checked = true;
+    }
 
     // Jouer un son de plop aléatoire à chaque réponse (parce que c'est marrant non ??)
     const plopSound = new Audio();

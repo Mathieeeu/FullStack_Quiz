@@ -29,6 +29,10 @@ export class AjoutQuestionComponent {
   ];
   selectedValue: String | null = null;
 
+  // Liste des réponses pour le QCM
+  answers: string[] = ['', ''];
+  correctAnswerIndex: number | null = null;
+
 
   // Les données du formulaire
   formData: any = {
@@ -37,9 +41,9 @@ export class AjoutQuestionComponent {
     themeText : '',
     difficulty : '',
     questionType: null,
-    fakeAnswer : null,
+    fakeAnswer : [],
     trueAnswers : null,
-    fakeAnswers : null
+    fakeAnswers : []
   };
 
 
@@ -68,30 +72,86 @@ export class AjoutQuestionComponent {
     // Supprimer les accents et convertir en minuscule
     return text.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
   }
-  
-  remplirForm(){
-    this.selectValue;
-    if (this.currentTab == 1){
-      this.formData.questionType = 'QCM';
-    }
-    else if (this.currentTab == 2){
-      this.formData.questionType = 'Selection';
-    }
-    else if (this.currentTab == 3){
-      this.formData.questionType = 'Vrai/Faux';
-    }
-    else{
-      this.formData.questionType = 'Simple';
+
+  // QCM
+  addAnswer(): void {
+    if (this.answers.length < 4) {
+      this.answers.push('');
     }
   }
 
+  removeAnswer(): void {
+    if (this.answers.length > 2) {
+      this.answers.pop();
+    }
+  }
+
+  trackByFn(index: number, item: string): number {
+    return index; // Utilise l'index comme identifiant unique
+  }
+
+
+  
+  remplirForm(){
+    if (this.currentTab === 1) {
+      this.formData.questionType = 'QCM';
+      if (this.correctAnswerIndex !== null && this.correctAnswerIndex >= 0 && this.correctAnswerIndex < this.answers.length) {
+        this.formData.answerText = this.answers[this.correctAnswerIndex];
+        this.formData.fakeAnswer = this.answers.filter((_, index) => index !== this.correctAnswerIndex);
+      } else {
+        console.error('Index de la réponse correcte invalide ou non défini');
+        this.formData.answerText = null;
+        this.formData.fakeAnswer = [];
+      }
+    } else if (this.currentTab === 2) {
+      this.formData.questionType = 'Selection';
+    } else if (this.currentTab === 3) {
+      this.formData.questionType = 'Vrai/Faux';
+    } else {
+      this.formData.questionType = 'ouverte';
+    }
+  }
+
+
+  resetForm(): void {
+    this.formData = {
+        questionText: '',
+        answerText: null,
+        themeText: '',
+        difficulty: '',
+        questionType: null,
+        fakeAnswer: null,
+        trueAnswers: null,
+        fakeAnswers: null
+    };
+
+    this.themes.forEach(theme => theme.status = 'neutral'); 
+    this.currentTab = 0; 
+    this.selectedValue = null; 
+}
+
+
   // Soumettre le formulaire
   onSubmit(): void {
-    console.log('Données du formulaire:', this.formData);
+    // Vérifiez que toutes les réponses sont renseignées (QCM)
+    const nonEmptyAnswers = this.answers.filter(answer => answer.trim() !== '');
+    if (nonEmptyAnswers.length < 2) {
+      alert('Veuillez entrer au moins deux réponses valides.');
+      return;
+    }
+
+    // Vérifiez qu'une réponse correcte est sélectionnée
+    if (this.correctAnswerIndex === null || this.correctAnswerIndex < 0 || this.correctAnswerIndex >= this.answers.length) {
+      alert('Veuillez sélectionner une réponse correcte.');
+      return;
+    }
+
+
     this.remplirForm();
     this.questionService.submitQuestion(this.formData).subscribe(
       (response) => {
         alert('La question a été ajoutée avec succès!');
+        this.resetForm();
       },
       (error) => {
         alert('Il y a eu une erreur lors de l\'ajout de la question. Veuillez réessayer.');

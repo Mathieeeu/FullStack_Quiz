@@ -135,7 +135,21 @@ export class CreationPartieComponent {
     return text.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
   }
 
+  isFormValid(): boolean {
+    return (
+        !!this.gameData.nbQuestions && 
+        !!this.gameData.questionTime && 
+        !!this.gameCode && 
+        (this.currentMode === 'tous' || this.generateFilters() !== '')
+    );
+  }
+
   onSubmit(): void {
+    if (!this.isFormValid()) {
+      alert('Veuillez remplir tous les champs avant de créer la partie.');
+      return;
+    }
+
     this.updateGameData();
     this.gameService.createGame(this.gameData).subscribe(
       (response) => {

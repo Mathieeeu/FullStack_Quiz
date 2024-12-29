@@ -45,7 +45,44 @@
         <!-- Onglet 2 - QCM-->
         <div *ngIf="currentTab === 1" class="tab">
           <h2>QCM</h2>
-          
+          <input type="text" placeholder="Entrer la question" id="question" [(ngModel)]="formData.questionText" name="questionText" required autocomplete="off"><br>
+
+          <div class="reponses">
+              <ul>
+                  <li *ngFor="let answer of answers; let i = index; trackBy: trackByFn">
+                      <input type="text" [(ngModel)]="answers[i]" name="answer{{i}}" placeholder="Réponse {{i + 1}}" />
+                      <input type="radio" name="correctAnswer" [value]="i" [(ngModel)]="correctAnswerIndex" />
+                      <label>Bonne réponse</label>
+                  </li>
+              </ul>
+              <button type="button" (click)="addAnswer()" [disabled]="answers.length >= 4">Ajouter une réponse</button>
+              <button type="button" (click)="removeAnswer()" [disabled]="answers.length <= 2">Supprimer une réponse</button>
+          </div>
+
+          <h3>Choisir un thème</h3>
+          <div class="theme-list">
+            <ul>
+              <li *ngFor="let theme of themes"
+                  [class.selected]="theme.status === 'selected'"
+                  (click)="selectTheme(theme)">
+                {{ theme.name }}
+              </li>
+            </ul>
+          </div>
+
+          <br>
+
+          <div class="radio-button">
+            <h3>Niveau de difficulté</h3>
+            <input type="radio" id="niveau1" name="difficulty" value="1" [(ngModel)]="formData.difficulty"/>
+            <label for="niveau1">Ma petite cousine a la réponse</label>
+            <br>
+            <input type="radio" id="niveau2" name="difficulty" value="2" [(ngModel)]="formData.difficulty"/>
+            <label for="niveau2">Un coup d'oeil chez le voisin peut être utile</label>
+            <br>
+            <input type="radio" id="niveau3" name="difficulty" value="3" [(ngModel)]="formData.difficulty"/>
+            <label for="niveau3">Kant peut se rhabiller</label>
+        </div>
         </div>
     
         <!-- Onglet 3  - Plusieurs réponses -->

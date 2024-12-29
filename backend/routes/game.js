@@ -341,13 +341,20 @@ module.exports = (collection) => {
                 
                 // Pour la selection, le score est égal à la base_points multiplié par le pourcentage de réponses correctes (passé en paramètre)
                 game.players[playerIndex].score += Math.floor(base_points * pourcentageSelectionCorrecte);
+                game.players[playerIndex].hasAnswered = true;
+                if (pourcentageSelectionCorrecte === 1) {
+                    game.players[playerIndex].answerCorrect = true;
+                } else {
+                    game.players[playerIndex].answerCorrect = false;
+                }
             }
             else {
                 game.players[playerIndex].score += Math.ceil(game.countdown * base_points / game.options.questionTime); // Max = base_points, diminue linéairement avec le temps
+                game.players[playerIndex].hasAnswered = true;
+                game.players[playerIndex].answerCorrect = true;
             }
-
-            game.players[playerIndex].hasAnswered = true;
-            game.players[playerIndex].answerCorrect = true;
+            
+            // Trier les joueurs par score
             game.players.sort((a, b) => b.score - a.score); 
     
             // Metttre à jour le jeu dans la base de données

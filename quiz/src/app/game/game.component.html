@@ -21,8 +21,8 @@
         <!-- Zone de réponse : -->
         <ng-container [ngSwitch]="gameDetails.currentQuestion.questionType">
 
-          <div *ngSwitchCase="'ouverte'">
-            <!-- Question ouverte -->
+          <div *ngSwitchCase="'Ouverte'">
+            <!-- Question Ouverte -->
             <input *ngIf="!gameDetails.showAnswer" type="text" id="answer-input" #answerInput [(ngModel)]="answer"
               placeholder="Votre réponse" (keydown.enter)="checkAnswer()" autocomplete="off" autofocus>
             <p *ngIf="gameDetails.showAnswer"><strong>Réponse :</strong> {{ gameDetails.currentQuestion.answerText }}</p>

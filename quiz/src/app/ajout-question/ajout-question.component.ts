@@ -123,7 +123,7 @@ export class AjoutQuestionComponent {
     } else if (this.currentTab === 3) {
       this.formData.questionType = 'Vrai/Faux';
     } else {
-      this.formData.questionType = 'ouverte';
+      this.formData.questionType = 'Ouverte';
     }
   }
 

@@ -99,14 +99,14 @@ export class GameComponent implements OnInit, OnDestroy {
 
           // Focus sur l'input de réponse si une question est en cours (pour éviter de cliquer dessus à chaque fois)
           if (this.answerInput && this.gameDetails.currentQuestionIndex !== -1 && !this.gameDetails.isOver) {
-            if (this.gameDetails.currentQuestion.questionType === 'ouverte') {
+            if (this.gameDetails.currentQuestion.questionType === 'Ouverte') {
               setTimeout(() => this.answerInput.nativeElement.focus(), 0);
             }
           }
 
-          // Si le timer est égal à 0 et que la question est en cours, on check la réponse si c'est une question ouverte et vide la réponse
+          // Si le timer est égal à 0 et que la question est en cours, on check la réponse si c'est une question Ouverte et vide la réponse
           if (this.gameDetails.currentQuestionIndex !== -1  && this.gameDetails.countdown === 0) {
-            if (this.gameDetails.currentQuestion.questionType === 'ouverte') {
+            if (this.gameDetails.currentQuestion.questionType === 'Ouverte') {
               try {
                 this.answerInput.nativeElement.style.display = 'none';
                 this.answer = '';
@@ -162,7 +162,7 @@ export class GameComponent implements OnInit, OnDestroy {
     const clickedButton = event?.target as HTMLElement;
   
     switch (questionType) {
-      case 'ouverte':
+      case 'Ouverte':
         this.checkOpenAnswer();
         break;
       case 'VF':
@@ -426,7 +426,7 @@ export class GameComponent implements OnInit, OnDestroy {
     // console.log('Correct answer=' + correctAnswer);
   
     switch (questionType) {
-      case 'ouverte':
+      case 'Ouverte':
         const distance = this.levenshtein(this.answer.toLowerCase(), correctAnswer.toLowerCase());
         const tolerance = 0.2; // Nombre de fautes autorisées par caractère de la réponse
         const maxDistance = Math.floor(tolerance * correctAnswer.length);

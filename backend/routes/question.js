@@ -69,6 +69,13 @@ module.exports = (collection) => {
         return { query, n };
     };
 
+    // fonction pour choisir des IDs aléatoirement
+    const getRandomIds = async (query, n) => {
+        const allIds = await collection.find(query, { projection: { questionId: 1 } }).toArray();
+        const shuffledIds = allIds.sort(() => 0.5 - Math.random());
+        return shuffledIds.slice(0, n).map(question => question.questionId);
+    };
+
     // Route pour récupérer les questions respectant des conditions
     router.get('/:conditions', async (req, res) => {
         const conditions = req.params.conditions.split('&');
@@ -79,7 +86,8 @@ module.exports = (collection) => {
 
             // Si n est précisé, on renvoie n questions tirées aléatoirement
             if (n) {
-                questions = await collection.aggregate([{ $match: query }, { $sample: { size: n } }]).toArray();
+                const randomIds = await getRandomIds(query, n);
+                questions = await collection.find({ questionId: { $in: randomIds } }).toArray();
             } else {
                 questions = await collection.find(query).toArray();
             }
@@ -191,6 +199,23 @@ module.exports = (collection) => {
     
             console.log(`Question ${questionId} deleted and IDs updated`);
             res.send({ message: "Question deleted and IDs updated" });
+        } catch (error) {
+            res.status(500).send(error);
+        }
+    });
+
+    // Route pour réattribuer les IDs des questions (en cas de problème)
+    router.get('/reassignIds', async (req, res) => {
+        try {
+            const questions = await collection.find().sort({ questionId: 1 }).toArray();
+            for (let i = 0; i < questions.length; i++) {
+                if (questions[i].questionId !== i.toString()) {
+                    console.log(`Question ${questions[i].questionId} has a wrong ID, should be ${i}`);
+                }
+                questions[i].questionId = i.toString();
+                await collection.updateOne({ _id: questions[i]._id }, { $set: { questionId: questions[i].questionId } });
+            }
+            res.send({ message: "IDs updated" });
         } catch (error) {
             res.status(500).send(error);
         }

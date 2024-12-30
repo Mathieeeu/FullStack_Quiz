@@ -26,11 +26,9 @@
   </div>
 
   <!-- Onglet 3 - Gestion des parties -->
-  <!-- Si on est un superuser : on voit ici <b>toutes les parties</b>, avec leur code et leur date de création, le nom de leur créateur et le nombre de joueurs, on peut les lancer "à distance" si plus de 0 joueur et les supprimer -->
-  <!-- Si on est un utilisateur normal : on voit ici seulement les parties <b>qu'on a créées</b>, avec leur code, leur date de création et le nombre de joueurs, on peut les lancer "à distance" si plus de 0 joueur et les supprimer -->
   <div *ngIf="currentTab === 2" class="tab games-tab">
-    <h2>Supprimer des parties</h2>
-    <button (click)="loadGames()">Actualiser</button>
+    <h2>Gestion des parties</h2>
+    <!-- Si on est un superuser : on voit ici <b>toutes les parties</b>, avec leur code et leur date de création, le nom de leur créateur et le nombre de joueurs, on peut les lancer "à distance" si plus de 0 joueur et les supprimer -->
     <div *ngIf="superUser" class="games-grid">
       <div class="grid-header">
         <div><b>Code</b></div>
@@ -54,6 +52,8 @@
           </button>
         </div>
       </div>
+      <!-- Si on est un utilisateur normal : on voit ici seulement les parties <b>qu'on a créées</b>, avec leur code, leur date de création et le nombre de joueurs, on peut les lancer "à distance" si plus de 0 joueur et les supprimer -->
+
     </div>
   </div>
 </div>

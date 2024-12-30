@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Subscription, interval } from 'rxjs';
 
 import { AuthService } from '../service/auth.service';
 import { SessionAdminService } from '../service/session-admin.service';
 import { GameService } from '../service/game.service';
-import { after } from 'node:test';
 
 @Component({
   selector: 'app-admin',
@@ -21,12 +21,12 @@ export class AdminComponent implements OnInit {
   currentTab: number = 0;
   users: any[] = [];
   games: any[] = [];
-  intervalId: any;
+  private subscription: Subscription = new Subscription();
 
   constructor(
     private authService: AuthService,
     private SessionAdminService: SessionAdminService,
-    private gameService: GameService
+    private gameService: GameService,
   ) {
     this.login = this.SessionAdminService.getUsername();
     this.superUser = this.SessionAdminService.getSuperUser();
@@ -35,23 +35,14 @@ export class AdminComponent implements OnInit {
   ngOnInit(): void {
     this.loadUsers();
     this.loadGames();
-    // this.afterNextRender(); // ça fait planter angular lol
+    this.subscription = interval(1000).subscribe(() => {
+      this.loadUsers();
+      this.loadGames();
+    });
   }
 
-  // // ça fait planter angular lol
-  // afterNextRender(): void {
-  //   setTimeout(() => {
-  //     this.intervalId = setInterval(() => {
-  //       this.loadGames();
-  //     }, 5000);
-  //   }, 0);
-  // }
-
   ngOnDestroy(): void {
-    // // ça fait planter angular lol
-    // if (this.intervalId) {
-    //   clearInterval(this.intervalId);
-    // }
+    this.subscription.unsubscribe();
   }
 
   loadUsers(): void {

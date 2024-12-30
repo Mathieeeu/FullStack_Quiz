@@ -228,7 +228,13 @@ module.exports = (collection) => {
                 }
                 else {
                     // Récupère le score des joueurs (qui a été changé par d'autres routes)
-                    game.players = await collection.findOne({ code }).then(game => game.players);
+                    try {
+                        game.players = await collection.findOne({ code }).then(game => game.players);
+                    }
+                    catch (error) {
+                        console.log("Erreur lors de la récupération des joueurs");
+                        game.players = [];
+                    }
                 }
 
                 currentQuestionIndex++;

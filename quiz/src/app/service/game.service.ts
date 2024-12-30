@@ -25,6 +25,14 @@ export class GameService {
   createGame(options: any): Observable<any> {
     return this.http.post(`${this.baseUrl}/create/${options.code}`, options);
   }
+
+  getGames(): Observable<any> {
+    return this.http.get(`${this.baseUrl}/`);
+  }
+
+  deleteGame(code: string): Observable<any> {
+    return this.http.delete(`${this.baseUrl}/delete/${code}`);
+  }
   
   generateGameCode(): Observable<any> {
     return this.http.get(`${this.baseUrl}/generate-code`);

@@ -75,7 +75,8 @@ module.exports = (collection) => {
     });
 
     // Route pour supprimer une partie
-    router.post('/delete/:code', async (req, res) => {
+    router.delete('/delete/:code', async (req, res) => {
+        console.log("Suppression de la partie " + req.params.code);
         const code = req.params.code;
         try {
             const result = await collection.deleteOne({ code });

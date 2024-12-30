@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+
 import { AuthService } from '../service/auth.service';
 import { SessionAdminService } from '../service/session-admin.service';
+import { GameService } from '../service/game.service';
+import { after } from 'node:test';
 
 @Component({
   selector: 'app-admin',
@@ -17,10 +20,13 @@ export class AdminComponent implements OnInit {
   tabs: string[] = ['Mon compte', 'Gestion comptes', 'Gestion parties'];
   currentTab: number = 0;
   users: any[] = [];
+  games: any[] = [];
+  intervalId: any;
 
   constructor(
     private authService: AuthService,
-    private SessionAdminService: SessionAdminService
+    private SessionAdminService: SessionAdminService,
+    private gameService: GameService
   ) {
     this.login = this.SessionAdminService.getUsername();
     this.superUser = this.SessionAdminService.getSuperUser();
@@ -28,6 +34,24 @@ export class AdminComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadUsers();
+    this.loadGames();
+    // this.afterNextRender(); // ça fait planter angular lol
+  }
+
+  // // ça fait planter angular lol
+  // afterNextRender(): void {
+  //   setTimeout(() => {
+  //     this.intervalId = setInterval(() => {
+  //       this.loadGames();
+  //     }, 5000);
+  //   }, 0);
+  // }
+
+  ngOnDestroy(): void {
+    // // ça fait planter angular lol
+    // if (this.intervalId) {
+    //   clearInterval(this.intervalId);
+    // }
   }
 
   loadUsers(): void {
@@ -42,6 +66,26 @@ export class AdminComponent implements OnInit {
         console.error('Erreur lors du chargement des utilisateurs', error);
       }
     );
+  }
+
+  loadGames(): void {
+    this.gameService.getGames().subscribe(
+      (games: any[]) => {
+        this.games = games.map(game => ({
+          ...game,
+          creationDate: this.formatDate(game.creationDate)
+        }));
+      },
+      (error) => {
+        console.error('Erreur lors du chargement des parties', error);
+      }
+    );
+  }
+
+  formatDate(dateString: string): string {
+    const dateParts = dateString.split('_'); 
+    const formattedDate = `${dateParts[0]} ${dateParts[1].replace(/_/g, ':')}`;
+    return formattedDate;
   }
 
   toggleSuperUser(user: any): void {
@@ -81,6 +125,32 @@ export class AdminComponent implements OnInit {
         },
         (error) => {
           console.error('Erreur lors de la suppression de l\'utilisateur', error);
+        }
+      );
+    }
+  }
+
+  launchGame(game: any): void {
+    this.gameService.startGame(game.code).subscribe(
+      () => {
+        console.log('Partie lancée avec succès');
+        this.loadGames(); // Rafraîchir la liste des parties
+      },
+      (error) => {
+        console.error('Erreur lors du lancement de la partie', error);
+      }
+    );
+  }
+
+  deleteGame(game: any): void {
+    if (confirm(`Voulez-vous vraiment supprimer la partie ${game.code} ?`)) {
+      this.gameService.deleteGame(game.code).subscribe(
+        () => {
+          console.log('Partie supprimée avec succès');
+          this.loadGames(); // Rafraîchir la liste des parties
+        },
+        (error) => {
+          console.error('Erreur lors de la suppression de la partie', error);
         }
       );
     }

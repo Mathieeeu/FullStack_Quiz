@@ -1,9 +1,6 @@
 <div class="page_container">
   <div class="tab-buttons">
-    <button 
-      *ngFor="let tab of tabs; let i = index"
-      [class.active]="currentTab === i"
-      (click)="showTab(i)">
+    <button *ngFor="let tab of tabs; let i = index" [class.active]="currentTab === i" (click)="showTab(i)">
       {{ tab }}
     </button>
   </div>
@@ -28,10 +25,35 @@
     </ul>
   </div>
 
-  <!-- Onglet 3  - Supprimer des parties -->
-  <div *ngIf="currentTab === 2" class="tab">
-    <h2>Gestion des parties</h2>
-    <p>Si on est un superuser : on voit ici <b>toutes les parties</b>, avec leur code et leur date de création, le nom de leur créateur et le nombre de joueurs, on peut les lancer "à distance" si plus de 0 joueur et les supprimer</p>
-    <p>Si on est un utilisateur normal : on voit ici seulement les parties <b>qu'on a créées</b>, avec leur code, leur date de création et le nombre de joueurs, on peut les lancer "à distance" si plus de 0 joueur et les supprimer</p>
+  <!-- Onglet 3 - Gestion des parties -->
+  <!-- Si on est un superuser : on voit ici <b>toutes les parties</b>, avec leur code et leur date de création, le nom de leur créateur et le nombre de joueurs, on peut les lancer "à distance" si plus de 0 joueur et les supprimer -->
+  <!-- Si on est un utilisateur normal : on voit ici seulement les parties <b>qu'on a créées</b>, avec leur code, leur date de création et le nombre de joueurs, on peut les lancer "à distance" si plus de 0 joueur et les supprimer -->
+  <div *ngIf="currentTab === 2" class="tab games-tab">
+    <h2>Supprimer des parties</h2>
+    <button (click)="loadGames()">Actualiser</button>
+    <div *ngIf="superUser" class="games-grid">
+      <div class="grid-header">
+        <div><b>Code</b></div>
+        <div><b>Date de création</b></div>
+        <div><b>Créateur</b></div>
+        <div><b>Nombre de joueurs</b></div>
+        <div><b>Actions</b></div>
+      </div>
+      <div *ngFor="let game of games" class="game-item">
+        <div>{{ game.code }}</div>
+        <div>{{ game.creationDate }}</div>
+        <div>{{ game.host }}</div>
+        <div>{{ game.players.length }}</div>
+        <div class="game-actions">
+          <button [ngClass]="{'started': game.isStarted, 'over': game.isOver, 'launch': !game.isStarted}"
+            [disabled]="game.players.length === 0 || game.isStarted" (click)="launchGame(game)">
+            {{ game.isOver ? 'Terminée' : (game.isStarted ? 'En cours' : 'Lancer') }}
+          </button>
+          <button [disabled]="game.players.length > 0" class="deleteButton" (click)="deleteGame(game)">
+            Supprimer
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

@@ -80,3 +80,108 @@ ul.user-grid li button.superUserButton.superuser {
   background-color: red;
   color: white;
 }
+
+/* Styles spécifiques pour l'onglet des parties */
+.games-tab .games-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr); /* 5 colonnes de largeur égale */
+  gap: 1rem;
+  align-items: center;
+  width: fit-content;
+}
+
+.games-grid {
+  max-height: 60vh;
+  overflow-y: auto;
+  scrollbar-width: none; /* Firefox */
+  border: 1px solid var(--box);
+  border-radius: 5px;
+}
+
+.games-grid::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+.games-grid::before,
+.games-grid::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 20px;
+  pointer-events: none;
+}
+
+.games-grid::before {
+  top: 0;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0));
+}
+
+.games-grid::after {
+  bottom: 0;
+  background: linear-gradient(0deg, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0));
+}
+
+.grid-header {
+  display: contents; /* Permet de faire des colonnes */
+  font-weight: bold;
+}
+
+.games-tab .game-item {
+  display: contents; /* Permet de faire des colonnes */
+}
+
+.games-tab .game-item div, 
+.grid-header div {
+  padding: 10px;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+  /* On peut aussi ajouter une bordure à droite pour séparer les colonnes */
+}
+
+.games-tab .game-actions {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+}
+.games-tab .game-item button {
+  margin-left: 10px;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+}
+
+.games-tab .game-actions button:enabled:hover {
+  transform: scale(1.02);
+  cursor: pointer;
+}
+
+.games-tab .game-actions button.launch {
+  background-color: green;
+  color: white;
+}
+
+.games-tab .game-actions button.launch:disabled {
+  background-color: gray;
+  color: white;
+}
+
+.games-tab .game-actions button.started {
+  background-color: rgb(16, 168, 150);
+  color: white;
+}
+
+.games-tab .game-actions button.over {
+  background-color: purple;
+  color: white;
+}
+
+.games-tab .game-actions button.deleteButton {
+  background-color: red;
+  color: white;
+}
+
+.games-tab .game-actions button.deleteButton:disabled {
+  background-color: gray;
+  color: white;
+}

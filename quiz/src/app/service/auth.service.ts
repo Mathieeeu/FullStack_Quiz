@@ -23,7 +23,6 @@ export class AuthService {
 
   login(login: string, password: string): Observable<boolean> {
     const body = { login, password };
-    console.log(body);
     return this.http.post<boolean>(`${this.baseUrl}/login`, body);
   }
 

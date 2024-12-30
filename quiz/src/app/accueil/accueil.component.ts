@@ -35,11 +35,30 @@ export class AccueilComponent {
     // S'abonner aux changements de session
     this.sessionAdmin.username$.subscribe((username) => {
       this.login = username;
+      this.username = '';
     });
 
     this.sessionAdmin.superUser$.subscribe((isSuperUser) => {
       this.superUser = isSuperUser;
     });
+
+    const name = sessionStorage.getItem('login');
+    const isAdmin = sessionStorage.getItem('superUser') === 'true';
+
+    if (name) {
+      this.login = name;
+  }
+
+  if (isAdmin) {
+      this.superUser =isAdmin;
+  }
+  sessionStorage.clear()
+
+// Pré-remplir pseudo si existe
+  if (this.login) {
+    this.username = this.login; 
+  }
+
   }
 
   goToAjoutQuestion(){

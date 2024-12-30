@@ -102,8 +102,6 @@ export class AjoutQuestionComponent {
   trackByFn(index: number, item: string): number {
     return index; // Utilise l'index comme identifiant unique
   }
-
-
   
   remplirForm(){
     if (this.currentTab === 1) {
@@ -129,6 +127,7 @@ export class AjoutQuestionComponent {
 
 
   resetForm(): void {
+    // Réinitialiser les données du formulaire
     this.formData = {
         questionText: '',
         answerText: null,
@@ -140,27 +139,55 @@ export class AjoutQuestionComponent {
         fakeAnswers: null
     };
 
-    this.themes.forEach(theme => theme.status = 'neutral'); 
-    this.currentTab = 0; 
-    this.selectedValue = null; 
+    this.themes.forEach(theme => theme.status = 'neutral');
+    this.answers = ['',''];
+    this.correctAnswerIndex = null;
+    this.correctAnswerIndices = [];
+
+    this.currentTab = 0;
+
+    this.selectedValue = null;
 }
 
+private isFormValidForCurrentTab(): boolean {
+  switch (this.currentTab) {
+      case 0: // Onglet 1 - Question simple
+          return this.formData.questionText?.trim() !== '' &&
+                 this.formData.answerText?.trim() !== '' &&
+                 this.formData.difficulty !== '' &&
+                 this.themes.some(theme => theme.status === 'selected');
+
+      case 1: // Onglet 2 - QCM
+          return this.formData.questionText?.trim() !== '' &&
+                 this.answers.length >= 2 &&
+                 this.correctAnswerIndex !== null &&
+                 this.formData.difficulty !== '' &&
+                 this.themes.some(theme => theme.status === 'selected');
+
+      case 2: // Onglet 3 - Plusieurs réponses justes possibles
+          return this.formData.questionText?.trim() !== '' &&
+                 this.answers.length >= 2 &&
+                 this.correctAnswerIndices.length > 0 &&
+                 this.formData.difficulty !== '' &&
+                 this.themes.some(theme => theme.status === 'selected');
+
+      case 3: // Onglet 4 - Vrai/Faux
+          return this.formData.questionText?.trim() !== '' &&
+                 this.selectedValue !== null &&
+                 this.formData.difficulty !== '' &&
+                 this.themes.some(theme => theme.status === 'selected');
+
+      default:
+          return false; // Onglet inconnu, invalide
+  }
+}
 
   // Soumettre le formulaire
   onSubmit(): void {
-    // // Vérifiez que toutes les réponses sont renseignées (QCM)
-    // const nonEmptyAnswers = this.answers.filter(answer => answer.trim() !== '');
-    // if (nonEmptyAnswers.length < 2) {
-    //   alert('Veuillez entrer au moins deux réponses valides.');
-    //   return;
-    // }
-
-    // // Vérifiez qu'une réponse correcte est sélectionnée
-    // if (this.correctAnswerIndex === null || this.correctAnswerIndex < 0 || this.correctAnswerIndex >= this.answers.length) {
-    //   alert('Veuillez sélectionner une réponse correcte.');
-    //   return;
-    // }
-
+    if (!this.isFormValidForCurrentTab()) {
+      alert('Veuillez remplir tous les champs requis pour cet onglet avant de soumettre la question.');
+      return;
+  }
 
     this.remplirForm();
     this.questionService.submitQuestion(this.formData).subscribe(

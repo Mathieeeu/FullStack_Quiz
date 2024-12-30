@@ -39,6 +39,8 @@ export class HeaderComponent implements OnInit {
   }
 
   goToAccueil(): void {
+    sessionStorage.setItem('login', this.login);
+    sessionStorage.setItem('superUser', this.superUser.toString());
     this.router.navigate(['/']);
   }
 

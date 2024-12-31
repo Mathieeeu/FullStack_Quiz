@@ -9,6 +9,7 @@ module.exports = (collection) => {
     const generateQuery = (conditions) => {
         let themes = [];
         let difficulties = [];
+        let types = [];
         let n = null;
 
         // Récupération des valeurs des conditions si elles sont précisées
@@ -18,12 +19,16 @@ module.exports = (collection) => {
                 themes = value.split(',');
             } else if (key === "difficulty") {
                 difficulties = value.split(',');
+            } else if (key === "type") {
+                types = value.split(',');
             } else if (key === "n") {
                 n = parseInt(value);
             }
         });
 
+        // Génération de la requête avec les conditions
         let query = {};
+        // Conditions sur le thème
         if (themes.length > 0) {
             const includeThemes = themes.filter(theme => !theme.startsWith('!'));
             const excludeThemes = themes.filter(theme => theme.startsWith('!')).map(theme => theme.substring(1));
@@ -35,6 +40,7 @@ module.exports = (collection) => {
                 query.themeText.$nin = excludeThemes;
             }
         }
+        // Conditions sur la difficulté
         if (difficulties.length > 0) {
             const includeDifficulties = difficulties.filter(difficulty => !difficulty.startsWith('!'));
             const excludeDifficulties = difficulties.filter(difficulty => difficulty.startsWith('!')).map(difficulty => difficulty.substring(1));
@@ -47,8 +53,57 @@ module.exports = (collection) => {
             }
         }
 
+        // Conditions sur le type de question
+        if (types.length > 0) {
+            const includeTypes = types.filter(type => !type.startsWith('!'));
+            const excludeTypes = types.filter(type => type.startsWith('!')).map(type => type.substring(1));
+            query.questionType = {};
+            if (includeTypes.length > 0) {
+                query.questionType.$in = includeTypes;
+            }
+            if (excludeTypes.length > 0) {
+                query.questionType.$nin = excludeTypes;
+            }
+        }
+
         return { query, n };
     };
+
+    // fonction pour choisir des IDs aléatoirement
+    const getRandomIds = async (query, n) => {
+        // Récupération de toutes les questions respectant les conditions
+        const questions = await collection.find(query).toArray();
+        const nbQuestions = questions.length;
+
+        // Génération de n IDs aléatoires
+        const randomIds = [];
+        for (let i = 0; i < n; i++) {
+            let randomId = Math.floor(Math.random() * nbQuestions);
+            while (randomIds.includes(randomId)) {
+                randomId = Math.floor(Math.random() * nbQuestions);
+            }
+            randomIds.push(randomId);
+        }
+
+        // Récupération des IDs des questions
+        const randomQuestionIds = randomIds.map(id => questions[id].questionId);
+
+        return randomQuestionIds;
+    };
+
+    // Fonction pour réattribuer les IDs des questions (en cas de problème)
+    const reassignIds = async () => {
+        const questions = await collection.find().toArray();
+        questions.sort((a, b) => parseInt(a.questionId) - parseInt(b.questionId));
+        for (let i = 0; i < questions.length; i++) {
+            if (questions[i].questionId !== i.toString()) {
+                console.log(`Question ${questions[i].questionId} has a wrong ID, should be ${i}`);
+            }
+            questions[i].questionId = i.toString();
+            await collection.updateOne({ _id: questions[i]._id }, { $set: { questionId: questions[i].questionId } });
+        }
+        console.log("All IDs updated");
+    }
 
     // Route pour récupérer les questions respectant des conditions
     router.get('/:conditions', async (req, res) => {
@@ -60,7 +115,16 @@ module.exports = (collection) => {
 
             // Si n est précisé, on renvoie n questions tirées aléatoirement
             if (n) {
-                questions = await collection.aggregate([{ $match: query }, { $sample: { size: n } }]).toArray();
+                const randomIds = await getRandomIds(query, n);
+                console.log("Random IDs: ", randomIds);
+                questions = [];
+                for (const id of randomIds) {
+                    const question = await collection.findOne({ questionId: id.toString() });
+                    if (question) {
+                        questions.push(question);
+                    }
+                }
+                // console.log("Questions: ", questions);
             } else {
                 questions = await collection.find(query).toArray();
             }
@@ -90,14 +154,25 @@ module.exports = (collection) => {
 
     // Route pour ajouter une question
     router.post('/add', async (req, res) => {
-        // req.body contient {questionText, answerText, themeText, difficulty}
+        // req.body contient {questionText, answerText, themeText, difficulty, questionType, fakeAnswer?, trueAnswers?, fakeAnswers?}
         const question = {
             questionId: "",
             questionText: req.body.questionText,
-            answerText: req.body.answerText,
             themeText: req.body.themeText,
-            difficulty: req.body.difficulty
+            difficulty: req.body.difficulty,
+            questionType: req.body.questionType
         };
+
+        // Ajouter les champs spécifiques selon le type de question
+        if (req.body.questionType === 'QCM') {
+            question.fakeAnswer = req.body.fakeAnswer;
+        } else if (req.body.questionType === 'Selection') {
+            question.trueAnswers = req.body.trueAnswers;
+            question.fakeAnswers = req.body.fakeAnswers;
+        }
+        if (req.body.questionType !== 'Selection') {
+            question.answerText = req.body.answerText;
+        }
 
         // Récupération du nombre de questions pour générer un nouvel id
         const nbQuestions = await collection.countDocuments();
@@ -109,12 +184,8 @@ module.exports = (collection) => {
             res.send(result);
 
             // Réorganisation des ids (car on a des soucis car les ids sont attribués trop lentement) ######## TODO : Trouver une solution pour éviter ça
-            const questions = await collection.find().sort({ questionId: 1 }).toArray();
-            for (let i = 0; i < questions.length; i++) {
-                questions[i].questionId = i.toString();
-                await collection.updateOne({ _id: questions[i]._id }, { $set: { questionId: questions[i].questionId } });
-            }
-            console.log(`Question ${question.questionId} added and IDs updated: `, question);
+            await reassignIds();
+
         } catch (error) {
             res.status(500).send(error);
         }
@@ -153,15 +224,23 @@ module.exports = (collection) => {
             // Récupération de toutes les questions restantes
             const questions = await collection.find().sort({ questionId: 1 }).toArray();
     
-            // Réattribution des ids
-            for (let i = 0; i < questions.length; i++) {
-                questions[i].questionId = i.toString();
-                await collection.updateOne({ _id: questions[i]._id }, { $set: { questionId: questions[i].questionId } });
-            }
-    
+            // Réattribution des ids en utilisant la requete reassignIds de l'API
+            await reassignIds();
+
             console.log(`Question ${questionId} deleted and IDs updated`);
             res.send({ message: "Question deleted and IDs updated" });
         } catch (error) {
+            res.status(500).send(error);
+        }
+    });
+
+    // Route pour réattribuer les IDs des questions (en cas de problème)
+    router.post('/reassignIds', async (req, res) => {
+        try {
+            await reassignIds();
+            res.send({ message: "IDs updated" });
+        } catch (error) {
+            console.log("An error occured");
             res.status(500).send(error);
         }
     });

@@ -1,0 +1,69 @@
+<div class="page-container">
+    <div class="background-animation">
+      <section>
+        <!-- Répéter les éléments <span> pour l'animation -->
+        <section> <span></span> <span></span><span></span> <span></span><span></span> <span></span>
+          <span></span><span></span> <span></span><span></span> <span></span><span></span> <span></span>
+          <span></span> <span></span><span></span> <span></span><span></span> <span></span><span></span> 
+          <span></span><span></span> <span></span> <span></span> <span></span> <span></span> <span></span> 
+          <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> 
+          <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> 
+          <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> 
+          <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> 
+          <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> 
+          <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> 
+          <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> 
+          <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> 
+          <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> 
+          <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> 
+          <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> 
+          <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> 
+          <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> 
+          <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> 
+          <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> 
+          <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> 
+          <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> 
+          <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> 
+          <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> 
+          <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> 
+          <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> 
+          <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> 
+          <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> 
+          <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> 
+          <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> 
+          <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> 
+          <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> 
+          <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> 
+          <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> 
+          <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> 
+          <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> 
+          <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> 
+          <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> 
+          <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> 
+          <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> 
+          <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> 
+          <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> 
+          <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> 
+          <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> 
+          <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> 
+          <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> 
+          <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> 
+          <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> 
+          <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span>
+          <span></span> <span></span> <span></span>
+        </section>
+      </section>
+    </div>
+  
+    <div class="inscription">
+      <div class="content">
+        <h2>Inscription</h2>
+        <form (submit)="goToAdmin(); $event.preventDefault();">
+          <input type="text" placeholder="Identifiant"  [(ngModel)]="login" required autocomplete="off" name = "login"/>
+          <input type="password" placeholder="Mot de passe" [(ngModel)]="password"  required name = "password"/>
+          <input type="password" placeholder="Confirmation du mot de passe" [(ngModel)]="password_conf"  required name = "password_conf"/>
+          <input type="submit" id="submit" value="Valider" />
+        </form>
+      </div>
+    </div>
+  </div>

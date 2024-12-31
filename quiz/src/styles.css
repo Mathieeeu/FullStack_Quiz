@@ -2,12 +2,15 @@
     --grn:#04fc43;
     --ylw:#fee800;
     --red:#ff2972;
-    --clr: var(--grn);
+    --dark-red:#880022;
 
     --txt:#4caf50;
     --box:#2f363e;
     --bg :#d2d2d2;
     --bg-button : rgba(111, 111, 111, 0.152);
+
+    --header-height: 40px;
+    --motd: var(--bg);
 }
 
 html, body {
@@ -16,12 +19,18 @@ html, body {
     line-height: 1.6;
     color: var(--box);
     background-color: var(--bg);
-    margin: 0;
+    margin-top: 2vh;
     padding: 0;
     width: 100%;
     height: 100%;
     display: flex;
-    justify-content: center;
-    align-items: center;
     flex-direction: column;
+    overflow: hidden;
+}
+
+/* Si la fenetre fait moins de 740px de hauteur : */
+@media (max-height: 740px) {
+    html, body {
+        overflow: auto;
+    }
 }

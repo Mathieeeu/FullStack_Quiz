@@ -4,13 +4,29 @@
             <p>Testez vos connaissances, défiez vos amis et grimpez au sommet des classements.
             Rejoignez notre communauté de joueurs du monde entier et découvrez qui est le véritable maître du quiz.
             <br>Prêt à relever le défi ?</p>
-        <form (submit) = goToLobby()>
-            <input type="text" placeholder="Pseudo" required maxlength="20" autocomplete="off" name = "pseudo"/>
+        <form (submit)="joinGame(); $event.preventDefault();">
+            <input type="text" placeholder="Pseudo" required maxlength="20" autocomplete="off" id="username" [(ngModel)]="username" name="username"/>
+            <input type="text" placeholder="Code de partie" required minlength="4" maxlength="4" autocomplete="off" id="gameCode" [(ngModel)]="gameCode" name="gameCode"/>
+            <br>
             <input type="submit" id="submit" value="Rejoindre" />
           </form>
+
+          <button *ngIf="login !== ''" class="learn-more" (click)="goToCreateGame()">
+            <span class="circle">
+            <span class="icon arrow"></span>
+            </span>
+            <span class="button-text">Créer une nouvelle partie</span>
+          </button>
+          <br>
+          <button *ngIf="login !== '' && superUser" class="learn-more" (click)="goToAjoutQuestion()">
+            <span class="circle">
+            <span class="icon arrow"></span>
+            </span>
+            <span class="button-text">Ajouter des questions</span>
+          </button>
     </div>
     <div class = "div_droite">
-        <img src = "img accueil (1).png"/>
+        <img src = "img-accueil.png"/>
     </div>
 </div>
 

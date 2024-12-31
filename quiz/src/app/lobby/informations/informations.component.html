@@ -1,0 +1,7 @@
+<div class="informations-container">
+    <h2>Lobby - Code : {{ gameCode }}</h2>
+    <p><b>Hôte :</b> {{ gameDetails.host }}</p>
+    <p><b>Votre pseudo :</b> {{ username }}</p>
+    <p><b>Nombre de questions : </b>{{ gameDetails.options.nbQuestions }} (temps par question : {{ gameDetails.options.questionTime }} s)</p>
+    <p *ngIf="gameDetails.options.filters"><b>Filtre(s) : </b>{{ gameDetails.options.filters }} </p>
+</div>

@@ -1,0 +1,59 @@
+<div class="page_container">
+    <h2>Code de la partie : <strong>{{ gameCode }}</strong></h2>
+    <!-- <button (click)="generateCode()">Régénérer le code</button> -->
+    <form (ngSubmit)="onSubmit()">        
+        <div>
+          <input type="number" placeholder="Nombre de questions"id="nbQuestions" [(ngModel)]="gameData.nbQuestions" name="nbQuestions" required />
+        </div>
+        
+
+        <div>
+          <input type="number" placeholder="Temps par question"id="questionTime" [(ngModel)]="gameData.questionTime" name="questionTime" required />
+        </div>
+
+        <div>
+          <div class = "flex-container">
+            <div class = "themes">
+            <h3>Sélectionnez les thèmes</h3>
+              <div class="container">
+                <div class="tabs">
+                  <input type="radio" id="radio-1" name="tabs" (change)="setDefaultMode('tous')" checked>
+                  <label class="tab" for="radio-1">Tous</label>
+                  <input type="radio" id="radio-2" name="tabs" (change)="setDefaultMode('inclure')">
+                  <label class="tab" for="radio-2">Inclure</label>
+                  <input type="radio" id="radio-3" name="tabs" (change)="setDefaultMode('exclure')">
+                  <label class="tab" for="radio-3">Exclure</label>
+                  <span class="glider"></span>
+                </div>
+              </div>
+            
+              <div class="theme-list">
+                <ul>
+                  <li *ngFor="let theme of themes"
+                      [class.grayed-out]="currentMode === 'tous'"
+                      [class.include]="theme.status === 'include'"
+                      [class.exclude]="theme.status === 'exclude'"
+                      (click)="currentMode !== 'tous' && toggleThemeStatus(theme)">
+                    {{ theme.name }}
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="difficulty">
+              <h3>Niveau de difficulté</h3>
+              <input type="checkbox" id="niveau1" name="difficulty" value="1" (change)="updateFilters($event)" [checked]="difficulty.includes('1')"/>
+              <label for="niveau1">Ma petite cousine a la réponse</label>
+              <br>
+              <input type="checkbox" id="niveau2" name="difficulty" value="2" (change)="updateFilters($event)" [checked]="difficulty.includes('2')"/>
+              <label for="niveau2">Un coup d'oeil chez le voisin peut être utile</label>
+              <br>
+              <input type="checkbox" id="niveau3" name="difficulty" value="3" (change)="updateFilters($event)" [checked]="difficulty.includes('3')"/>
+              <label for="niveau3">Kant peut se rhabiller</label>
+          </div>
+        </div>
+    </div>
+    
+        <button type="submit" >Créer la partie</button>
+      </form>
+  </div>

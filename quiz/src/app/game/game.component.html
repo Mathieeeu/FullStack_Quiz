@@ -1,0 +1,77 @@
+<div *ngIf="gameDetails">
+  <!-- <h2>Partie {{ gameDetails.code }}</h2> -->
+  <div class="game-container">
+    <main id="starting" *ngIf="gameDetails.currentQuestionIndex === -1">
+      <!-- Chargement de la partie -->
+      <p>La partie commence...</p>
+      <!-- Petit mot du chef : -->
+      <p class="motd">"{{ motd }}"</p>
+    </main>
+
+    <main *ngIf="gameDetails.currentQuestionIndex !== -1 && !gameDetails.isOver">
+      <!-- Partie en cours -->
+
+      <div id="question">
+        <!-- <span id="question-type">{{ gameDetails.currentQuestion.questionType }}</span> -->
+        <div id="time" *ngIf="gameDetails.countdown !== -1">{{ gameDetails.countdown }}</div>
+        <span id="question-nb">Question {{ gameDetails.currentQuestionIndex + 1 }}/{{ gameDetails.options.nbQuestions }}</span>
+        <hr>
+        <span id="question-text">{{ gameDetails.currentQuestion.questionText }}</span>
+
+        <!-- Zone de réponse : -->
+        <ng-container [ngSwitch]="gameDetails.currentQuestion.questionType">
+
+          <div *ngSwitchCase="'Ouverte'">
+            <!-- Question Ouverte -->
+            <input *ngIf="!gameDetails.showAnswer" type="text" id="answer-input" #answerInput [(ngModel)]="answer"
+              placeholder="Votre réponse" (keydown.enter)="checkAnswer()" autocomplete="off" autofocus>
+            <p *ngIf="gameDetails.showAnswer"><strong>Réponse :</strong> {{ gameDetails.currentQuestion.answerText }}</p>
+          </div>
+
+          <div id="VF" *ngSwitchCase="'VF'">
+            <!-- Question Vrai/Faux -->
+            <button id="trueButton" *ngIf="!gameDetails.showAnswer" #trueButton (click)="checkAnswer('Vrai')">Vrai</button>
+            <button id="falseButton" *ngIf="!gameDetails.showAnswer" #falseButton (click)="checkAnswer('Faux')">Faux</button>
+            <p *ngIf="gameDetails.showAnswer"><strong>Réponse :</strong> {{ gameDetails.currentQuestion.answerText }}</p>
+          </div>
+
+          <div id="QCM" *ngSwitchCase="'QCM'">
+            <!-- Question QCM -->
+            <ng-container *ngIf="!gameDetails.showAnswer">
+              <button #qcmButton class="qcm-button" *ngFor="let option of gameDetails.currentQuestion.allAnswers" (click)="checkAnswer(option, $event)">{{ option }}</button>
+            </ng-container>
+            <p *ngIf="gameDetails.showAnswer"><strong>Réponse :</strong> {{ gameDetails.currentQuestion.answerText }}</p>
+          </div>
+
+          <div *ngSwitchCase="'Selection'">
+            <!-- Question Sélection -->
+            <ng-container *ngIf="!gameDetails.showAnswer">
+              <div class="selection-container">
+                <div class="selection-button" *ngFor="let option of gameDetails.currentQuestion.allAnswers">
+                  <button #selectionButton [ngClass]="{'selected': isSelected(option)}" (click)="toggleSelection(option)">{{ option }}</button>
+                </div>
+              </div>
+              <button #validateButton class="validate-button" (click)="checkAnswer()">Valider</button>
+            </ng-container>
+            <p *ngIf="gameDetails.showAnswer"><strong>Réponse :</strong> {{ gameDetails.currentQuestion.trueAnswers.join(', ') }}</p>
+          </div>
+
+        </ng-container>
+      </div>
+    </main>
+
+    <main id="ending" *ngIf="gameDetails.isOver">
+      <!-- Partie terminée -->
+      <p>La partie est terminée !</p>
+      <p>Le gagnant est <strong>{{ gameDetails.players[0].username }}</strong> avec {{ gameDetails.players[0].score }} points.</p>
+      <button id="leave-game-button" (click)="leaveGame()">Retour à l'accueil</button>
+    </main>
+
+    <ul id="scoreboard">
+      <h3>Scoreboard</h3>
+      <li *ngFor="let player of gameDetails.players" [ngClass]="{'answered': player.hasAnswered, 'correct': player.answerCorrect && player.hasAnswered, 'incorrect': !player.answerCorrect && player.hasAnswered}">
+        <span class="username">{{ player.username }}</span> {{ player.score }}
+      </li>
+    </ul>
+  </div>
+</div>

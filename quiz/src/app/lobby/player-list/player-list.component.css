@@ -1,0 +1,43 @@
+#scoreboard {
+    background-color: var(--box);
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    list-style-type: none;
+    height: fit-content;
+    max-height: 600px;
+    overflow-y: auto;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE 10+ */
+}
+
+#scoreboard::-webkit-scrollbar {
+    display: none; /* Safari, Chrome et Opera */
+}
+
+#scoreboard li {
+    display: flex;
+    justify-content:space-between;
+    align-items:start;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 10px;
+    font-weight: bold;
+    text-align: left;
+    width: 250px;
+    color: var(--box);
+    background-color: var(--bg);
+}
+
+#scoreboard li .username {
+    font-weight: bold;
+}
+
+#scoreboard h3 {
+    color: var(--txt);
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-align: center;
+}
+/* Rajouter barre de scroll avec un style jolie */

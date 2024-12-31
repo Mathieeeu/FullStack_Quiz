@@ -1,0 +1,38 @@
+.page_container {
+    display: flex;
+    flex-direction: row; 
+    justify-content: space-evenly;
+    margin : 2vh;
+  }
+  
+.informations{
+    align-items: center;
+}
+
+.liste_joueur{
+    margin-top: 3vh;
+    align-self: center;
+}
+
+button{
+    padding: 2vh 3vw;
+    background-color: var(--txt);
+    margin-right: 3vw;
+    margin-top: 3%;
+    color: var(--box);
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    font-size: 20px;
+    transition: background-color 0.3s, transform 0.3s;
+  }
+
+button:hover {
+    background-color: var(--txt);
+    transform: scale(1.02);
+}
+
+button:active {
+    background-color: var(--txt);
+    transform: scale(0.95);
+}

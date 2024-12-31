@@ -5,6 +5,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { HeaderComponent } from './header/header.component';
 import { FormsModule } from '@angular/forms';
 
+
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -12,7 +13,8 @@ import { FormsModule } from '@angular/forms';
     HeaderComponent,
     FooterComponent,
     HttpClientModule,
-    FormsModule],
+    FormsModule,
+ ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })

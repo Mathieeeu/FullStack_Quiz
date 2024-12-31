@@ -1,0 +1,187 @@
+.page_container {
+  padding: 8vh; 
+}
+
+/* Boutons en haut */
+.tab {
+  margin-top: 1vh;
+}
+
+.tab-buttons {
+  margin-bottom: 1vh;
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+.tab-buttons button {
+  margin-right: 0.8vw;
+  padding: 10px 15px;
+  cursor: pointer;
+  border: none;
+  border-radius: 20px;
+  background-color: var(--bg-button);
+}
+
+.tab-buttons button:hover {
+  transform: scale(1.02);
+}
+
+.tab-buttons button.active {
+  background-color: var(--txt);
+  color: white;
+}
+
+/* Styles des boutons de super utilisateur */
+ul.user-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  list-style-type: none;
+  padding: 0;
+  max-width: fit-content;
+}
+
+ul.user-grid li {
+  display: contents;
+}
+
+ul.user-grid li label {
+  grid-column: 1;
+  align-self: center;
+}
+
+ul.user-grid li button {
+  margin-left: 10px;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+ul.user-grid li button:hover {
+  transform: scale(1.02);
+}
+
+ul.user-grid li button.renameButton {
+  background-color: red;
+  color: white;
+}
+
+ul.user-grid li button.deleteButton {
+  background-color: red;
+  color: white;
+}
+
+ul.user-grid li button.superUserButton:not(.superuser) {
+  background-color: green;
+  color: white;
+}
+
+ul.user-grid li button.superUserButton.superuser {
+  background-color: red;
+  color: white;
+}
+
+/* Styles spécifiques pour l'onglet des parties */
+.games-tab .games-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr); /* 5 colonnes de largeur égale */
+  gap: 1rem;
+  align-items: center;
+  width: fit-content;
+}
+
+.games-grid {
+  max-height: 60vh;
+  overflow-y: auto;
+  scrollbar-width: none; /* Firefox */
+  border: 1px solid var(--box);
+  border-radius: 5px;
+}
+
+.games-grid::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+.games-grid::before,
+.games-grid::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 20px;
+  pointer-events: none;
+}
+
+.games-grid::before {
+  top: 0;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0));
+}
+
+.games-grid::after {
+  bottom: 0;
+  background: linear-gradient(0deg, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0));
+}
+
+.grid-header {
+  display: contents; /* Permet de faire des colonnes */
+  font-weight: bold;
+}
+
+.games-tab .game-item {
+  display: contents; /* Permet de faire des colonnes */
+}
+
+.games-tab .game-item div, 
+.grid-header div {
+  padding: 10px;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+  /* On peut aussi ajouter une bordure à droite pour séparer les colonnes */
+}
+
+.games-tab .game-actions {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+}
+.games-tab .game-item button {
+  margin-left: 10px;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+}
+
+.games-tab .game-actions button:enabled:hover {
+  transform: scale(1.02);
+  cursor: pointer;
+}
+
+.games-tab .game-actions button.launch {
+  background-color: green;
+  color: white;
+}
+
+.games-tab .game-actions button.launch:disabled {
+  background-color: gray;
+  color: white;
+}
+
+.games-tab .game-actions button.started {
+  background-color: rgb(16, 168, 150);
+  color: white;
+}
+
+.games-tab .game-actions button.over {
+  background-color: purple;
+  color: white;
+}
+
+.games-tab .game-actions button.deleteButton {
+  background-color: red;
+  color: white;
+}
+
+.games-tab .game-actions button.deleteButton:disabled {
+  background-color: gray;
+  color: white;
+}

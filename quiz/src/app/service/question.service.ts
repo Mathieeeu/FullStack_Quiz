@@ -6,24 +6,17 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class QuestionService {
-  private apiUrl = 'http://localhost:3000/api';
+  private address = 'localhost'; // Adresse du serveur
+  private port = 3000; // Port du serveur
+  private baseUrl = `http://${this.address}:${this.port}/api`;
 
   constructor(private http: HttpClient) { }
 
-  /*
-  QuestionSchema : {
-      questionText: String,
-      answerText: String,
-      themeText: String,
-      difficulty: String
-  }
-  */
- // URL : http://localhost:3000/api/question/add
   submitQuestion(QuestionData: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/question/add`, QuestionData);
+    return this.http.post(`${this.baseUrl}/question/add`, QuestionData);
   }
   
   getQuestions(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/question/*`);
+    return this.http.get<any[]>(`${this.baseUrl}/question/*`);
   }
 }

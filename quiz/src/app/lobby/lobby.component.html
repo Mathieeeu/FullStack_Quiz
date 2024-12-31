@@ -1,9 +1,14 @@
-<div>
-  <h2>Lobby - Game Code: {{ gameDetails.code }}</h2>
-  <p>Host: {{ gameDetails.host }}</p>
-  <ul>
-    <li *ngFor="let player of gameDetails.players">{{player.username}}</li>
-  </ul>
-  <button (click)="startGame()" [disabled]="gameDetails.isStarted">Start Game</button>
-  <button (click)="leaveGame()">Leave Game</button>
+<div class="page_container">
+  <div class="informations">
+    <app-informations></app-informations>
+    <br>
+    <div class="boutons"> 
+      <button *ngIf="username === gameDetails.host || gameDetails.host === 'admin'" (click)="startGame()" [disabled]="gameDetails.isStarted">Démarrer la partie</button>
+      <button (click)="leaveGame()">Quitter</button>
+    </div> 
+  </div>
+  <div class ="liste_joueur">
+    <app-player-list></app-player-list>
+  </div>
+ 
 </div>

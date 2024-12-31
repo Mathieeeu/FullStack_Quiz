@@ -18,6 +18,7 @@ import { FormsModule } from '@angular/forms';
 export class CreationPartieComponent {
   gameCode: string = '';
   hote: string = '';
+  difficulty : string[] = [];
   themes = [
     { name: 'Géographie', status: 'neutral' },
     { name: 'Histoire', status: 'neutral' },
@@ -37,8 +38,10 @@ export class CreationPartieComponent {
     nbQuestions: null,
     filters: '',
     questionTime: null,
-    code : this.gameCode
+    code : this.gameCode,
   };
+
+  
 
   constructor(
     private gameService: GameService,
@@ -74,7 +77,7 @@ export class CreationPartieComponent {
       nbQuestions: null,
       filters: '',
       questionTime:null,
-      code: ''
+      code: '',
     }
     this.currentMode = 'tous';
     this.themes.forEach(theme => theme.status = 'neutral');
@@ -109,25 +112,43 @@ export class CreationPartieComponent {
     }
   }
 
+  // Gère les changements des cases à cocher
+  updateFilters(event: Event): void {
+    const checkbox = event.target as HTMLInputElement;
+    const value = checkbox.value;
+
+    if (checkbox.checked) {
+      // Ajoute la valeur si elle n'est pas déjà dans le tableau
+      if (!this.difficulty.includes(value)) {
+        this.difficulty.push(value);
+      }
+    } else {
+      // Supprime la valeur si elle est décochée
+      this.difficulty = this.difficulty.filter(v => v !== value);
+    }
+  }
+
   generateFilters(): string {
-    if (this.currentMode === 'tous') {
-      return '';
+    let themeFilter = '';
+    if (this.currentMode !== 'tous') {
+      const selectedThemes = this.themes
+        .filter(theme => 
+          (this.currentMode === 'inclure' && theme.status === 'include') || 
+          (this.currentMode === 'exclure' && theme.status === 'exclude')
+        )
+        .map(theme => theme.name);
+
+      if (this.currentMode === 'inclure') {
+        themeFilter = `theme=${selectedThemes.join(',')}`;
+      } else if (this.currentMode === 'exclure') {
+        themeFilter = `theme=!${selectedThemes.join(',!')}`;
+      }
     }
-  
-    const selectedThemes = this.themes
-      .filter(theme => 
-        (this.currentMode === 'inclure' && theme.status === 'include') || 
-        (this.currentMode === 'exclure' && theme.status === 'exclude')
-      )
-      .map(theme => theme.name);
-  
-    if (this.currentMode === 'inclure') {
-      return `theme=${selectedThemes.join(',')}`;
-    } else if (this.currentMode === 'exclure') {
-      return `theme=!${selectedThemes.join(',!')}`;
-    }
-  
-    return ''; // Par défaut, renvoie une chaîne vide
+
+    const selectedDifficulties = this.difficulty.join(',');
+    const difficultyFilter = selectedDifficulties ? `difficulty=${selectedDifficulties}` : '';
+
+    return [themeFilter, difficultyFilter].filter(part => part !== '').join('&');
   }
 
   toLowercaseWithoutAccents(text: string): string {

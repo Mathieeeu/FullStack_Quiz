@@ -194,3 +194,55 @@ button:active {
   background-color: var(--txt);
   transform: scale(0.95);
 }
+
+
+/* Checkbox */
+input[type=checkbox] {
+  --s: 15px;     /* control the size */
+
+  height: var(--s);
+  aspect-ratio: 1;
+  border: calc(var(--s)/8) solid #939393;
+  padding: calc(var(--s)/8);
+  background: 
+     radial-gradient(farthest-side,var(--txt) 94%,#0000) 
+     50%/0 0 no-repeat content-box;
+  border-radius: 50%;
+  outline-offset: calc(var(--s)/10);
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  cursor: pointer;
+  font-size: inherit;
+  transition: .3s;
+  vertical-align: middle;
+}
+input[type=checkbox]:checked {
+  border-color: var(--txt);
+  background-size: 100% 100%;
+}
+
+
+@media print {
+  input[type=checkbox] {
+    -webkit-appearance: auto;
+    -moz-appearance: auto;
+    appearance: auto;
+    background: none;
+  }
+}
+
+
+.flex-container {
+  display: flex;
+  margin-top: 2vh;
+  align-items: flex-start; 
+}
+
+.themes {
+  flex: 3; 
+}
+
+.difficulty {
+  flex: 6; 
+}

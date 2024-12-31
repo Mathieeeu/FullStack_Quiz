@@ -22,6 +22,10 @@ export class GameService {
     return this.http.get(`${this.assetsUrl}/motd`);
   }
 
+  getThemes(): Observable<any> {
+    return this.http.get(`${this.assetsUrl}/themes`);
+  }
+
   createGame(options: any): Observable<any> {
     return this.http.post(`${this.baseUrl}/create/${options.code}`, options);
   }

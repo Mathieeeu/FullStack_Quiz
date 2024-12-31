@@ -2,6 +2,12 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { QuestionService } from '../service/question.service';
+import { GameService } from '../service/game.service';
+
+interface Theme {
+  name: string;
+  status: 'neutral' | 'selected';
+}
 
 @Component({
   selector: 'app-ajout-question',
@@ -16,17 +22,7 @@ import { QuestionService } from '../service/question.service';
 export class AjoutQuestionComponent {
   tabs: string[] = ['Basique', 'QCM', 'Plusieurs réponses', 'Vrai/Faux'];
   currentTab: number = 0;
-  themes = [
-    { name: 'Géographie', status: 'neutral' },
-    { name: 'Histoire', status: 'neutral' },
-    { name: 'Botanique', status: 'neutral' },
-    { name: 'Logique', status: 'neutral' },
-    { name: 'Sciences', status: 'neutral' },
-    { name: 'Culture', status: 'neutral' },
-    { name: 'Sport', status: 'neutral' },
-    { name: 'Cuisine', status: 'neutral' },
-    { name: 'Autre', status: 'neutral' }
-  ];
+  themes : Theme[] = [];
   selectedValue: String | null = null;
 
   // Liste des réponses pour le QCM
@@ -50,12 +46,34 @@ export class AjoutQuestionComponent {
 
   constructor(
     private questionService: QuestionService,
+    private gameService: GameService,
   )
     {}
 
+  ngOnInit(){
+    this.gameService.getThemes().subscribe(
+      (data: any) => {
+        interface ThemeData {
+          name: string;
+          numberOfQuestions: number;
+          percentageOfTotalQuestions: number;
+        }
+        const themes2: ThemeData[] = data.themes;
+        this.themes = themes2.map(theme => ({
+          name: theme.name.charAt(0).toUpperCase() + theme.name.slice(1), // Capitalize first letter
+          status: 'neutral' // Default status
+        }));
+        console.log(this.themes)
+      },
+      (error: any) => {
+        console.error(error);
+      }
+    );
+  }
   // Changer d'onglet
   showTab(index: number): void {
     this.currentTab = index;
+    this.themes.forEach(theme => theme.status = 'neutral');
   }
 
   selectTheme(selectedTheme: any): void {

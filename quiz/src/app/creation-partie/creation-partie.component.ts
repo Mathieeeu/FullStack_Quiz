@@ -5,6 +5,11 @@ import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
+interface Theme {
+  name: string;
+  status: 'neutral' | 'include' | 'exclude';
+}
+
 @Component({
   selector: 'app-creation-partie',
   standalone: true,
@@ -15,21 +20,13 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './creation-partie.component.html',
   styleUrl: './creation-partie.component.css'
 })
+
 export class CreationPartieComponent {
   gameCode: string = '';
   hote: string = '';
   difficulty : string[] = [];
-  themes = [
-    { name: 'Géographie', status: 'neutral' },
-    { name: 'Histoire', status: 'neutral' },
-    { name: 'Botanique', status: 'neutral' },
-    { name: 'Logique', status: 'neutral' },
-    { name: 'Sciences', status: 'neutral' },
-    { name: 'Culture', status: 'neutral' },
-    { name: 'Sport', status: 'neutral' },
-    { name: 'Cuisine', status: 'neutral' },
-    { name: 'Autre', status: 'neutral' }
-  ];
+
+  themes : Theme[] = [];
 
   currentMode: 'tous' | 'inclure' | 'exclure' = 'tous';
 
@@ -40,8 +37,6 @@ export class CreationPartieComponent {
     questionTime: null,
     code : this.gameCode,
   };
-
-  
 
   constructor(
     private gameService: GameService,
@@ -56,7 +51,26 @@ export class CreationPartieComponent {
 
   ngOnInit(): void {
     this.generateCode(); 
+    this.gameService.getThemes().subscribe(
+      (data: any) => {
+        interface ThemeData {
+          name: string;
+          numberOfQuestions: number;
+          percentageOfTotalQuestions: number;
+        }
+        const themes2: ThemeData[] = data.themes;
+        this.themes = themes2.map(theme => ({
+          name: theme.name.charAt(0).toUpperCase() + theme.name.slice(1), // Capitalize first letter
+          status: 'neutral' // Default status
+        }));
+        console.log(this.themes)
+      },
+      (error: any) => {
+        console.error(error);
+      }
+    );
   }
+
 
   generateCode(): void {
     this.gameService.generateGameCode().subscribe(

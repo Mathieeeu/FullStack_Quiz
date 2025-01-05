@@ -35,14 +35,21 @@ export class AdminComponent implements OnInit {
   ngOnInit(): void {
     this.loadUsers();
     this.loadGames();
-    this.subscription = interval(1000).subscribe(() => {
-      this.loadUsers();
-      this.loadGames();
-    });
+
+    // // C'est terrible que ce truc veuille pas marcher, je comprends pas :(
+    // this.subscription = interval(1000).subscribe(() => {
+    //   this.loadUsers();
+    //   this.loadGames();
+    // });
   }
 
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
+  }
+
+  refreshData(): void {
+    this.loadUsers();
+    this.loadGames();
   }
 
   loadUsers(): void {
@@ -80,6 +87,7 @@ export class AdminComponent implements OnInit {
   }
 
   toggleSuperUser(user: any): void {
+    this.refreshData();
     user.Superuser = !user.Superuser;
     this.authService.editUser(user, 'superuser').subscribe(
       () => {
@@ -93,6 +101,7 @@ export class AdminComponent implements OnInit {
   }
 
   editUsername(user: any): void {
+    this.refreshData();
     const newUsername = prompt("Nouvel identifiant:", user.username);
     if (newUsername) {
       this.authService.editUser(user, 'rename', newUsername).subscribe(
@@ -108,6 +117,7 @@ export class AdminComponent implements OnInit {
   }
 
   deleteUser(user: any): void {
+    this.refreshData();
     if (confirm(`Voulez-vous vraiment supprimer l'utilisateur ${user.username} ?`)) {
       this.authService.deleteUser(user.username).subscribe(
         () => {
@@ -122,6 +132,7 @@ export class AdminComponent implements OnInit {
   }
 
   launchGame(game: any): void {
+    this.refreshData();
     this.gameService.startGame(game.code).subscribe(
       () => {
         console.log('Partie lancée avec succès');
@@ -134,6 +145,7 @@ export class AdminComponent implements OnInit {
   }
 
   deleteGame(game: any): void {
+    this.refreshData();
     if (confirm(`Voulez-vous vraiment supprimer la partie ${game.code} ?`)) {
       this.gameService.deleteGame(game.code).subscribe(
         () => {

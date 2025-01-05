@@ -3,6 +3,8 @@
     <button *ngFor="let tab of tabs; let i = index" [class.active]="currentTab === i" (click)="showTab(i)">
       {{ tab }}
     </button>
+    <!-- Bouton de rafrachissement des données (parce qu'Angular plante si je mets un truc automatique sérieux........) -->
+    <button (click)="refreshData()">Actualiser</button>
   </div>
 
   <!-- Onglet 1 - Gestion du compte-->

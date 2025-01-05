@@ -8,8 +8,9 @@ start node db-server.js
 
 cd ../quiz
 @REM ng build --configuration production
+ng serve --host 0.0.0.0 --disable-host-check
 
-cd dist/quiz/browser
-start http-server -p 80
+@REM cd dist/quiz/browser
+@REM start http-server -p 80
 
 @REM pause

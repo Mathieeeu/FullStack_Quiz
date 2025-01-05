@@ -48,6 +48,11 @@ client.connect()
         process.exit(1);
     });   
 
+// Route pour vérifier que le serveur est en ligne
+app.get('/api/ping', (req, res) => {
+    res.status(200).send('pong');
+});
+
 // Route pour la racine de l'API
 app.get('/', (req, res) => {
     res.send(`

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
+import { SERVER_CONFIG } from './config';
 
 import { SessionService } from './session.service';
 
@@ -8,10 +9,8 @@ import { SessionService } from './session.service';
   providedIn: 'root'
 })
 export class GameService {
-  private address = 'localhost'; // Adresse du serveur
-  private port = 3000; // Port du serveur
-  private baseUrl = `http://${this.address}:${this.port}/api/game`;
-  private assetsUrl = `http://${this.address}:${this.port}/api/assets`;
+  private baseUrl = SERVER_CONFIG.gameUrl;
+  private assetsUrl = SERVER_CONFIG.assetsUrl;
 
   constructor(
     private http: HttpClient,

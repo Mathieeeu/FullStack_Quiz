@@ -1,14 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { SERVER_CONFIG } from './config';
 
 @Injectable({
   providedIn: 'root'
 })
 export class QuestionService {
-  private address = 'localhost'; // Adresse du serveur
-  private port = 3000; // Port du serveur
-  private baseUrl = `http://${this.address}:${this.port}/api`;
+  private baseUrl = SERVER_CONFIG.baseUrl;
 
   constructor(private http: HttpClient) { }
 

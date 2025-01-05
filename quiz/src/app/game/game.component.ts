@@ -127,7 +127,7 @@ export class GameComponent implements OnInit, OnDestroy {
           // console.log(this.gameDetails.countdown === this.gameDetails.options.questionTime);
           // console.log(this.checked);
           if (this.gameDetails.countdown === -1 && this.checked) {
-            console.log('Resetting checked');
+            // console.log('Resetting checked');
             this.checked = false;
           }
         },
@@ -149,7 +149,7 @@ export class GameComponent implements OnInit, OnDestroy {
 
   checkAnswer(selectedAnswer?: string, event?: Event): void {
     // console.log('Answer=' + (selectedAnswer || this.answer));
-    console.log('Checking answer');
+    // console.log('Checking answer');
     this.checked = true;
 
     // Jouer un son de plop aléatoire à chaque réponse (parce que c'est marrant non ??)

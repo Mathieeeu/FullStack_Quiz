@@ -8,7 +8,7 @@
       <p class="motd">"{{ motd }}"</p>
     </main>
 
-    <main *ngIf="gameDetails.currentQuestionIndex !== -1 && !gameDetails.isOver">
+    <main id="game" *ngIf="gameDetails.currentQuestionIndex !== -1 && !gameDetails.isOver">
       <!-- Partie en cours -->
 
       <div id="question">

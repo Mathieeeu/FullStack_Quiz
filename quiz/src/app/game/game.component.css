@@ -306,14 +306,23 @@ button.qcm-button:active {
     padding-right: 5%;
     align-content: center;
     flex-direction: column;
-    margin-top: var(--header-height);
+
+    overflow: auto;
 }
 
 p.motd {
     display :none;
 }
 
-main {
+main#starting{
     margin-top: 200px;
+}
+
+ul{
+    margin-bottom: 50px;
+}
+
+main#game{
+    
 }
 }

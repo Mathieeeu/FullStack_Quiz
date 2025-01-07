@@ -47,7 +47,4 @@ button:active {
     margin-bottom: 100px;
     }
 
-    ::-webkit-scrollbar {
-        display: none;
-        }
 }

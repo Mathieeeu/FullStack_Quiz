@@ -137,7 +137,7 @@ export class AjoutQuestionComponent {
       this.formData.trueAnswers = this.correctAnswerIndices.map(index => this.answers[index]);
       this.formData.fakeAnswers = this.answers.filter((_, index) => !this.correctAnswerIndices.includes(index));
     } else if (this.currentTab === 3) {
-      this.formData.questionType = 'Vrai/Faux';
+      this.formData.questionType = 'VF';
     } else {
       this.formData.questionType = 'Ouverte';
     }

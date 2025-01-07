@@ -296,3 +296,24 @@ button.qcm-button:active {
     transform: scale(0.95);
 }
 
+@media (max-width: 800px) {
+.game-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 90%;
+    padding-left: 10%;
+    padding-right: 5%;
+    align-content: center;
+    flex-direction: column;
+    margin-top: var(--header-height);
+}
+
+p.motd {
+    display :none;
+}
+
+main {
+    margin-top: 200px;
+}
+}

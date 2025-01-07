@@ -85,8 +85,9 @@ button {
 }
 
 button.learn-more {
-  width: 45%;
+  width: 300px;
   height: auto;
+  margin-top: 2vh;
 }
 
 button.learn-more .circle {

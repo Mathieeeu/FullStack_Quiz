@@ -29,7 +29,7 @@ html, body {
 }
 
 /* Si la fenetre fait moins de 740px de hauteur : */
-@media (max-height: 740px) {
+@media (max-height: 900px) {
     html, body {
         overflow: auto;
     }

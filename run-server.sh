@@ -4,7 +4,7 @@
 
 # Démarrage du serveur backend
 cd backend
-nohup node db-server.js &
+node db-server.js &
 
 # Démarrage du serveur frontend
 cd ../quiz
